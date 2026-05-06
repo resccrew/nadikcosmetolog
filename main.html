@@ -284,6 +284,11 @@ nav.scrolled {
   background: linear-gradient(135deg, #EDE0D0 0%, #D4C4B0 100%);
   display: flex; align-items: flex-end; justify-content: center;
 }
+.hero-photo {
+  width: 100%; height: 100%;
+  object-fit: cover; object-position: center top;
+  display: block;
+}
 .hero-photo-placeholder {
   width: 100%; height: 100%;
   display: flex; align-items: center; justify-content: center;
@@ -369,6 +374,12 @@ nav.scrolled {
   width: 100%; aspect-ratio: 3/4;
   background: linear-gradient(145deg, #EDE0D0, #C8B49A);
   position: relative; display: flex; align-items: center; justify-content: center;
+  overflow: hidden;
+}
+.about-photo {
+  width: 100%; height: 100%;
+  object-fit: cover; object-position: center top;
+  display: block;
 }
 .about-img-deco {
   position: absolute; top: -24px; left: -24px;
@@ -385,16 +396,84 @@ nav.scrolled {
   writing-mode: vertical-rl; font-size: 0.6rem;
   letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold); opacity: 0.7;
 }
-.credentials { display: flex; flex-direction: column; gap: 14px; margin-top: 40px; }
-.credential-item {
-  display: flex; align-items: flex-start; gap: 16px;
-  padding: 16px 20px; border: 1px solid rgba(184,150,90,0.15);
+/* ─── ABOUT TABS ─── */
+.about-tabs {
+  display: flex; gap: 0; margin-top: 28px;
+  border-bottom: 1px solid rgba(184,150,90,0.2);
+}
+.about-tab-btn {
+  background: none; border: none; cursor: pointer;
+  padding: 10px 24px; font-family: 'Jost', sans-serif;
+  font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--muted); position: relative;
+  transition: color .3s;
+}
+.about-tab-btn::after {
+  content: ''; position: absolute; bottom: -1px; left: 0; right: 0;
+  height: 1px; background: var(--gold);
+  transform: scaleX(0); transition: transform .3s;
+}
+.about-tab-btn.active { color: var(--gold); }
+.about-tab-btn.active::after { transform: scaleX(1); }
+
+.about-tab-panel { display: none; }
+.about-tab-panel.active { display: block; }
+
+/* ─── CERTIFICATES GRID ─── */
+.certs-grid {
+  display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin-top: 20px;
+}
+.cert-thumb {
+  aspect-ratio: 3/4; overflow: hidden;
+  border: 1px solid rgba(184,150,90,0.2);
+  cursor: pointer; position: relative;
   transition: border-color .3s, transform .3s;
 }
-.credential-item:hover { border-color: rgba(184,150,90,0.5); transform: translateX(6px); }
-.cred-dot { width: 8px; height: 8px; min-width: 8px; background: var(--gold); border-radius: 50%; margin-top: 6px; }
-.cred-text { font-size: 0.85rem; line-height: 1.6; color: var(--text); }
-.cred-year { font-size: 0.7rem; color: var(--gold); display: block; margin-top: 2px; }
+.cert-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .4s; }
+.cert-thumb:hover { border-color: rgba(184,150,90,0.6); transform: translateY(-3px); }
+.cert-thumb:hover img { transform: scale(1.05); }
+.cert-placeholder {
+  width: 100%; height: 100%; background: linear-gradient(145deg, #EDE0D0, #C8B49A);
+  display: flex; align-items: center; justify-content: center;
+}
+.cert-placeholder span { font-size: 0.6rem; letter-spacing: 0.15em; color: rgba(30,20,10,0.35); text-transform: uppercase; text-align: center; padding: 8px; }
+
+/* ─── CERT LIGHTBOX ─── */
+.cert-lightbox {
+  position: fixed; inset: 0; z-index: 500;
+  background: rgba(28,24,22,0.92); backdrop-filter: blur(8px);
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; pointer-events: none; transition: opacity .3s;
+}
+.cert-lightbox.open { opacity: 1; pointer-events: all; }
+.cert-lightbox img { max-width: 80vw; max-height: 85vh; object-fit: contain; box-shadow: 0 20px 80px rgba(0,0,0,0.5); }
+.cert-lightbox-close {
+  position: absolute; top: 32px; right: 40px;
+  background: none; border: none; cursor: pointer;
+  font-size: 1.4rem; color: var(--gold); opacity: 0.8; transition: opacity .2s;
+}
+.cert-lightbox-close:hover { opacity: 1; }
+.cert-lightbox-nav {
+  position: absolute; top: 50%; transform: translateY(-50%);
+  background: none; border: 1px solid rgba(184,150,90,0.4);
+  color: var(--gold); width: 44px; height: 44px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; font-size: 1.1rem; transition: background .3s;
+}
+.cert-lightbox-nav:hover { background: rgba(184,150,90,0.15); }
+.cert-lightbox-prev { left: 32px; }
+.cert-lightbox-next { right: 32px; }
+
+.credentials { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 20px; margin-top: 20px; }
+.credential-item {
+  display: flex; align-items: flex-start; gap: 10px;
+  padding: 10px 14px; border: 1px solid rgba(184,150,90,0.15);
+  transition: border-color .3s, transform .3s;
+}
+.credential-item:hover { border-color: rgba(184,150,90,0.5); transform: translateX(4px); }
+.cred-dot { width: 6px; height: 6px; min-width: 6px; background: var(--gold); border-radius: 50%; margin-top: 5px; }
+.cred-text { font-size: 0.75rem; line-height: 1.45; color: var(--text); }
+.cred-year { font-size: 0.68rem; color: var(--gold); display: inline; margin-left: 6px; white-space: nowrap; }
 
 /* ═══════════════════════════════════════════
    SERVICES
@@ -422,7 +501,8 @@ nav.scrolled {
 }
 .service-card {
   background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06);
-  padding: 48px 40px; position: relative; overflow: hidden;
+  padding: 40px 36px; position: relative; overflow: hidden;
+  cursor: pointer;
   transition: background .4s, border-color .4s, transform .4s;
 }
 .service-card::before {
@@ -432,40 +512,116 @@ nav.scrolled {
 }
 .service-card:hover { background: rgba(255,255,255,0.06); transform: translateY(-4px); }
 .service-card:hover::before { transform: scaleX(1); }
+.service-card:hover .service-arrow { opacity: 1; transform: translateX(0); }
 .service-num {
   font-family: 'Cormorant Garamond', serif;
-  font-size: 3.5rem; font-weight: 300; color: rgba(184,150,90,0.15); line-height: 1; margin-bottom: 20px;
+  font-size: 3rem; font-weight: 300; color: rgba(184,150,90,0.12); line-height: 1; margin-bottom: 16px;
 }
 .service-name {
   font-family: 'Cormorant Garamond', serif;
-  font-size: 1.5rem; font-weight: 400; color: var(--cream); margin-bottom: 14px; line-height: 1.3;
+  font-size: 1.45rem; font-weight: 400; color: var(--cream); line-height: 1.3;
 }
-.service-desc { font-size: 0.82rem; line-height: 1.85; color: rgba(248,244,239,0.45); margin-bottom: 24px; }
-.service-price { font-size: 0.7rem; letter-spacing: 0.15em; color: var(--gold); display: flex; align-items: center; justify-content: space-between; }
-.service-link {
-  color: var(--gold); text-decoration: none; font-size: 0.65rem;
-  letter-spacing: 0.2em; text-transform: uppercase;
-  display: flex; align-items: center; gap: 8px; margin-top: 20px; transition: gap .3s;
+.service-desc-short {
+  font-size: 0.78rem; line-height: 1.7;
+  color: rgba(248,244,239,0.38); margin-top: 10px;
+  flex: 1;
 }
-.service-link:hover { gap: 14px; }
+.service-card { display: flex; flex-direction: column; }
+.service-arrow {
+  margin-top: 24px; align-self: flex-start;
+  color: var(--gold); font-size: 0.65rem; letter-spacing: 0.2em;
+  text-transform: uppercase; opacity: 0; transform: translateX(-6px);
+  transition: opacity .3s, transform .3s;
+}
+
+/* ─── SOLUTION DRAWER ─── */
+.solution-overlay {
+  position: fixed; inset: 0; z-index: 400;
+  background: rgba(28,24,22,0.6); backdrop-filter: blur(4px);
+  opacity: 0; pointer-events: none; transition: opacity .35s;
+}
+.solution-overlay.open { opacity: 1; pointer-events: all; }
+
+.solution-drawer {
+  position: fixed; top: 0; right: 0; bottom: 0; z-index: 401;
+  width: min(520px, 92vw);
+  background: var(--dark); border-left: 1px solid rgba(184,150,90,0.2);
+  padding: 60px 48px; overflow-y: auto;
+  transform: translateX(100%); transition: transform .45s cubic-bezier(.4,0,.2,1);
+  display: flex; flex-direction: column;
+}
+.solution-drawer.open { transform: translateX(0); }
+
+.drawer-close {
+  position: absolute; top: 24px; right: 28px;
+  background: none; border: none; cursor: pointer;
+  color: rgba(248,244,239,0.4); font-size: 1.2rem;
+  transition: color .2s;
+}
+.drawer-close:hover { color: var(--gold); }
+
+.drawer-num {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 4rem; font-weight: 300; color: rgba(184,150,90,0.1); line-height: 1; margin-bottom: 8px;
+}
+.drawer-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2rem; font-weight: 400; color: var(--cream);
+  line-height: 1.25; margin-bottom: 28px;
+  padding-bottom: 28px; border-bottom: 1px solid rgba(184,150,90,0.2);
+}
+.drawer-body { font-size: 0.88rem; line-height: 2; color: rgba(248,244,239,0.6); flex: 1; }
+.drawer-body p { margin-bottom: 16px; }
+.drawer-body ul { padding-left: 0; list-style: none; display: flex; flex-direction: column; gap: 10px; }
+.drawer-body ul li { display: flex; gap: 12px; }
+.drawer-body ul li::before { content: '—'; color: var(--gold); flex-shrink: 0; }
+.drawer-cta {
+  margin-top: 40px; padding: 16px 32px;
+  border: 1px solid var(--gold); background: transparent;
+  color: var(--gold); font-family: 'Jost', sans-serif;
+  font-size: 0.7rem; letter-spacing: 0.22em; text-transform: uppercase;
+  text-decoration: none; display: inline-block; text-align: center;
+  transition: background .3s, color .3s;
+}
+.drawer-cta:hover { background: var(--gold); color: var(--dark); }
 
 /* ═══════════════════════════════════════════
    PHILOSOPHY
 ═══════════════════════════════════════════ */
 .philosophy {
-  padding: 140px 60px; max-width: 1400px; margin: 0 auto;
+  padding: 60px 60px 140px; max-width: 1400px; margin: 0 auto;
   display: grid; grid-template-columns: 1fr 1.3fr; gap: 100px; align-items: start;
 }
-.phil-sticky { position: sticky; top: 120px; }
-.phil-items { display: flex; flex-direction: column; gap: 0; }
-.phil-item {
-  padding: 36px 0; border-bottom: 1px solid rgba(184,150,90,0.15);
-  display: grid; grid-template-columns: 60px 1fr; gap: 24px; transition: padding .3s;
+.phil-img-panel {
+  position: absolute; top: 0; left: 0; bottom: 0;
+  width: 46%; overflow: hidden; pointer-events: none;
 }
-.phil-item:hover { padding: 36px 0 36px 12px; }
-.phil-item-num { font-family: 'Cormorant Garamond', serif; font-size: 1.3rem; color: var(--gold); font-weight: 300; padding-top: 4px; }
-.phil-item-title { font-family: 'Cormorant Garamond', serif; font-size: 1.4rem; font-weight: 400; color: var(--dark); margin-bottom: 10px; }
-.phil-item-text { font-size: 0.85rem; line-height: 1.9; color: var(--muted); }
+.phil-img-panel img {
+  width: 100%; height: 100%; object-fit: cover; object-position: center 5%; display: block;
+}
+.phil-img-panel::after {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(to right, rgba(28,24,22,0.45) 0%, rgba(28,24,22,0.55) 60%, var(--cream) 100%);
+}
+.phil-sticky { position: sticky; top: 80px; z-index: 1; padding-top: 80px; }
+.phil-sticky .section-label { color: rgba(184,150,90,0.9); }
+.phil-sticky .section-label::before { background: rgba(184,150,90,0.9); }
+.phil-sticky .section-title { color: var(--cream); }
+.phil-sticky .section-title em { color: var(--gold-light); }
+.phil-sticky .section-text { color: rgba(248,244,239,0.65); }
+.phil-sticky .btn-primary { border-color: rgba(184,150,90,0.7); color: var(--gold-light); }
+.phil-sticky .btn-primary:hover { background: var(--gold); color: var(--dark); border-color: var(--gold); }
+.phil-items { display: flex; flex-direction: column; gap: 36px; }
+.phil-para {
+  padding-bottom: 36px; border-bottom: 1px solid rgba(184,150,90,0.15);
+}
+.phil-para:last-child { border-bottom: none; padding-bottom: 0; }
+.phil-para-text {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.25rem; font-weight: 300; line-height: 1.85;
+  color: var(--text);
+}
+.phil-para-text em { font-style: italic; color: var(--gold); }
 
 /* ═══════════════════════════════════════════
    PROCEDURES
@@ -774,9 +930,9 @@ footer {
   .section-label::before { width: 20px; }
   .section-title { font-size: clamp(1.9rem, 7vw, 2.8rem); margin-bottom: 20px; }
   .section-text { font-size: 0.88rem; line-height: 1.85; margin-bottom: 18px; }
-  .credentials { gap: 10px; margin-top: 28px; }
-  .credential-item { padding: 12px 16px; }
-  .cred-text { font-size: 0.8rem; }
+  .credentials { grid-template-columns: 1fr; gap: 6px; margin-top: 20px; }
+  .credential-item { padding: 9px 12px; }
+  .cred-text { font-size: 0.75rem; }
 
   /* SERVICES */
   .services { padding: 72px 20px; }
@@ -891,7 +1047,7 @@ footer {
     <li><a href="#contact"  onclick="closeMenu()">Контакты</a></li>
   </ul>
   <div class="mobile-menu-cta">
-    <a href="#contact" onclick="closeMenu()">Записаться на приём</a>
+    <a href="#contact" onclick="closeMenu()">Записаться на консультацию</a>
   </div>
   <div class="mobile-menu-socials">
     <a href="#">Instagram</a>
@@ -902,7 +1058,7 @@ footer {
 
 <!-- ─── NAV ─── -->
 <nav id="navbar">
-  <a href="#" class="nav-logo">Dr. <span>Надежда</span></a>
+  <a href="#" class="nav-logo">Nadezda. <span>antiage</span></a>
   <ul class="nav-links">
     <li><a href="#about">О враче</a></li>
     <li><a href="#services">Услуги</a></li>
@@ -922,26 +1078,26 @@ footer {
   <div class="deco-ring" style="top:-80px; right:-80px; width:400px; height:400px; opacity:0.5;"></div>
 
   <div class="hero-left">
-    <div class="hero-eyebrow">Врач-косметолог · Кипр</div>
+    <div class="hero-eyebrow">Превентивная медицина · Кипр</div>
     <h1 class="hero-name">
       Надежда<br>
       <em>Праворова</em>
     </h1>
-    <div class="hero-title">Дерматокосметолог · Антивозрастная медицина</div>
+    <div class="hero-title">Врач-трихолог, дерматокосметолог, клинический нутрициолог</div>
     <p class="hero-desc">
-      Помогаю коже выглядеть молодой, здоровой и ухоженной. Работаю только с доказанными методиками и сертифицированными препаратами европейского класса.
+      Помогаю женщинам и мужчинам выглядеть и чувствовать себя лучше, замедлить старение , восстановить здоровье кожи и волос через системную диагностику и комплексный персонализированный подход.
     </p>
     <div class="hero-ctas">
-      <a href="#contact" class="btn-primary">Записаться на приём</a>
+      <a href="#contact" class="btn-primary">Записаться на консультацию</a>
       <a href="#services" class="btn-outline">Все услуги</a>
     </div>
     <div class="hero-stats">
       <div class="stat-item">
-        <span class="stat-num">12</span>
+        <span class="stat-num">16</span>
         <div class="stat-label">Лет опыта</div>
       </div>
       <div class="stat-item">
-        <span class="stat-num">2400<span style="font-size:1.4rem; color:var(--gold)">+</span></span>
+        <span class="stat-num">30000<span style="font-size:1.4rem; color:var(--gold)">+</span></span>
         <div class="stat-label">Клиентов</div>
       </div>
       <div class="stat-item">
@@ -953,19 +1109,12 @@ footer {
 
   <div class="hero-right">
     <div class="hero-img-wrap">
-      <div class="hero-photo-placeholder">
-        <div class="photo-icon">
-          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="rgba(184,150,90,0.6)" stroke-width="1.2">
-            <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/>
-          </svg>
-        </div>
-        <span class="photo-hint">Ваше фото</span>
-      </div>
+      <img src="IMG_9656.JPG" alt="Фото" class="hero-photo">
     </div>
     <div class="hero-img-overlay"></div>
     <div class="hero-badge">
       <span class="badge-num">№1</span>
-      <div class="badge-text">В рейтинге косметологов<br>Кипра 2024</div>
+      <div class="badge-text">в вопросах молодости и красоты</div>
     </div>
     <div class="float-line"></div>
   </div>
@@ -980,272 +1129,238 @@ footer {
 <section class="about" id="about">
   <div class="about-img-col reveal">
     <div class="about-img-main">
-      <div class="photo-icon">
-        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="rgba(184,150,90,0.4)" stroke-width="1">
-          <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/>
-        </svg>
-      </div>
+      <img src="IMG_9689.JPG" alt="Dr. Nadik" class="about-photo">
     </div>
     <div class="about-img-deco"></div>
     <div class="about-img-deco2"></div>
-    <div class="about-img-tag">Dr. Nadik</div>
   </div>
 
   <div class="reveal" style="transition-delay:0.15s">
     <div class="section-label">Обо мне</div>
-    <h2 class="section-title">Красота — это <em>наука</em> и искусство</h2>
+    <h2 class="section-title">Красота — это <em>не только инъекции и поверхностные процедуры</em> это в том числе внутреннее здоровье.</h2>
     <p class="section-text">
-      Я — Надежда Праворова, врач-дерматокосметолог с 12-летним опытом в эстетической медицине. Окончила Первый МГМУ им. Сеченова по специальности «Лечебное дело» и прошла специализацию по дерматовенерологии и косметологии.
+      Я-Надежда Праворова, врач 1 категории. Дерматокосметолог, трихолог, нутрициолог с 13-летним опытом в клинической медицине + 4 года работы с клиентами в частной и онлайн-практике. 
+Окончила ГрГМУ по специальности «Лечебное дело». Прошла специализацию по дерматовенерологии , трихологии и косметологии. Закончила Университет Образовательной Медицины по курсу «Интегративная и клиническая нутрициология».
     </p>
     <p class="section-text">
-      Работаю в концепции «индивидуальный подход» — не существует двух одинаковых лиц, а значит, не существует одинаковых протоколов. Каждая процедура — это результат тщательного анализа состояния кожи, образа жизни и ваших целей.
+      Работаю в концепции «индивидуальный комплексный подход»- не существует двух одинаковых организмов, а значит , не существует и одинаковых протоколов. 
+Здоровье и красота нашей кожи и волос-это зеркало нашего здоровья в целом.
     </p>
-    <div class="credentials">
-      <div class="credential-item">
-        <div class="cred-dot"></div>
-        <div class="cred-text">Первый МГМУ им. И.М. Сеченова, специальность «Лечебное дело»<span class="cred-year">2009–2015</span></div>
-      </div>
-      <div class="credential-item">
-        <div class="cred-dot"></div>
-        <div class="cred-text">Ординатура по дерматовенерологии и косметологии, РУДН<span class="cred-year">2015–2017</span></div>
-      </div>
-      <div class="credential-item">
-        <div class="cred-dot"></div>
-        <div class="cred-text">Международный сертификат Allergan Aesthetics Master<span class="cred-year">2019</span></div>
-      </div>
-      <div class="credential-item">
-        <div class="cred-dot"></div>
-        <div class="cred-text">Действительный член РААОП и Европейской академии дерматологии<span class="cred-year">С 2020</span></div>
+    <!-- TABS -->
+    <div class="about-tabs">
+      <button class="about-tab-btn active" data-tab="education">Образование</button>
+      <button class="about-tab-btn" data-tab="certs">Сертификаты</button>
+    </div>
+
+    <!-- TAB: Образование -->
+    <div class="about-tab-panel active" id="tab-education">
+      <div class="credentials">
+        <div class="credential-item">
+          <div class="cred-dot"></div>
+          <div class="cred-text">Гродненский государственный медицинский университет, специальность «Лечебное дело»<span class="cred-year">2001–2009</span></div>
+        </div>
+        <div class="credential-item">
+          <div class="cred-dot"></div>
+          <div class="cred-text">Интернатура по дерматовенерологии, Гродненский областной кожно-венерологический диспансер<span class="cred-year">2009–2010</span></div>
+        </div>
+        <div class="credential-item">
+          <div class="cred-dot"></div>
+          <div class="cred-text">Врач-дерматовенеролог, Гродненский областной кожно-венерологический диспансер<span class="cred-year">2010–2013</span></div>
+        </div>
+        <div class="credential-item">
+          <div class="cred-dot"></div>
+          <div class="cred-text">Повышение квалификации «Трихология», СЗГМУ им. И.И. Мечникова, Санкт-Петербург<span class="cred-year">2013</span></div>
+        </div>
+        <div class="credential-item">
+          <div class="cred-dot"></div>
+          <div class="cred-text">Врач-дерматовенеролог, КУП «Медицинский центр красоты и здоровья», г. Гродно<span class="cred-year">2013–2022</span></div>
+        </div>
+        <div class="credential-item">
+          <div class="cred-dot"></div>
+          <div class="cred-text">Переподготовка «Косметология», БелМАПО, Минск<span class="cred-year">2014</span></div>
+        </div>
+        <div class="credential-item">
+          <div class="cred-dot"></div>
+          <div class="cred-text">Повышение квалификации «Хронические дерматозы», БелМАПО, Минск<span class="cred-year">2016</span></div>
+        </div>
+        <div class="credential-item">
+          <div class="cred-dot"></div>
+          <div class="cred-text">2-я квалификационная категория, Министерство здравоохранения Республики Беларусь<span class="cred-year">2017</span></div>
+        </div>
+        <div class="credential-item">
+          <div class="cred-dot"></div>
+          <div class="cred-text">Повышение квалификации «Дерматоскопия и трихоскопия», БелМАПО, Минск<span class="cred-year">2020</span></div>
+        </div>
+        <div class="credential-item">
+          <div class="cred-dot"></div>
+          <div class="cred-text">Повышение квалификации «Лазерные методики в косметологии и дерматовенерологии», БелМАПО, Минск<span class="cred-year">2021</span></div>
+        </div>
+        <div class="credential-item">
+          <div class="cred-dot"></div>
+          <div class="cred-text">1-я квалификационная категория, Министерство здравоохранения Республики Беларусь<span class="cred-year">2021</span></div>
+        </div>
+        <div class="credential-item">
+          <div class="cred-dot"></div>
+          <div class="cred-text">Статус ИП, Грузия, г. Батуми. Открытие кабинета эстетической косметологии и консультативной практики<span class="cred-year">2022</span></div>
+        </div>
+        <div class="credential-item">
+          <div class="cred-dot"></div>
+          <div class="cred-text">Профессиональная переподготовка «Интегративная и клиническая нутрициология», Институт Функциональной Интегративной Диетологии и Нутрициологии, Москва<span class="cred-year">2024–2025</span></div>
+        </div>
+        <div class="credential-item">
+          <div class="cred-dot"></div>
+          <div class="cred-text">Консультативная онлайн-практика в области клинической нутрициологии, Кипр<span class="cred-year">2025 — н.в.</span></div>
+        </div>
       </div>
     </div>
+
+    <!-- TAB: Сертификаты -->
+    <div class="about-tab-panel" id="tab-certs">
+      <div class="certs-grid" id="certs-grid">
+        <!-- сюда добавьте сертификаты: <div class="cert-thumb" data-index="0"><img src="cert1.jpg" alt="Сертификат"></div> -->
+        <div class="cert-thumb cert-placeholder-item"><div class="cert-placeholder"><span>Добавьте фото сертификата</span></div></div>
+        <div class="cert-thumb cert-placeholder-item"><div class="cert-placeholder"><span>Добавьте фото сертификата</span></div></div>
+        <div class="cert-thumb cert-placeholder-item"><div class="cert-placeholder"><span>Добавьте фото сертификата</span></div></div>
+        <div class="cert-thumb cert-placeholder-item"><div class="cert-placeholder"><span>Добавьте фото сертификата</span></div></div>
+        <div class="cert-thumb cert-placeholder-item"><div class="cert-placeholder"><span>Добавьте фото сертификата</span></div></div>
+      </div>
+    </div>
+
   </div>
 </section>
+
+<!-- ─── CERT LIGHTBOX ─── -->
+<div class="cert-lightbox" id="certLightbox">
+  <button class="cert-lightbox-close" id="certClose">✕</button>
+  <button class="cert-lightbox-nav cert-lightbox-prev" id="certPrev">&#8249;</button>
+  <img src="" alt="Сертификат" id="certLightboxImg">
+  <button class="cert-lightbox-nav cert-lightbox-next" id="certNext">&#8250;</button>
+</div>
 
 <!-- ─── SERVICES ─── -->
 <section class="services" id="services">
   <div class="services-bg"></div>
   <div class="services-header reveal">
     <div>
-      <div class="section-label">Услуги</div>
-      <h2 class="section-title">Процедуры для <em>каждой</em> задачи</h2>
+      <div class="section-label">Мои решения</div>
+      <h2 class="section-title"> Решения для <em>каждой</em> задачи</h2>
     </div>
     <a href="#contact" class="nav-btn" style="color:var(--gold);border-color:var(--gold);">Консультация</a>
   </div>
   <div class="services-grid">
-    <div class="service-card reveal">
+    <div class="service-card reveal" data-solution="0">
       <div class="service-num">01</div>
-      <div class="service-name">Биоревитализация и мезотерапия</div>
-      <div class="service-desc">Глубокое увлажнение, запуск синтеза коллагена, лифтинг-эффект. Работаем с брендами Juvederm Hydrate, Restylane Skinboosters.</div>
-      <div class="service-price"><span>от 8 000 ₽</span></div>
-      <a href="#contact" class="service-link">Записаться →</a>
+      <div class="service-name">Здоровье волос</div>
+      <div class="service-desc-short">Выпадение, истончение, перхоть — нахожу причину и устраняю её через питание и нутрицевтики.</div>
+      <div class="service-arrow">Подробнее →</div>
     </div>
-    <div class="service-card reveal" style="transition-delay:.1s">
+    <div class="service-card reveal" style="transition-delay:.08s" data-solution="1">
       <div class="service-num">02</div>
-      <div class="service-name">Контурная пластика</div>
-      <div class="service-desc">Коррекция носогубных складок, увеличение губ, скуловой лифтинг. Использую только сертифицированные гиалуроновые филлеры.</div>
-      <div class="service-price"><span>от 15 000 ₽</span></div>
-      <a href="#contact" class="service-link">Записаться →</a>
+      <div class="service-name">Здоровая кожа изнутри и снаружи</div>
+      <div class="service-desc-short">Акне, сухость, тусклость — работаю с кожей комплексно: изнутри и снаружи одновременно.</div>
+      <div class="service-arrow">Подробнее →</div>
     </div>
-    <div class="service-card reveal" style="transition-delay:.2s">
+    <div class="service-card reveal" style="transition-delay:.16s" data-solution="2">
       <div class="service-num">03</div>
-      <div class="service-name">Ботулинотерапия</div>
-      <div class="service-desc">Ботокс, Диспорт, Ксеомин. Разглаживание мимических морщин лба, межбровья, зоны вокруг глаз. Натуральный результат без «маски».</div>
-      <div class="service-price"><span>от 12 000 ₽</span></div>
-      <a href="#contact" class="service-link">Записаться →</a>
+      <div class="service-name">Дефициты и энергия</div>
+      <div class="service-desc-short">Хроническая усталость и апатия — выявляю скрытые нехватки и восстанавливаю ресурс.</div>
+      <div class="service-arrow">Подробнее →</div>
     </div>
-    <div class="service-card reveal" style="transition-delay:.1s">
+    <div class="service-card reveal" style="transition-delay:.08s" data-solution="3">
       <div class="service-num">04</div>
-      <div class="service-name">Плазмотерапия (PRP)</div>
-      <div class="service-desc">Омоложение собственной плазмой — безопасно, натурально, эффективно. Стимуляция регенерации и восстановление тургора кожи.</div>
-      <div class="service-price"><span>от 10 000 ₽</span></div>
-      <a href="#contact" class="service-link">Записаться →</a>
+      <div class="service-name">Женское здоровье</div>
+      <div class="service-desc-short">ПМС, нарушения цикла, гормональный дисбаланс — нутрициологическая поддержка без лишней химии.</div>
+      <div class="service-arrow">Подробнее →</div>
     </div>
-    <div class="service-card reveal" style="transition-delay:.2s">
+    <div class="service-card reveal" style="transition-delay:.16s" data-solution="4">
       <div class="service-num">05</div>
-      <div class="service-name">Аппаратная косметология</div>
-      <div class="service-desc">RF-лифтинг, HIFU-терапия, лазерная шлифовка, микротоки. Подбираем аппаратный протокол индивидуально под тип и запрос кожи.</div>
-      <div class="service-price"><span>от 6 000 ₽</span></div>
-      <a href="#contact" class="service-link">Записаться →</a>
+      <div class="service-name">Детокс и поддержка печени</div>
+      <div class="service-desc-short">Мягкий детокс без жёстких диет — снижаю нагрузку на печень и запускаю естественное очищение.</div>
+      <div class="service-arrow">Подробнее →</div>
     </div>
-    <div class="service-card reveal" style="transition-delay:.3s">
+    <div class="service-card reveal" style="transition-delay:.24s" data-solution="5">
       <div class="service-num">06</div>
-      <div class="service-name">Консультация + диагностика</div>
-      <div class="service-desc">Детальный анализ состояния кожи на профессиональном оборудовании. Составление персонального плана ухода и лечения.</div>
-      <div class="service-price"><span>3 000 ₽</span></div>
-      <a href="#contact" class="service-link">Записаться →</a>
+      <div class="service-name">Персональный anti-age подход</div>
+      <div class="service-desc-short">Работаю с причинами старения: воспалением, гликацией и дефицитами — изнутри и снаружи.</div>
+      <div class="service-arrow">Подробнее →</div>
+    </div>
+    <div class="service-card reveal" style="transition-delay:.08s" data-solution="6">
+      <div class="service-num">07</div>
+      <div class="service-name">Подготовка к беременности</div>
+      <div class="service-desc-short">Восполняю нутриентный статус за 3–6 месяцев до зачатия — для здоровья мамы и ребёнка.</div>
+      <div class="service-arrow">Подробнее →</div>
+    </div>
+    <div class="service-card reveal" style="transition-delay:.16s" data-solution="7">
+      <div class="service-num">08</div>
+      <div class="service-name">Антистресс / ресурс / сон</div>
+      <div class="service-desc-short">Восстанавливаю надпочечники и сон через питание и адаптогены — без стимуляторов.</div>
+      <div class="service-arrow">Подробнее →</div>
+    </div>
+    <div class="service-card reveal" style="transition-delay:.24s" data-solution="8">
+      <div class="service-num">09</div>
+      <div class="service-name">Программа восстановления ЖКТ</div>
+      <div class="service-desc-short">Вздутие, дисбиоз, синдром дырявого кишечника — устраняю причину, а не симптомы.</div>
+      <div class="service-arrow">Подробнее →</div>
+    </div>
+    <div class="service-card reveal" style="transition-delay:.16s" data-solution="9">
+      <div class="service-num">10</div>
+      <div class="service-name">Разбор анализов (полный чекап)</div>
+      <div class="service-desc-short">Читаю анализы по функциональным диапазонам — нахожу то, что лаборатория считает «нормой».</div>
+      <div class="service-arrow">Подробнее →</div>
+    </div>
+    <div class="service-card reveal" style="transition-delay:.24s" data-solution="10">
+      <div class="service-num">11</div>
+      <div class="service-name">Коррекция веса</div>
+      <div class="service-desc-short">Ищу метаболическую причину лишнего веса — без диет на 1200 ккал и эффекта йо-йо.</div>
+      <div class="service-arrow">Подробнее →</div>
+    </div>
+    <div class="service-card reveal" style="transition-delay:.24s" data-solution="11">
+      <div class="service-num">12</div>
+      <div class="service-name">Индивидуальное сопровождение</div>
+      <div class="service-desc-short">Долгосрочная работа под ключ — от анализов до видимого результата с регулярным контролем.</div>
+      <div class="service-arrow">Подробнее →</div>
     </div>
   </div>
 </section>
 
+<!-- ─── SOLUTION DRAWER ─── -->
+<div class="solution-overlay" id="solutionOverlay"></div>
+<div class="solution-drawer" id="solutionDrawer">
+  <button class="drawer-close" id="drawerClose">✕</button>
+  <div class="drawer-num" id="drawerNum"></div>
+  <div class="drawer-title" id="drawerTitle"></div>
+  <div class="drawer-body" id="drawerBody"></div>
+  <a href="#contact" class="drawer-cta">Записаться на консультацию</a>
+</div>
+
 <!-- ─── PHILOSOPHY ─── -->
-<section style="padding:120px 60px; background:var(--cream);">
+<section style="padding:40px 60px 120px; background:var(--cream); position:relative; overflow:hidden;">
+  <div class="phil-img-panel">
+    <img src="IMG_9983.JPG" alt="">
+  </div>
   <div style="max-width:1400px; margin:0 auto;" class="philosophy">
     <div class="phil-sticky">
       <div class="section-label reveal">Подход</div>
-      <h2 class="section-title reveal" style="transition-delay:.1s">Моя <em>философия</em> красоты</h2>
-      <p class="section-text reveal" style="transition-delay:.2s; max-width:360px;">
-        Я убеждена: эстетическая медицина — это диалог. Красота не должна кричать, она должна говорить. Мой принцип — усиливать природу, а не переписывать её.
-      </p>
-      <a href="#about" class="btn-primary reveal" style="transition-delay:.3s; margin-top:20px; display:inline-block;">Подробнее обо мне</a>
+      <h2 class="section-title reveal" style="transition-delay:.1s">Моя <em>философия</em> здоровья и красоты</h2>
     </div>
     <div class="phil-items">
-      <div class="phil-item reveal">
-        <div class="phil-item-num">01</div>
-        <div>
-          <div class="phil-item-title">Честность прежде всего</div>
-          <p class="phil-item-text">Я никогда не предложу процедуру, в которой нет необходимости. Если ваша кожа здорова — я скажу об этом прямо и дам рекомендации по домашнему уходу.</p>
-        </div>
+      <div class="phil-para reveal">
+        <p class="phil-para-text">Я уверена, что тело всегда говорит с нами — через высыпания на коже, выпадение волос, пищеварение, гормональные сбои, снижение энергии, тревожность или хроническое воспаление. <em>И за каждым симптомом стоит причина, которую важно увидеть.</em></p>
       </div>
-      <div class="phil-item reveal" style="transition-delay:.1s">
-        <div class="phil-item-num">02</div>
-        <div>
-          <div class="phil-item-title">Результат, а не обещания</div>
-          <p class="phil-item-text">Фотографии до и после — мой главный аргумент. Работаю только с методиками и препаратами с доказанной клинической эффективностью.</p>
-        </div>
+      <div class="phil-para reveal" style="transition-delay:.1s">
+        <p class="phil-para-text">Мой подход — это <em>внимательный, комплексный разбор</em> состояния человека: не только анализов, но и образа жизни, питания, уровня стресса, сна, эмоционального фона и внутренних ресурсов организма.</p>
       </div>
-      <div class="phil-item reveal" style="transition-delay:.2s">
-        <div class="phil-item-num">03</div>
-        <div>
-          <div class="phil-item-title">Безопасность — основа</div>
-          <p class="phil-item-text">Никаких компромиссов в вопросах качества. Все препараты — оригинальные, с документами. Строгое соблюдение санитарных норм.</p>
-        </div>
+      <div class="phil-para reveal" style="transition-delay:.2s">
+        <p class="phil-para-text">Я соединяю знания медицины, нутрициологии и практический опыт сопровождения людей на пути восстановления здоровья. <em>Без крайностей, без жёстких запретов, без универсальных схем.</em> С уважением к телу, его ритму и индивидуальности каждого человека.</p>
       </div>
-      <div class="phil-item reveal" style="transition-delay:.3s">
-        <div class="phil-item-num">04</div>
-        <div>
-          <div class="phil-item-title">Долгосрочные отношения</div>
-          <p class="phil-item-text">Я становлюсь «семейным» косметологом — слежу за изменениями кожи в динамике, корректирую уход вместе с возрастом и образом жизни.</p>
-        </div>
+      <div class="phil-para reveal" style="transition-delay:.3s">
+        <p class="phil-para-text">Моя работа — помочь вам не просто «лечить симптомы», а по-настоящему <em>вернуть себе здоровье, энергию и качество жизни.</em></p>
       </div>
+      <a href="#about" class="btn-primary reveal" style="transition-delay:.4s; margin-top:12px; display:inline-block;">Подробнее обо мне</a>
     </div>
   </div>
 </section>
 
-<!-- ─── PROCEDURES ─── -->
-<section class="procedures" id="procedures">
-  <div class="procedures-inner">
-    <div class="procedures-header reveal">
-      <div class="section-label">Процедуры</div>
-      <h2 class="section-title">Как это работает?</h2>
-    </div>
-    <div class="proc-tabs">
-      <button class="proc-tab active" onclick="switchTab(0)">Биоревитализация</button>
-      <button class="proc-tab" onclick="switchTab(1)">Контурная пластика</button>
-      <button class="proc-tab" onclick="switchTab(2)">Ботулинотерапия</button>
-      <button class="proc-tab" onclick="switchTab(3)">PRP-терапия</button>
-    </div>
-    <div class="proc-content active" id="tab0">
-      <div class="proc-img"><span class="photo-hint" style="color:rgba(30,20,10,0.4);font-size:0.6rem;letter-spacing:0.2em;text-transform:uppercase;">Фото процедуры</span></div>
-      <div class="proc-details">
-        <div class="section-label">Биоревитализация</div>
-        <h3 class="proc-title">Глубокое увлажнение и молодость кожи</h3>
-        <p class="proc-text">Введение высококонцентрированной гиалуроновой кислоты в средние слои кожи. Запускает синтез коллагена, улучшает тургор и тон кожи, устраняет тусклость и мелкие морщины.</p>
-        <div class="proc-meta">
-          <div class="meta-item"><span class="meta-val">45 мин</span><span class="meta-key">Длительность</span></div>
-          <div class="meta-item"><span class="meta-val">3–5</span><span class="meta-key">Процедур</span></div>
-          <div class="meta-item"><span class="meta-val">6 мес</span><span class="meta-key">Эффект</span></div>
-        </div>
-        <a href="#contact" class="btn-primary">Записаться</a>
-      </div>
-    </div>
-    <div class="proc-content" id="tab1">
-      <div class="proc-img"><span class="photo-hint" style="color:rgba(30,20,10,0.4);font-size:0.6rem;letter-spacing:0.2em;text-transform:uppercase;">Фото процедуры</span></div>
-      <div class="proc-details">
-        <div class="section-label">Контурная пластика</div>
-        <h3 class="proc-title">Объём и гармония черт лица</h3>
-        <p class="proc-text">Коррекция овала лица, увеличение объёма губ, моделирование скул и подбородка с помощью филлеров на основе гиалуроновой кислоты.</p>
-        <div class="proc-meta">
-          <div class="meta-item"><span class="meta-val">60 мин</span><span class="meta-key">Длительность</span></div>
-          <div class="meta-item"><span class="meta-val">1</span><span class="meta-key">Процедура</span></div>
-          <div class="meta-item"><span class="meta-val">18 мес</span><span class="meta-key">Эффект</span></div>
-        </div>
-        <a href="#contact" class="btn-primary">Записаться</a>
-      </div>
-    </div>
-    <div class="proc-content" id="tab2">
-      <div class="proc-img"><span class="photo-hint" style="color:rgba(30,20,10,0.4);font-size:0.6rem;letter-spacing:0.2em;text-transform:uppercase;">Фото процедуры</span></div>
-      <div class="proc-details">
-        <div class="section-label">Ботулинотерапия</div>
-        <h3 class="proc-title">Расслабление морщин без масочного эффекта</h3>
-        <p class="proc-text">Работаю только с оригинальными препаратами Botox, Dysport, Xeomin. Индивидуальный расчёт дозировки — мимика сохраняется.</p>
-        <div class="proc-meta">
-          <div class="meta-item"><span class="meta-val">30 мин</span><span class="meta-key">Длительность</span></div>
-          <div class="meta-item"><span class="meta-val">1</span><span class="meta-key">Процедура</span></div>
-          <div class="meta-item"><span class="meta-val">6 мес</span><span class="meta-key">Эффект</span></div>
-        </div>
-        <a href="#contact" class="btn-primary">Записаться</a>
-      </div>
-    </div>
-    <div class="proc-content" id="tab3">
-      <div class="proc-img"><span class="photo-hint" style="color:rgba(30,20,10,0.4);font-size:0.6rem;letter-spacing:0.2em;text-transform:uppercase;">Фото процедуры</span></div>
-      <div class="proc-details">
-        <div class="section-label">PRP-терапия</div>
-        <h3 class="proc-title">Омоложение собственной плазмой</h3>
-        <p class="proc-text">Забор крови, центрифугирование, введение плазмы, богатой тромбоцитами. Стимулирует регенерацию, улучшает цвет лица, подтягивает кожу.</p>
-        <div class="proc-meta">
-          <div class="meta-item"><span class="meta-val">60 мин</span><span class="meta-key">Длительность</span></div>
-          <div class="meta-item"><span class="meta-val">3–4</span><span class="meta-key">Процедур</span></div>
-          <div class="meta-item"><span class="meta-val">1 год</span><span class="meta-key">Эффект</span></div>
-        </div>
-        <a href="#contact" class="btn-primary">Записаться</a>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ─── RESULTS ─── -->
-<section class="results" id="results">
-  <div class="results-header reveal">
-    <div class="section-label">До и После</div>
-    <h2 class="section-title">Реальные <em>результаты</em></h2>
-  </div>
-  <div class="results-grid">
-    <div class="result-card reveal">
-      <div class="result-placeholder">
-        <div class="photo-icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="rgba(184,150,90,0.5)" stroke-width="1.2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
-        <span class="photo-hint">Фото клиента</span>
-      </div>
-      <div class="result-before-after">До / После</div>
-      <div class="result-overlay">
-        <div class="result-procedure">Биоревитализация</div>
-        <div class="result-name">Мария, 38 лет</div>
-      </div>
-    </div>
-    <div class="result-card reveal" style="transition-delay:.1s">
-      <div class="result-placeholder">
-        <div class="photo-icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="rgba(184,150,90,0.5)" stroke-width="1.2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
-        <span class="photo-hint">Фото клиента</span>
-      </div>
-      <div class="result-before-after">До / После</div>
-      <div class="result-overlay">
-        <div class="result-procedure">Контурная пластика</div>
-        <div class="result-name">Ирина, 42 года</div>
-      </div>
-    </div>
-    <div class="result-card reveal" style="transition-delay:.2s">
-      <div class="result-placeholder">
-        <div class="photo-icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="rgba(184,150,90,0.5)" stroke-width="1.2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
-        <span class="photo-hint">Фото клиента</span>
-      </div>
-      <div class="result-before-after">До / После</div>
-      <div class="result-overlay">
-        <div class="result-procedure">Ботулинотерапия</div>
-        <div class="result-name">Елена, 46 лет</div>
-      </div>
-    </div>
-    <div class="result-card reveal" style="transition-delay:.3s">
-      <div class="result-placeholder">
-        <div class="photo-icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="rgba(184,150,90,0.5)" stroke-width="1.2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
-        <span class="photo-hint">Фото клиента</span>
-      </div>
-      <div class="result-before-after">До / После</div>
-      <div class="result-overlay">
-        <div class="result-procedure">PRP-терапия</div>
-        <div class="result-name">Светлана, 51 год</div>
-      </div>
-    </div>
-  </div>
-</section>
 
 <!-- ─── TESTIMONIALS ─── -->
 <section class="testimonials" id="reviews">
@@ -1299,37 +1414,45 @@ footer {
 <section class="booking" id="contact">
   <div class="booking-info">
     <div class="section-label reveal">Запись</div>
-    <h2 class="section-title reveal" style="transition-delay:.1s">Начните <em>путь</em> к красивой коже</h2>
+    <h2 class="section-title reveal" style="transition-delay:.1s">Начните <em> свой путь</em> к здоровью и красоте</h2>
     <p class="section-text reveal" style="transition-delay:.2s">
-      Запишитесь на первичную консультацию — я расскажу, какие процедуры подойдут именно вам, и отвечу на все вопросы. Консультация входит в стоимость первой процедуры.
+      Не знаете с чего начать? 
+      Запишитесь на короткий бесплатный видеозвонок, и мы вместе составим ваш индивидуальный план
     </p>
     <div class="contact-items reveal" style="transition-delay:.3s">
       <a class="contact-item" href="tel:+79001234567">
         <div class="contact-icon">📞</div>
         <div>
           <span class="contact-label">Телефон</span>
-          <span class="contact-val">+7 (900) 123-45-67</span>
+          <span class="contact-val">+ 357 97485636</span>
         </div>
       </a>
-      <a class="contact-item" href="https://wa.me/79001234567">
+      <a class="contact-item" href="https://t.me/tricholog_Nadezda" target="_blank">
         <div class="contact-icon">💬</div>
         <div>
-          <span class="contact-label">WhatsApp / Telegram</span>
-          <span class="contact-val">@dr_nadik</span>
+          <span class="contact-label">Telegram</span>
+          <span class="contact-val">@tricholog_Nadezda</span>
         </div>
       </a>
-      <a class="contact-item" href="#">
+      <a class="contact-item" href="https://www.instagram.com/nadezda.antiage?igsh=NTNobDJ6ZmVqNnpz&utm_source=qr" target="_blank">
         <div class="contact-icon">📸</div>
         <div>
           <span class="contact-label">Instagram</span>
-          <span class="contact-val">@dr.nadik_beauty</span>
+          <span class="contact-val">@nadezda_antiage</span>
         </div>
       </a>
       <div class="contact-item">
         <div class="contact-icon">📍</div>
         <div>
           <span class="contact-label">Адрес</span>
-          <span class="contact-val">Кипр, Лимассол, клиника «Эстетика»</span>
+          <span class="contact-val">Кипр, Пафос</span>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-icon">🌎</div>
+        <div>
+          <span class="contact-label">Онлайн-консультации</span>
+          <span class="contact-val">По всему миру</span>
         </div>
       </div>
     </div>
@@ -1348,7 +1471,7 @@ footer {
     </div>
     <div class="form-group">
       <select class="form-select">
-        <option value="" disabled selected>Выберите процедуру</option>
+        <option value="" disabled selected>Выберите услугу</option>
         <option>Первичная консультация</option>
         <option>Биоревитализация / Мезотерапия</option>
         <option>Контурная пластика</option>
@@ -1361,7 +1484,6 @@ footer {
       <textarea class="form-input" placeholder="Ваш вопрос или пожелание (необязательно)"></textarea>
     </div>
     <button class="form-submit" id="formSubmit">Отправить заявку</button>
-    <p class="form-note">Я свяжусь с вами в течение 2 часов.<br>Нажимая кнопку, вы соглашаетесь с обработкой персональных данных.</p>
   </div>
 </section>
 
@@ -1495,6 +1617,235 @@ if (/iPad|iPhone|iPod/.test(navigator.userAgent)) {
     });
   });
 }
+
+/* ─── SOLUTION DRAWER ─── */
+const solutions = [
+  {
+    title: 'Здоровье волос',
+    body: `<p>Выпадение волос, истончение, перхоть, жирность кожи головы — всё это симптомы, а не самостоятельные болезни. Я ищу причину: дефициты, гормональный фон, аутоиммунные процессы.</p>
+    <ul>
+      <li>Трихоскопия и анализ состояния волосяных фолликулов</li>
+      <li>Выявление дефицитов (железо, ферритин, цинк, витамин D, биотин)</li>
+      <li>Коррекция питания и нутрицевтическая поддержка</li>
+      <li>Локальные и системные протоколы лечения</li>
+      <li>Сопровождение до видимого результата</li>
+    </ul>`
+  },
+  {
+    title: 'Здоровая кожа изнутри и снаружи',
+    body: `<p>Акне, розацеа, купероз, сухость, тусклость — состояние кожи отражает состояние всего организма. Работаю с кожей одновременно снаружи и изнутри.</p>
+    <ul>
+      <li>Анализ триггеров: питание, гормоны, кишечник, стресс</li>
+      <li>Нутрициологическая поддержка кожи</li>
+      <li>Подбор персонального домашнего ухода</li>
+      <li>Профессиональные процедуры по показаниям</li>
+      <li>Протокол без «эффекта отмены»</li>
+    </ul>`
+  },
+  {
+    title: 'Дефициты и энергия',
+    body: `<p>Хроническая усталость, туман в голове, апатия — чаще всего это не «норма» и не характер. Это сигнал нехватки ключевых нутриентов.</p>
+    <ul>
+      <li>Анализ микроэлементного и витаминного статуса</li>
+      <li>Выявление скрытых дефицитов (B12, D, железо, магний, омега-3)</li>
+      <li>Индивидуальная схема восполнения</li>
+      <li>Коррекция рациона под ваш ритм жизни</li>
+      <li>Контроль динамики и корректировка протокола</li>
+    </ul>`
+  },
+  {
+    title: 'Женское здоровье',
+    body: `<p>ПМС, нарушения цикла, набор веса, перепады настроения, снижение либидо — всё это связано с гормональным балансом, который можно поддержать нутрициологически.</p>
+    <ul>
+      <li>Разбор гормонального фона по анализам</li>
+      <li>Нутрициологическая поддержка цикла</li>
+      <li>Работа с эстрогендоминированием и дефицитом прогестерона</li>
+      <li>Протоколы при СПКЯ, эндометриозе, менопаузе</li>
+      <li>Поддержка без гормональной терапии (или в дополнение к ней)</li>
+    </ul>`
+  },
+  {
+    title: 'Детокс и поддержка печени',
+    body: `<p>Печень — центральный орган детоксикации. Её перегрузка проявляется усталостью, кожными реакциями, гормональным дисбалансом и лишним весом.</p>
+    <ul>
+      <li>Оценка нагрузки на детокс-системы организма</li>
+      <li>Протокол мягкого детокса без жёстких диет</li>
+      <li>Поддержка фаз детоксикации нутрицевтиками</li>
+      <li>Коррекция питания и образа жизни</li>
+      <li>Работа с жировым гепатозом и повышенными печёночными ферментами</li>
+    </ul>`
+  },
+  {
+    title: 'Персональный anti-age подход',
+    body: `<p>Старение — управляемый процесс. Я работаю с его причинами: воспалением, гликацией, оксидативным стрессом, дефицитами — а не только с внешними проявлениями.</p>
+    <ul>
+      <li>Оценка биологического возраста по маркерам воспаления и метаболизма</li>
+      <li>Антивозрастной нутрициологический протокол</li>
+      <li>Поддержка синтеза коллагена изнутри</li>
+      <li>Интеграция с косметологическими процедурами</li>
+      <li>Долгосрочная стратегия для кожи и тела</li>
+    </ul>`
+  },
+  {
+    title: 'Подготовка к беременности',
+    body: `<p>Нутрициологическая подготовка к зачатию — это инвестиция в здоровье мамы и ребёнка. Минимум за 3–6 месяцев до планируемой беременности.</p>
+    <ul>
+      <li>Анализ нутриентного статуса обоих партнёров</li>
+      <li>Восполнение фолатов, йода, железа, омега-3, D</li>
+      <li>Поддержка репродуктивной функции</li>
+      <li>Снижение риска осложнений беременности</li>
+      <li>Протокол питания на весь период подготовки</li>
+    </ul>`
+  },
+  {
+    title: 'Антистресс / ресурс / сон',
+    body: `<p>Хронический стресс истощает надпочечники, разрушает кишечник, нарушает сон. Я работаю с этим через питание, нутрицевтики и образ жизни.</p>
+    <ul>
+      <li>Оценка уровня кортизола и надпочечниковой нагрузки</li>
+      <li>Протокол адаптогенов и нейротрофических нутриентов</li>
+      <li>Работа с дефицитом магния, B-витаминов, ГАМК</li>
+      <li>Рекомендации по режиму и гигиене сна</li>
+      <li>Восстановление ресурсного состояния без стимуляторов</li>
+    </ul>`
+  },
+  {
+    title: 'Программа восстановления ЖКТ',
+    body: `<p>Кишечник — второй мозг и основа иммунитета. Вздутие, запоры, диарея, дисбиоз, синдром дырявого кишечника — всё это влияет на кожу, вес и настроение.</p>
+    <ul>
+      <li>Анализ симптомов и пищевых триггеров</li>
+      <li>Протокол восстановления слизистой кишечника</li>
+      <li>Коррекция дисбиоза через питание и пробиотики</li>
+      <li>Устранение воспаления в ЖКТ</li>
+      <li>Поэтапная реинтродукция продуктов</li>
+    </ul>`
+  },
+  {
+    title: 'Разбор анализов (полный чекап)',
+    body: `<p>Сдали анализы, но не знаете что с ними делать? Я читаю анализы не по «норме лаборатории», а по функциональным диапазонам.</p>
+    <ul>
+      <li>Разбор общего и биохимического анализа крови</li>
+      <li>Оценка гормонального профиля</li>
+      <li>Выявление скрытых дефицитов и воспалительных маркеров</li>
+      <li>Чёткий список приоритетов коррекции</li>
+      <li>Индивидуальные рекомендации по питанию и добавкам</li>
+    </ul>`
+  },
+  {
+    title: 'Коррекция веса',
+    body: `<p>Лишний вес — это симптом. Я не назначаю диеты на 1200 ккал. Я ищу причину: инсулинорезистентность, гипотиреоз, хроническое воспаление, дефициты, стресс.</p>
+    <ul>
+      <li>Метаболическая диагностика по анализам</li>
+      <li>Выявление и коррекция инсулинорезистентности</li>
+      <li>Персональный план питания без жёстких ограничений</li>
+      <li>Нутрицевтическая поддержка метаболизма</li>
+      <li>Долгосрочный результат без эффекта «йо-йо»</li>
+    </ul>`
+  },
+  {
+    title: 'Индивидуальное сопровождение',
+    body: `<p>Лишний вес — это симптом. Я не назначаю диеты на 1200 ккал. Я ищу причину: инсулинорезистентность, гипотиреоз, хроническое воспаление, дефициты, стресс.</p>
+    <ul>
+      <li>Метаболическая диагностика по анализам</li>
+      <li>Выявление и коррекция инсулинорезистентности</li>
+      <li>Персональный план питания без жёстких ограничений</li>
+      <li>Нутрицевтическая поддержка метаболизма</li>
+      <li>Долгосрочный результат без эффекта «йо-йо»</li>
+    </ul>`
+  }
+];
+
+(function() {
+  const overlay = document.getElementById('solutionOverlay');
+  const drawer = document.getElementById('solutionDrawer');
+  const drawerNum = document.getElementById('drawerNum');
+  const drawerTitle = document.getElementById('drawerTitle');
+  const drawerBody = document.getElementById('drawerBody');
+
+  function openDrawer(idx) {
+    const s = solutions[idx];
+    drawerNum.textContent = String(idx + 1).padStart(2, '0');
+    drawerTitle.textContent = s.title;
+    drawerBody.innerHTML = s.body;
+    overlay.classList.add('open');
+    drawer.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeDrawer() {
+    overlay.classList.remove('open');
+    drawer.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  document.querySelectorAll('.service-card[data-solution]').forEach(card => {
+    card.addEventListener('click', () => openDrawer(+card.dataset.solution));
+  });
+
+  document.getElementById('drawerClose').addEventListener('click', closeDrawer);
+  overlay.addEventListener('click', closeDrawer);
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeDrawer(); });
+})();
+
+/* ─── ABOUT TABS ─── */
+document.querySelectorAll('.about-tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.about-tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.about-tab-panel').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+  });
+});
+
+/* ─── CERT LIGHTBOX ─── */
+(function() {
+  const lightbox = document.getElementById('certLightbox');
+  const lbImg = document.getElementById('certLightboxImg');
+  const grid = document.getElementById('certs-grid');
+  let current = 0;
+
+  function getCertImages() {
+    return Array.from(grid.querySelectorAll('.cert-thumb img'));
+  }
+
+  function openLightbox(index) {
+    const imgs = getCertImages();
+    if (!imgs.length) return;
+    current = index;
+    lbImg.src = imgs[current].src;
+    lightbox.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeLightbox() {
+    lightbox.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  function navigate(dir) {
+    const imgs = getCertImages();
+    current = (current + dir + imgs.length) % imgs.length;
+    lbImg.src = imgs[current].src;
+  }
+
+  grid.addEventListener('click', e => {
+    const thumb = e.target.closest('.cert-thumb');
+    if (!thumb) return;
+    const imgs = getCertImages();
+    const idx = imgs.indexOf(thumb.querySelector('img'));
+    if (idx >= 0) openLightbox(idx);
+  });
+
+  document.getElementById('certClose').addEventListener('click', closeLightbox);
+  document.getElementById('certPrev').addEventListener('click', () => navigate(-1));
+  document.getElementById('certNext').addEventListener('click', () => navigate(1));
+  lightbox.addEventListener('click', e => { if (e.target === lightbox) closeLightbox(); });
+  document.addEventListener('keydown', e => {
+    if (!lightbox.classList.contains('open')) return;
+    if (e.key === 'Escape') closeLightbox();
+    if (e.key === 'ArrowLeft') navigate(-1);
+    if (e.key === 'ArrowRight') navigate(1);
+  });
+})();
 </script>
 </body>
 </html>
