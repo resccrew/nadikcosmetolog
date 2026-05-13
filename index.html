@@ -1034,7 +1034,7 @@ footer {
     padding-top: 0; border-top: none;
     background: rgba(20,17,15,0.55);
     border: 1px solid rgba(255,255,255,0.12);
-    border-radius: 10px; overflow: hidden;
+    border-radius: 8px; overflow: hidden;
     animation: none; opacity: 1;
   }
   .stat-item {
@@ -1044,19 +1044,15 @@ footer {
   .stat-item:last-child { border-right: none; }
   .stat-num { font-size: 1.5rem; color: #fff; }
   .stat-label { font-size: 0.48rem; letter-spacing: 0.1em; color: rgba(255,255,255,0.45); margin-top: 3px; }
-  .hero-ctas { display: flex; gap: 10px; animation: none; opacity: 1; }
+  .hero-ctas { display: block; animation: none; opacity: 1; }
   .btn-primary {
-    flex: 1; text-align: center;
+    display: block; width: 100%; text-align: center;
     background: var(--gold); color: var(--dark);
     padding: 14px 16px; font-size: 0.62rem;
-    border-radius: 6px; letter-spacing: 0.16em;
+    border-radius: 8px; letter-spacing: 0.16em;
+    margin-bottom: 12px;
   }
-  .btn-outline {
-    padding: 14px 16px; font-size: 0.62rem;
-    border-radius: 6px; white-space: nowrap;
-    border-color: rgba(184,150,90,0.5);
-    color: var(--gold-light);
-  }
+  .btn-outline { display: none; }
   .scroll-indicator { display: none; }
 
   /* ─── ABOUT ─── */
