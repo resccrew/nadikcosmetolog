@@ -341,16 +341,6 @@ body {
 }
 
 /* Media progress dots */
-.dir-dots {
-  position: absolute; bottom: 32px; left: 30%; transform: translateX(-50%);
-  z-index: 4; display: flex; gap: 10px;
-}
-.dir-dot {
-  width: 4px; height: 4px; border-radius: 50%;
-  background: rgba(255,255,255,0.2);
-  transition: background .3s, transform .3s;
-}
-.dir-dot.on { background: var(--gold); transform: scale(1.5); }
 
 /* ═══════════════════════════════════════
    QUOTE
@@ -553,14 +543,6 @@ body {
   .dir-panel-tags { gap: 6px; }
   .dir-panel-tag  { font-size: 0.5rem; padding: 5px 10px; }
 
-  /* dots just above the text panel */
-  .dir-dots {
-    bottom: auto;
-    top: 52%;
-    left: 50%;
-    transform: translateX(-50%) translateY(-24px);
-  }
-
   /* ─── quote ─── */
   #quote { padding: 80px 7vw; }
   .quote-mark { font-size: 6rem; }
@@ -721,9 +703,6 @@ body {
         <span class="dir-panel-tag">Истончение</span>
       </div>
     </div>
-    <div class="dir-dots" id="dots-tri">
-      <div class="dir-dot on"></div><div class="dir-dot"></div><div class="dir-dot"></div>
-    </div>
   </div>
 </div>
 
@@ -760,9 +739,6 @@ body {
         <span class="dir-panel-tag">Розацеа</span>
       </div>
     </div>
-    <div class="dir-dots" id="dots-cosme">
-      <div class="dir-dot on"></div><div class="dir-dot"></div><div class="dir-dot"></div><div class="dir-dot"></div>
-    </div>
   </div>
 </div>
 
@@ -794,9 +770,6 @@ body {
         <span class="dir-panel-tag">Дерматит</span>
         <span class="dir-panel-tag">Аллергия</span>
       </div>
-    </div>
-    <div class="dir-dots" id="dots-dermo">
-      <div class="dir-dot on"></div><div class="dir-dot"></div>
     </div>
   </div>
 </div>
@@ -834,9 +807,6 @@ body {
         <span class="dir-panel-tag">Женское здоровье</span>
         <span class="dir-panel-tag">Вес</span>
       </div>
-    </div>
-    <div class="dir-dots" id="dots-nutri">
-      <div class="dir-dot on"></div><div class="dir-dot"></div><div class="dir-dot"></div>
     </div>
   </div>
 </div>
@@ -937,7 +907,6 @@ function animDirs() {
   dirScenes.forEach(scene => {
     const p      = sceneP(scene);
     const layers = scene.querySelectorAll('.dir-layer');
-    const dots   = scene.querySelectorAll('.dir-dot');
     const panel  = scene.querySelector('.dir-panel');
     const n      = layers.length;
 
@@ -955,8 +924,6 @@ function animDirs() {
       }
       layer.style.opacity = op;
     });
-
-    dots.forEach((dot, i) => dot.classList.toggle('on', i === active));
 
     // Panel: fade on enter/exit; no vertical shift on mobile
     const panelIn  = clamp(p / 0.1,  0, 1);

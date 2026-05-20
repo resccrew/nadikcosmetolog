@@ -1213,12 +1213,14 @@ footer {
   .services-header .nav-btn { display: none; }
   .services-grid {
     display: -webkit-box;
-    display: flex; gap: 14px; overflow-x: auto;
+    display: flex; gap: 14px; overflow-x: auto; overflow-y: hidden;
     -webkit-overflow-scrolling: touch;
     padding: 4px 24px 12px;
     -webkit-scroll-snap-type: x mandatory;
     scroll-snap-type: x mandatory;
     grid-template-columns: unset;
+    touch-action: pan-x;
+    align-items: stretch;
   }
   .services-grid::-webkit-scrollbar { display: none; }
   .service-card {
@@ -1226,8 +1228,9 @@ footer {
     -webkit-scroll-snap-align: start;
     scroll-snap-align: start;
     border-radius: 16px; padding: 28px 24px;
+    transform: none !important;
   }
-  .service-card:hover { transform: none; }
+  .service-card:hover { transform: none !important; }
   .service-card:active { border-color: rgba(184,150,90,0.4); }
   .service-num { font-size: 2.2rem; margin-bottom: 12px; }
   .service-name { font-size: 0.92rem; margin-bottom: 10px; }
@@ -1320,12 +1323,14 @@ footer {
   .testimonials-header .nav-btn { display: none; }
   .reviews-track {
     display: -webkit-box;
-    display: flex; gap: 14px; overflow-x: auto;
+    display: flex; gap: 14px; overflow-x: auto; overflow-y: hidden;
     -webkit-overflow-scrolling: touch;
     padding: 4px 24px 8px;
     -webkit-scroll-snap-type: x mandatory;
     scroll-snap-type: x mandatory;
     grid-template-columns: unset;
+    touch-action: pan-x;
+    align-items: stretch;
   }
   .reviews-track::-webkit-scrollbar { display: none; }
   .review-card {
@@ -1333,6 +1338,7 @@ footer {
     -webkit-scroll-snap-align: start; scroll-snap-align: start;
     border-radius: 16px; padding: 24px;
     background: white; border: 1px solid rgba(184,150,90,0.15);
+    transform: none !important;
   }
   .review-card:hover { transform: none; }
   .review-text { font-size: 1rem; color: var(--text); margin-bottom: 16px; }
@@ -1652,7 +1658,7 @@ footer {
       </div>
     </div>
     <a href="story.html" class="story-banner-cta">
-      Читать историю
+      Окунуться в историю
       <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
     </a>
   </div>
