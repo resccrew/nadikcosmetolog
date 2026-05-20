@@ -176,7 +176,7 @@ body {
 .tl-year {
   font-family: 'Cormorant Garamond', serif;
   font-size: clamp(3rem, 5vw, 5rem); font-weight: 300;
-  color: rgba(184,150,90,0.25); line-height: 1; margin-bottom: 14px;
+  color: rgba(184,150,90,0.52); line-height: 1; margin-bottom: 14px;
 }
 .tl-card-title {
   font-size: 0.8rem; font-weight: 400; color: var(--cream);
@@ -556,9 +556,46 @@ body {
   .cta-btn-primary, .cta-btn-outline { width: 100%; text-align: center; }
 
 }
+
+/* ═══ PAGE LOADER ═══ */
+body.loading { overflow: hidden; }
+#page-loader {
+  position: fixed; inset: 0; z-index: 9999;
+  background: var(--dark2);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  transition: opacity 0.85s ease;
+}
+#page-loader.done { opacity: 0; pointer-events: none; }
+.loader-logo {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(1.6rem, 5vw, 2.6rem);
+  font-weight: 300; color: var(--cream);
+  letter-spacing: 0.14em; margin-bottom: 6px;
+}
+.loader-logo em { color: var(--gold-light); font-style: italic; }
+.loader-caption {
+  font-size: 0.52rem; letter-spacing: 0.38em; text-transform: uppercase;
+  color: rgba(248,244,239,0.28); margin-bottom: 44px;
+}
+.loader-track {
+  width: 100px; height: 1px;
+  background: rgba(184,150,90,0.15); overflow: hidden;
+}
+.loader-fill {
+  height: 100%; width: 0%;
+  background: linear-gradient(90deg, var(--gold), var(--gold-light));
+  transition: width 0.9s ease;
+}
 </style>
 </head>
-<body>
+<body class="loading">
+
+<div id="page-loader">
+  <div class="loader-logo">Надежда <em>Праворова</em></div>
+  <div class="loader-caption">История врача</div>
+  <div class="loader-track"><div class="loader-fill" id="loaderFill"></div></div>
+</div>
 
 <a href="index.html" class="back-btn">
   <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
@@ -868,10 +905,35 @@ const heroBg   = document.getElementById('heroBg');
 const heroCont = document.getElementById('heroContent');
 const heroHint = document.getElementById('heroHint');
 
+/* ═══════════════════════════════════════
+   LOADER
+═══════════════════════════════════════ */
+const loaderEl   = document.getElementById('page-loader');
+const loaderFill = document.getElementById('loaderFill');
+const loaderStart = Date.now();
+const MIN_LOADER  = 1100; // minimum ms to show loader
+
+// animate bar to 80% while loading
+requestAnimationFrame(() => { loaderFill.style.width = '80%'; });
+
 window.addEventListener('load', () => {
-  document.getElementById('hEyebrow').classList.add('in');
-  setTimeout(() => document.getElementById('hName').classList.add('in'), 160);
-  setTimeout(() => document.getElementById('hSpec').classList.add('in'), 360);
+  // complete the bar
+  loaderFill.style.transition = 'width 0.25s ease';
+  loaderFill.style.width = '100%';
+
+  const elapsed   = Date.now() - loaderStart;
+  const remaining = Math.max(0, MIN_LOADER - elapsed);
+
+  setTimeout(() => {
+    loaderEl.classList.add('done');
+    document.body.classList.remove('loading');
+    setTimeout(() => { if (loaderEl.parentNode) loaderEl.remove(); }, 900);
+
+    // kick off hero text reveal after loader gone
+    document.getElementById('hEyebrow').classList.add('in');
+    setTimeout(() => document.getElementById('hName').classList.add('in'), 160);
+    setTimeout(() => document.getElementById('hSpec').classList.add('in'), 360);
+  }, remaining + 250); // +250ms for bar fill animation
 });
 
 function animHero(p) {
