@@ -571,29 +571,6 @@ body {
   .cta-btns { flex-direction: column; align-items: center; }
   .cta-btn-primary, .cta-btn-outline { width: 100%; text-align: center; }
 
-  /* ─── global direction nav dots (bottom strip) ─── */
-  .dir-nav-dots {
-    display: flex;
-    position: fixed;
-    bottom: calc(16px + env(safe-area-inset-bottom));
-    left: 50%;
-    transform: translateX(-50%);
-    gap: 10px;
-    z-index: 800;
-    opacity: 0;
-    transition: opacity 0.4s ease;
-    pointer-events: none;
-  }
-  .dir-nav-dots.visible { opacity: 1; }
-  .dir-nav-dot-g {
-    width: 5px; height: 5px; border-radius: 50%;
-    background: rgba(255,255,255,0.22);
-    transition: background 0.35s, transform 0.35s;
-  }
-  .dir-nav-dot-g.on {
-    background: var(--gold);
-    transform: scale(1.6);
-  }
 }
 </style>
 </head>
@@ -894,14 +871,6 @@ body {
   </div>
 </section>
 
-<!-- global direction nav dots — mobile only -->
-<div class="dir-nav-dots" id="dirNavDots">
-  <div class="dir-nav-dot-g on"></div>
-  <div class="dir-nav-dot-g"></div>
-  <div class="dir-nav-dot-g"></div>
-  <div class="dir-nav-dot-g"></div>
-</div>
-
 <script>
 /* ═══════════════════════════════════════
    UTILITY
@@ -962,14 +931,10 @@ function animTagline(p) {
 /* ═══════════════════════════════════════
    DIRECTION SCENES — CYCLING MEDIA
 ═══════════════════════════════════════ */
-const dirScenes   = document.querySelectorAll('.dir-scene');
-const dirNavDots  = document.getElementById('dirNavDots');
-const dirNavDotGs = dirNavDots.querySelectorAll('.dir-nav-dot-g');
+const dirScenes = document.querySelectorAll('.dir-scene');
 
 function animDirs() {
-  let anyActive = false;
-
-  dirScenes.forEach((scene, sceneIdx) => {
+  dirScenes.forEach(scene => {
     const p      = sceneP(scene);
     const layers = scene.querySelectorAll('.dir-layer');
     const dots   = scene.querySelectorAll('.dir-dot');
@@ -1002,15 +967,7 @@ function animDirs() {
     } else {
       panel.style.transform = 'none';
     }
-
-    // Track which direction is active for bottom nav dots
-    const isActive = p > 0 && p < 1;
-    if (isActive) anyActive = true;
-    dirNavDotGs[sceneIdx]?.classList.toggle('on', isActive);
   });
-
-  // Show/hide the bottom nav strip
-  dirNavDots.classList.toggle('visible', anyActive);
 }
 
 /* ═══════════════════════════════════════

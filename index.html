@@ -1382,6 +1382,29 @@ footer {
 /* ═══════════════════════════════════════════
    ░░░ SMALL MOBILE ░░░  ≤ 380px
 ═══════════════════════════════════════════ */
+/* ─── SWIPE DOTS — hidden on desktop ─── */
+.swipe-dots { display: none; }
+
+@media (max-width: 768px) {
+  .swipe-dots {
+    display: flex;
+    justify-content: center;
+    gap: 7px;
+    padding: 14px 0 6px;
+  }
+  .swipe-dot {
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    background: rgba(184,150,90,0.22);
+    transition: background 0.3s, transform 0.3s;
+    flex-shrink: 0;
+  }
+  .swipe-dot.on {
+    background: var(--gold);
+    transform: scale(1.5);
+  }
+}
+
 @media (max-width: 380px) {
   .hero-name { font-size: 2.2rem; }
   .stat-num { font-size: 1.35rem; }
@@ -1657,7 +1680,7 @@ footer {
     </div>
     <a href="#contact" class="nav-btn" style="color:var(--gold);border-color:var(--gold);">Консультация</a>
   </div>
-  <div class="services-grid">
+  <div class="services-grid" id="servicesGrid">
     <div class="service-card reveal" data-solution="0">
       <div class="service-num">01</div>
       <div class="service-name">Здоровье волос</div>
@@ -1731,6 +1754,12 @@ footer {
       <div class="service-arrow">Подробнее →</div>
     </div>
   </div>
+  <div class="swipe-dots" id="servicesDots">
+    <div class="swipe-dot on"></div><div class="swipe-dot"></div><div class="swipe-dot"></div>
+    <div class="swipe-dot"></div><div class="swipe-dot"></div><div class="swipe-dot"></div>
+    <div class="swipe-dot"></div><div class="swipe-dot"></div><div class="swipe-dot"></div>
+    <div class="swipe-dot"></div><div class="swipe-dot"></div><div class="swipe-dot"></div>
+  </div>
 </section>
 
 <!-- ─── SOLUTION DRAWER ─── -->
@@ -1783,7 +1812,7 @@ footer {
       </div>
       <a href="#contact" class="nav-btn" style="color:var(--gold);border-color:var(--gold);">Записаться</a>
     </div>
-    <div class="reviews-track">
+    <div class="reviews-track" id="reviewsTrack">
       <div class="review-card reveal">
         <div class="stars">★★★★★</div>
         <div class="review-text">«Наконец-то нашла своего косметолога. Надежда очень внимательно выслушала, посмотрела кожу и предложила именно то, что мне нужно. Результат после биоревитализации — просто потрясающий.»</div>
@@ -1817,6 +1846,9 @@ footer {
           </div>
         </div>
       </div>
+    </div>
+    <div class="swipe-dots" id="reviewsDots">
+      <div class="swipe-dot on"></div><div class="swipe-dot"></div><div class="swipe-dot"></div>
     </div>
   </div>
 </section>
@@ -2335,6 +2367,30 @@ document.querySelectorAll('.seg-btn').forEach(btn => {
     }
   }
   window.addEventListener('scroll', onScroll, { passive: true });
+})();
+
+/* ─── SWIPE DOTS — services & reviews ─── */
+(function() {
+  function initDots(trackId, dotsId, cardSelector) {
+    const track = document.getElementById(trackId);
+    const dotsEl = document.getElementById(dotsId);
+    if (!track || !dotsEl) return;
+    const dots = dotsEl.querySelectorAll('.swipe-dot');
+    const cards = track.querySelectorAll(cardSelector);
+    if (!cards.length || !dots.length) return;
+
+    function update() {
+      const cardW = track.scrollWidth / cards.length;
+      const idx   = Math.min(Math.round(track.scrollLeft / cardW), dots.length - 1);
+      dots.forEach((d, i) => d.classList.toggle('on', i === idx));
+    }
+
+    track.addEventListener('scroll', update, { passive: true });
+    update();
+  }
+
+  initDots('servicesGrid', 'servicesDots', '.service-card');
+  initDots('reviewsTrack', 'reviewsDots',  '.review-card');
 })();
 </script>
 
