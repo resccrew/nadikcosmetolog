@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>История врача — Надежда Праворова</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Jost:wght@200;300;400;500&display=swap" rel="stylesheet">
+<style>
+/* ═══ VARIABLES ═══ */
+:root {
+  --cream: #F8F4EF;
+  --gold: #B8965A;
+  --gold-light: #D4B483;
+  --dark: #1C1816;
+  --dark2: #231F1C;
+  --muted: #7A6E64;
+  --text: #2E2924;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: auto; }
+
+body {
+  background: var(--dark);
+  color: var(--cream);
+  font-family: 'Jost', sans-serif;
+  font-weight: 300;
+  overflow-x: hidden;
+  cursor: none;
+}
+
+/* ═══ CURSOR ═══ */
+@media (pointer: fine) {
+  .cursor {
+    position: fixed; width: 10px; height: 10px;
+    background: var(--gold); border-radius: 50%;
+    pointer-events: none; z-index: 9999;
+    transform: translate(-50%, -50%);
+    transition: transform .15s, width .2s, height .2s, background .2s;
+    mix-blend-mode: normal;
+  }
+  .cursor-ring {
+    position: fixed; width: 40px; height: 40px;
+    border: 1px solid rgba(184,150,90,0.5); border-radius: 50%;
+    pointer-events: none; z-index: 9998;
+    transform: translate(-50%, -50%);
+    transition: transform .08s linear;
+  }
+  body.dragging .cursor { width: 60px; height: 60px; background: rgba(184,150,90,0.25); }
+  body.dragging .cursor-ring { opacity: 0; }
+}
+@media (pointer: coarse) {
+  .cursor, .cursor-ring { display: none; }
+  body { cursor: auto; }
+}
+
+/* ═══ BACK BUTTON ═══ */
+.back-btn {
+  position: fixed; top: 28px; left: 32px; z-index: 500;
+  display: flex; align-items: center; gap: 10px;
+  text-decoration: none; color: rgba(248,244,239,0.6);
+  font-size: 0.6rem; letter-spacing: 0.22em; text-transform: uppercase;
+  transition: color .3s;
+}
+.back-btn:hover { color: var(--gold); }
+.back-btn svg { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 1.5; }
+
+/* ═══ PROGRESS BAR ═══ */
+.progress-bar {
+  position: fixed; bottom: 0; left: 0; right: 0; z-index: 500;
+  height: 2px; background: rgba(255,255,255,0.07);
+}
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--gold), var(--gold-light));
+  width: 0%; transition: width .05s linear;
+}
+
+/* ═══ PANEL COUNTER ═══ */
+.panel-counter {
+  position: fixed; bottom: 20px; right: 32px; z-index: 500;
+  font-size: 0.58rem; letter-spacing: 0.2em; color: var(--muted);
+}
+.panel-counter span { color: var(--gold-light); }
+
+/* ═══ DRAG HINT ═══ */
+.drag-hint {
+  position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+  z-index: 500; display: flex; align-items: center; gap: 8px;
+  font-size: 0.55rem; letter-spacing: 0.2em; text-transform: uppercase;
+  color: rgba(248,244,239,0.35); transition: opacity .5s;
+}
+.drag-hint.hidden { opacity: 0; pointer-events: none; }
+.drag-hint-arrows { display: flex; gap: 4px; }
+.drag-hint-arrows span {
+  animation: drift 1.4s ease-in-out infinite;
+  color: var(--gold); font-size: 0.9rem;
+}
+.drag-hint-arrows span:nth-child(2) { animation-delay: .15s; }
+.drag-hint-arrows span:nth-child(3) { animation-delay: .3s; }
+@keyframes drift {
+  0%,100% { opacity: 0.2; transform: translateX(0); }
+  50% { opacity: 1; transform: translateX(4px); }
+}
+
+/* ═══ SCROLL CONTAINER ═══ */
+.scroll-wrapper {
+  height: 100vh; overflow: hidden;
+  position: relative;
+}
+
+/* The horizontal track */
+.panels-track {
+  display: flex;
+  height: 100vh;
+  will-change: transform;
+  cursor: grab;
+}
+.panels-track:active { cursor: grabbing; }
+
+/* ═══ PANEL BASE ═══ */
+.panel {
+  flex: 0 0 100vw;
+  width: 100vw; height: 100vh;
+  position: relative; overflow: hidden;
+  display: flex; align-items: center; justify-content: center;
+  user-select: none;
+}
+
+/* ═══ PANEL 1 — INTRO ═══ */
+.panel-1 {
+  background: var(--dark);
+}
+.panel-1 .bg-photo {
+  position: absolute; inset: 0;
+  background: url('IMG_9656.JPG') center top / cover no-repeat;
+  transform: scale(1.05);
+  transition: transform 8s ease;
+}
+.panel-1 .bg-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(110deg, rgba(28,24,22,0.92) 40%, rgba(28,24,22,0.55) 100%);
+}
+.panel-1 .content {
+  position: relative; z-index: 2;
+  padding: 0 8vw;
+  max-width: 700px;
+}
+.p1-label {
+  font-size: 0.6rem; letter-spacing: 0.35em; text-transform: uppercase;
+  color: var(--gold); margin-bottom: 32px;
+  display: flex; align-items: center; gap: 14px;
+}
+.p1-label::before { content: ''; width: 40px; height: 1px; background: var(--gold); }
+.p1-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(3rem, 6vw, 5.5rem);
+  font-weight: 300; line-height: 1.06; color: var(--cream);
+  margin-bottom: 28px;
+}
+.p1-title em { font-style: italic; color: var(--gold-light); display: block; }
+.p1-sub {
+  font-size: 0.85rem; line-height: 1.85; color: rgba(248,244,239,0.5);
+  max-width: 420px; margin-bottom: 52px;
+}
+.p1-start {
+  display: inline-flex; align-items: center; gap: 14px;
+  font-size: 0.6rem; letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--gold); text-decoration: none;
+  border-bottom: 1px solid rgba(184,150,90,0.3); padding-bottom: 6px;
+  transition: gap .3s, color .3s;
+}
+.p1-start:hover { gap: 22px; color: var(--gold-light); }
+.p1-scroll-arrow { font-size: 1rem; }
+
+/* ═══ PANEL 2 — TIMELINE НАЧАЛО ═══ */
+.panel-2 { background: #1A1714; }
+.panel-2 .year-bg {
+  position: absolute;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 32vw; font-weight: 300;
+  color: rgba(184,150,90,0.04);
+  line-height: 1; right: -2vw; bottom: -4vh;
+  user-select: none; pointer-events: none;
+}
+.panel-2 .content {
+  position: relative; z-index: 2;
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 80px; align-items: center;
+  padding: 0 8vw; width: 100%;
+}
+.timeline-left .tl-year {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(4rem, 8vw, 7rem);
+  font-weight: 300; color: var(--gold);
+  line-height: 1; margin-bottom: 16px;
+}
+.timeline-left .tl-place {
+  font-size: 0.65rem; letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--muted); margin-bottom: 40px;
+}
+.timeline-left .tl-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(1.8rem, 3vw, 2.6rem);
+  font-weight: 300; line-height: 1.25; color: var(--cream);
+  margin-bottom: 20px;
+}
+.timeline-left .tl-text {
+  font-size: 0.85rem; line-height: 1.9; color: rgba(248,244,239,0.45);
+  max-width: 380px;
+}
+.timeline-right { display: flex; flex-direction: column; gap: 24px; }
+.tl-milestone {
+  padding: 20px 24px;
+  border-left: 1px solid rgba(184,150,90,0.2);
+  transition: border-color .3s;
+}
+.tl-milestone:hover { border-color: var(--gold); }
+.tl-m-year { font-size: 0.62rem; color: var(--gold); letter-spacing: 0.15em; margin-bottom: 6px; }
+.tl-m-text { font-size: 0.8rem; line-height: 1.6; color: rgba(248,244,239,0.55); }
+
+/* ═══ PANEL 3 — STATS ═══ */
+.panel-3 {
+  background: var(--cream);
+  flex-direction: column;
+}
+.panel-3 .p3-label {
+  font-size: 0.6rem; letter-spacing: 0.35em; text-transform: uppercase;
+  color: var(--gold); margin-bottom: 20px;
+  display: flex; align-items: center; gap: 12px;
+}
+.panel-3 .p3-label::before { content: ''; width: 32px; height: 1px; background: var(--gold); }
+.panel-3 .p3-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(2rem, 4vw, 3.2rem);
+  font-weight: 300; color: var(--text);
+  margin-bottom: 72px; text-align: center; line-height: 1.2;
+}
+.panel-3 .p3-title em { font-style: italic; color: var(--gold); }
+.stats-row {
+  display: flex; gap: 0;
+  width: 100%; max-width: 900px;
+}
+.stat-block {
+  flex: 1; text-align: center;
+  padding: 48px 40px;
+  border-right: 1px solid rgba(184,150,90,0.15);
+  position: relative;
+}
+.stat-block:last-child { border-right: none; }
+.stat-block::after {
+  content: '';
+  position: absolute; bottom: 0; left: 50%; transform: translateX(-50%);
+  width: 0; height: 2px; background: var(--gold);
+  transition: width .6s ease;
+}
+.stat-block.in-view::after { width: 32px; }
+.stat-num-big {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(4rem, 8vw, 7rem);
+  font-weight: 300; color: var(--text);
+  line-height: 1; display: block; margin-bottom: 8px;
+}
+.stat-num-big .gold { color: var(--gold); font-size: 0.6em; }
+.stat-desc { font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); }
+
+/* ═══ PANEL 4 — СПЕЦИАЛИЗАЦИЯ ═══ */
+.panel-4 { background: #1A1714; }
+.panel-4 .content {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 80px; align-items: center;
+  padding: 0 8vw; width: 100%; max-width: 1200px;
+}
+.spec-photo-wrap {
+  position: relative; aspect-ratio: 3/4;
+  max-height: 70vh; overflow: hidden;
+  border-radius: 4px;
+}
+.spec-photo-wrap img {
+  width: 100%; height: 100%;
+  object-fit: cover; object-position: center top;
+  display: block;
+}
+.spec-photo-wrap::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(to top, rgba(28,24,22,0.6) 0%, transparent 50%);
+}
+.spec-photo-tag {
+  position: absolute; bottom: 20px; left: 20px; z-index: 2;
+  background: rgba(28,24,22,0.8);
+  border: 1px solid rgba(184,150,90,0.3);
+  padding: 10px 16px;
+  font-size: 0.6rem; letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--gold);
+}
+.spec-right .s-label {
+  font-size: 0.6rem; letter-spacing: 0.35em; text-transform: uppercase;
+  color: var(--gold); margin-bottom: 28px;
+  display: flex; align-items: center; gap: 12px;
+}
+.spec-right .s-label::before { content: ''; width: 32px; height: 1px; background: var(--gold); }
+.spec-right .s-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(2rem, 3.5vw, 3rem);
+  font-weight: 300; line-height: 1.2; color: var(--cream);
+  margin-bottom: 36px;
+}
+.spec-right .s-title em { font-style: italic; color: var(--gold-light); }
+.spec-tags { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 36px; }
+.spec-tag {
+  font-size: 0.62rem; letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--gold); border: 1px solid rgba(184,150,90,0.3);
+  padding: 8px 16px; border-radius: 2px;
+  transition: background .3s, border-color .3s;
+}
+.spec-tag:hover { background: rgba(184,150,90,0.1); border-color: var(--gold); }
+.spec-right .s-text {
+  font-size: 0.88rem; line-height: 1.9;
+  color: rgba(248,244,239,0.45); max-width: 400px;
+}
+
+/* ═══ PANEL 5 — ПОДХОД ═══ */
+.panel-5 { background: var(--dark); overflow: hidden; }
+.panel-5 .big-quote-bg {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  pointer-events: none; overflow: hidden;
+}
+.panel-5 .big-quote-bg span {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 40vw; font-weight: 300;
+  color: rgba(184,150,90,0.03);
+  line-height: 1; user-select: none;
+}
+.panel-5 .content {
+  position: relative; z-index: 2;
+  max-width: 800px; padding: 0 8vw; text-align: center;
+}
+.panel-5 .q-label {
+  font-size: 0.58rem; letter-spacing: 0.3em; text-transform: uppercase;
+  color: var(--gold); margin-bottom: 40px;
+}
+.panel-5 .q-text {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(2rem, 4vw, 3.4rem);
+  font-weight: 300; line-height: 1.5;
+  color: var(--cream); margin-bottom: 40px;
+}
+.panel-5 .q-text em { font-style: italic; color: var(--gold-light); }
+.panel-5 .q-author {
+  font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--muted); display: flex; align-items: center;
+  justify-content: center; gap: 16px;
+}
+.panel-5 .q-author::before,
+.panel-5 .q-author::after { content: ''; width: 32px; height: 1px; background: rgba(184,150,90,0.3); }
+
+/* ═══ PANEL 6 — РЕЗУЛЬТАТЫ ═══ */
+.panel-6 { background: #100E0C; }
+.panel-6 .content {
+  display: flex; flex-direction: column;
+  align-items: flex-start; justify-content: center;
+  padding: 0 8vw; width: 100%;
+}
+.panel-6 .r-label {
+  font-size: 0.6rem; letter-spacing: 0.35em; text-transform: uppercase;
+  color: var(--gold); margin-bottom: 20px;
+  display: flex; align-items: center; gap: 12px;
+}
+.panel-6 .r-label::before { content: ''; width: 32px; height: 1px; background: var(--gold); }
+.panel-6 .r-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(2rem, 3.5vw, 3rem);
+  font-weight: 300; color: var(--cream);
+  margin-bottom: 48px; line-height: 1.2;
+}
+.panel-6 .r-title em { font-style: italic; color: var(--gold-light); }
+.results-cards {
+  display: flex; gap: 20px; width: 100%;
+}
+.r-card {
+  flex: 1; border: 1px solid rgba(255,255,255,0.06);
+  background: rgba(255,255,255,0.03);
+  padding: 32px 28px;
+  position: relative; overflow: hidden;
+  transition: border-color .35s, transform .35s;
+}
+.r-card:hover { border-color: rgba(184,150,90,0.3); transform: translateY(-4px); }
+.r-card::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  opacity: 0; transition: opacity .35s;
+}
+.r-card:hover::before { opacity: 1; }
+.r-card-num {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2.8rem; font-weight: 300;
+  color: rgba(184,150,90,0.18); line-height: 1; margin-bottom: 12px;
+}
+.r-card-title { font-size: 0.85rem; font-weight: 400; color: var(--cream); margin-bottom: 12px; }
+.r-card-text { font-size: 0.75rem; line-height: 1.75; color: rgba(248,244,239,0.4); }
+
+/* ═══ PANEL 7 — CTA ═══ */
+.panel-7 { background: var(--dark); }
+.panel-7 .bg-photo {
+  position: absolute; inset: 0;
+  background: url('IMG_9983.JPG') center 10% / cover no-repeat;
+  opacity: 0.12;
+}
+.panel-7 .content {
+  position: relative; z-index: 2;
+  text-align: center; padding: 0 8vw; max-width: 700px;
+}
+.panel-7 .cta-label {
+  font-size: 0.58rem; letter-spacing: 0.35em; text-transform: uppercase;
+  color: var(--gold); margin-bottom: 32px;
+}
+.panel-7 .cta-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(2.5rem, 5vw, 4.5rem);
+  font-weight: 300; line-height: 1.15; color: var(--cream);
+  margin-bottom: 24px;
+}
+.panel-7 .cta-title em { font-style: italic; color: var(--gold-light); }
+.panel-7 .cta-sub {
+  font-size: 0.85rem; line-height: 1.85;
+  color: rgba(248,244,239,0.45); max-width: 440px;
+  margin: 0 auto 48px;
+}
+.cta-buttons { display: flex; gap: 16px; justify-content: center; }
+.cta-btn-primary {
+  padding: 16px 40px;
+  background: var(--gold); color: var(--dark);
+  text-decoration: none; font-size: 0.65rem;
+  font-weight: 500; letter-spacing: 0.2em;
+  text-transform: uppercase; border-radius: 3px;
+  transition: background .3s, transform .2s;
+}
+.cta-btn-primary:hover { background: var(--gold-light); transform: translateY(-2px); }
+.cta-btn-outline {
+  padding: 16px 40px;
+  border: 1px solid rgba(184,150,90,0.4); color: var(--gold);
+  text-decoration: none; font-size: 0.65rem;
+  letter-spacing: 0.2em; text-transform: uppercase; border-radius: 3px;
+  transition: background .3s, border-color .3s;
+}
+.cta-btn-outline:hover { background: rgba(184,150,90,0.1); border-color: var(--gold); }
+
+/* ═══ MOBILE ═══ */
+@media (max-width: 768px) {
+  body { cursor: auto; }
+  .back-btn { top: 20px; left: 20px; }
+  .panel-counter { bottom: 14px; right: 20px; }
+
+  /* 2-col → single col panels */
+  .panel-2 .content,
+  .panel-4 .content {
+    grid-template-columns: 1fr;
+    padding: 0 24px; gap: 32px;
+  }
+  .panel-2 .year-bg { font-size: 50vw; }
+  .spec-photo-wrap { aspect-ratio: 16/9; max-height: 38vh; }
+
+  .panel-3 .p3-title { font-size: 1.5rem; margin-bottom: 40px; padding: 0 24px; text-align: center; }
+  .panel-3 .p3-label { padding: 0 24px; }
+  .stats-row { flex-direction: column; gap: 0; max-width: 100%; padding: 0 24px; }
+  .stat-block { padding: 20px 0; border-right: none; border-bottom: 1px solid rgba(184,150,90,0.15); }
+  .stat-block:last-child { border-bottom: none; }
+  .stat-num-big { font-size: 3.5rem; }
+
+  .panel-5 .content { padding: 0 24px; }
+  .panel-5 .q-text { font-size: 1.5rem; }
+
+  .panel-6 .content { padding: 0 24px; }
+  .panel-6 .r-title { font-size: 1.5rem; margin-bottom: 28px; }
+  .results-cards { flex-direction: column; gap: 12px; overflow-y: auto; max-height: 55vh; }
+  .r-card { padding: 20px; }
+
+  .panel-7 .cta-title { font-size: 2rem; }
+  .panel-7 .content { padding: 0 24px; }
+  .cta-buttons { flex-direction: column; align-items: center; }
+  .cta-btn-primary, .cta-btn-outline { width: 100%; text-align: center; }
+
+  .p1-title { font-size: 2.8rem; }
+  .panel-1 .content { padding: 0 24px; }
+
+  .timeline-left .tl-title { font-size: 1.5rem; }
+  .timeline-right { display: none; }
+}
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- Back -->
+<a href="index.html" class="back-btn">
+  <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+  На главную
+</a>
+
+<!-- Progress -->
+<div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+
+<!-- Counter -->
+<div class="panel-counter"><span id="currentPanel">1</span> / 7</div>
+
+<!-- Drag hint -->
+<div class="drag-hint" id="dragHint">
+  <div class="drag-hint-arrows"><span>›</span><span>›</span><span>›</span></div>
+  Листайте или тяните
+</div>
+
+<!-- ══════════════════════════════════════
+     SCROLL WRAPPER
+══════════════════════════════════════ -->
+<div class="scroll-wrapper" id="scrollWrapper">
+<div class="panels-track" id="panelsTrack">
+
+  <!-- ─── PANEL 1: INTRO ─── -->
+  <div class="panel panel-1">
+    <div class="bg-photo" id="p1photo"></div>
+    <div class="bg-overlay"></div>
+    <div class="content">
+      <div class="p1-label">История врача</div>
+      <h1 class="p1-title">
+        16 лет.<br>
+        30 000 историй.<br>
+        <em>Одна миссия.</em>
+      </h1>
+      <p class="p1-sub">
+        Надежда Праворова — врач-трихолог, дерматокосметолог и клинический нутрициолог. Это её путь от белорусского медуниверситета до онлайн-практики по всему миру.
+      </p>
+      <a class="p1-start" id="startBtn">
+        Начать <span class="p1-scroll-arrow">→</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- ─── PANEL 2: НАЧАЛО ПУТИ ─── -->
+  <div class="panel panel-2">
+    <div class="year-bg">2001</div>
+    <div class="content">
+      <div class="timeline-left">
+        <div class="tl-year">2001</div>
+        <div class="tl-place">Гродно, Беларусь</div>
+        <h2 class="tl-title">Начало пути в медицине</h2>
+        <p class="tl-text">
+          Поступление в Гродненский государственный медицинский университет. Специальность «Лечебное дело» — фундамент, на котором строится всё остальное. Не косметика поверх кожи, а настоящая медицина изнутри.
+        </p>
+      </div>
+      <div class="timeline-right">
+        <div class="tl-milestone">
+          <div class="tl-m-year">2009–2010</div>
+          <div class="tl-m-text">Интернатура по дерматовенерологии. Первые тысячи пациентов.</div>
+        </div>
+        <div class="tl-milestone">
+          <div class="tl-m-year">2013</div>
+          <div class="tl-m-text">Специализация по трихологии — СЗГМУ им. Мечникова, Санкт-Петербург.</div>
+        </div>
+        <div class="tl-milestone">
+          <div class="tl-m-year">2014</div>
+          <div class="tl-m-text">Переподготовка по косметологии. Объединение внешнего и внутреннего подхода.</div>
+        </div>
+        <div class="tl-milestone">
+          <div class="tl-m-year">2021</div>
+          <div class="tl-m-text">1-я квалификационная категория — высшая ступень врачебной квалификации.</div>
+        </div>
+        <div class="tl-milestone">
+          <div class="tl-m-year">2024–2025</div>
+          <div class="tl-m-text">Профессиональная переподготовка по интегративной нутрициологии.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── PANEL 3: STATS ─── -->
+  <div class="panel panel-3">
+    <div class="p3-label">В цифрах</div>
+    <h2 class="p3-title">Опыт, который <em>говорит сам за себя</em></h2>
+    <div class="stats-row">
+      <div class="stat-block" data-count="16" data-suffix="">
+        <span class="stat-num-big"><span class="count-num">0</span></span>
+        <div class="stat-desc">Лет в медицине</div>
+      </div>
+      <div class="stat-block" data-count="30000" data-suffix="+">
+        <span class="stat-num-big"><span class="count-num">0</span><span class="gold">+</span></span>
+        <div class="stat-desc">Пациентов</div>
+      </div>
+      <div class="stat-block" data-count="98" data-suffix="%">
+        <span class="stat-num-big"><span class="count-num">0</span><span class="gold">%</span></span>
+        <div class="stat-desc">Довольны результатом</div>
+      </div>
+      <div class="stat-block" data-count="30" data-suffix="+">
+        <span class="stat-num-big"><span class="count-num">0</span><span class="gold">+</span></span>
+        <div class="stat-desc">Сертификатов</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── PANEL 4: СПЕЦИАЛИЗАЦИЯ ─── -->
+  <div class="panel panel-4">
+    <div class="content">
+      <div class="spec-photo-wrap">
+        <img src="IMG_9689.JPG" alt="Надежда Праворова">
+        <div class="spec-photo-tag">Врач 1 категории</div>
+      </div>
+      <div class="spec-right">
+        <div class="s-label">Специализация</div>
+        <h2 class="s-title">Три направления — <em>один системный подход</em></h2>
+        <div class="spec-tags">
+          <span class="spec-tag">Трихология</span>
+          <span class="spec-tag">Дерматокосметология</span>
+          <span class="spec-tag">Нутрициология</span>
+          <span class="spec-tag">Anti-age</span>
+          <span class="spec-tag">Онлайн</span>
+        </div>
+        <p class="s-text">
+          Я не разделяю тело на части. Волосы, кожа, гормоны, кишечник, питание — всё взаимосвязано. Только комплексный взгляд даёт устойчивый результат, который не пропадает через месяц.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── PANEL 5: ЦИТАТА ─── -->
+  <div class="panel panel-5">
+    <div class="big-quote-bg"><span>«»</span></div>
+    <div class="content">
+      <div class="q-label">Философия</div>
+      <blockquote class="q-text">
+        Тело всегда говорит с нами. За каждым симптомом стоит <em>причина, которую важно увидеть</em> — не заглушить, не скрыть, а найти и устранить навсегда.
+      </blockquote>
+      <div class="q-author">Надежда Праворова</div>
+    </div>
+  </div>
+
+  <!-- ─── PANEL 6: НАПРАВЛЕНИЯ РАБОТЫ ─── -->
+  <div class="panel panel-6">
+    <div class="content">
+      <div class="r-label">Направления</div>
+      <h2 class="r-title">С чем я <em>помогаю</em></h2>
+      <div class="results-cards">
+        <div class="r-card">
+          <div class="r-card-num">01</div>
+          <div class="r-card-title">Здоровье волос</div>
+          <div class="r-card-text">Выпадение, истончение, перхоть — нахожу причину через анализы и устраняю её нутрицевтиками и питанием.</div>
+        </div>
+        <div class="r-card">
+          <div class="r-card-num">02</div>
+          <div class="r-card-title">Кожа и anti-age</div>
+          <div class="r-card-text">Акне, тусклость, возрастные изменения — работаю изнутри: воспаление, гормоны, дефициты, питание.</div>
+        </div>
+        <div class="r-card">
+          <div class="r-card-num">03</div>
+          <div class="r-card-title">Женское здоровье</div>
+          <div class="r-card-text">ПМС, нарушения цикла, гормональный дисбаланс — нутрициологическая поддержка без жёсткой гормонотерапии.</div>
+        </div>
+        <div class="r-card">
+          <div class="r-card-num">04</div>
+          <div class="r-card-title">Разбор анализов</div>
+          <div class="r-card-text">Читаю анализы по функциональным диапазонам — нахожу то, что лаборатория считает «нормой».</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── PANEL 7: CTA ─── -->
+  <div class="panel panel-7">
+    <div class="bg-photo"></div>
+    <div class="content">
+      <div class="cta-label">Начните сейчас</div>
+      <h2 class="cta-title">Ваша история <em>начинается здесь</em></h2>
+      <p class="cta-sub">
+        Запишитесь на первичную консультацию. Разберём ситуацию, составим план — онлайн, по всему миру.
+      </p>
+      <div class="cta-buttons">
+        <a href="index.html#contact" class="cta-btn-primary">Записаться на консультацию</a>
+        <a href="index.html" class="cta-btn-outline">Вернуться на сайт</a>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /panels-track -->
+</div><!-- /scroll-wrapper -->
+
+<script>
+/* ══════════════════════════════════════
+   CUSTOM CURSOR
+══════════════════════════════════════ */
+(function() {
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursorRing');
+  if (!cursor) return;
+  let mx = 0, my = 0, rx = 0, ry = 0;
+  document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+  function animateCursor() {
+    rx += (mx - rx) * 0.12;
+    ry += (my - ry) * 0.12;
+    cursor.style.left = mx + 'px'; cursor.style.top = my + 'px';
+    ring.style.left = rx + 'px'; ring.style.top = ry + 'px';
+    requestAnimationFrame(animateCursor);
+  }
+  animateCursor();
+})();
+
+/* ══════════════════════════════════════
+   HORIZONTAL SCROLL ENGINE
+══════════════════════════════════════ */
+(function() {
+  const track = document.getElementById('panelsTrack');
+  const fill = document.getElementById('progressFill');
+  const currentLabel = document.getElementById('currentPanel');
+  const dragHint = document.getElementById('dragHint');
+  const PANEL_COUNT = 7;
+
+  let current = 0;        // current panel index (float for smooth anim)
+  let targetX = 0;        // target translateX in px
+  let currentX = 0;       // animated translateX
+  let panelWidth = window.innerWidth;
+  let maxX = 0;
+  let isAnimating = false;
+  let hintHidden = false;
+
+  function resize() {
+    panelWidth = window.innerWidth;
+    maxX = panelWidth * (PANEL_COUNT - 1);
+    currentX = targetX = -Math.round(currentX / panelWidth) * panelWidth;
+    track.style.transform = 'translateX(' + currentX + 'px)';
+  }
+  window.addEventListener('resize', resize);
+  resize();
+
+  function clamp(val, min, max) { return Math.max(min, Math.min(max, val)); }
+
+  function goToPanel(idx) {
+    idx = clamp(idx, 0, PANEL_COUNT - 1);
+    targetX = -idx * panelWidth;
+  }
+
+  /* Animate loop */
+  function tick() {
+    const ease = 0.072;
+    currentX += (targetX - currentX) * ease;
+    if (Math.abs(targetX - currentX) < 0.3) currentX = targetX;
+
+    track.style.transform = 'translateX(' + currentX + 'px)';
+
+    const progress = -currentX / maxX;
+    fill.style.width = (progress * 100) + '%';
+
+    const panelIdx = Math.round(-currentX / panelWidth);
+    currentLabel.textContent = clamp(panelIdx + 1, 1, PANEL_COUNT);
+
+    // Trigger stat counters when panel 3 is visible
+    if (panelIdx === 2) triggerCounters();
+
+    requestAnimationFrame(tick);
+  }
+  tick();
+
+  /* ─── WHEEL ─── */
+  let wheelAcc = 0;
+  let wheelTimer = null;
+  window.addEventListener('wheel', e => {
+    e.preventDefault();
+    wheelAcc += e.deltaY + e.deltaX;
+    clearTimeout(wheelTimer);
+    wheelTimer = setTimeout(() => {
+      const dir = wheelAcc > 0 ? 1 : -1;
+      const panelIdx = Math.round(-targetX / panelWidth);
+      goToPanel(panelIdx + dir);
+      wheelAcc = 0;
+    }, 30);
+    if (!hintHidden) hideHint();
+  }, { passive: false });
+
+  /* ─── TOUCH / DRAG ─── */
+  let dragStart = null;
+  let dragStartX = 0;
+  let dragStartTarget = 0;
+  let dragMoved = false;
+
+  function onDragStart(x) {
+    dragStart = x;
+    dragStartX = x;
+    dragStartTarget = targetX;
+    dragMoved = false;
+    document.body.classList.add('dragging');
+    if (!hintHidden) hideHint();
+  }
+
+  function onDragMove(x) {
+    if (dragStart === null) return;
+    const dx = x - dragStart;
+    if (Math.abs(dx) > 5) dragMoved = true;
+    // Rubber-band at edges
+    let newX = dragStartTarget + (x - dragStartX);
+    if (newX > 0) newX = newX * 0.2;
+    if (newX < -maxX) newX = -maxX + (newX + maxX) * 0.2;
+    targetX = newX;
+  }
+
+  function onDragEnd(x) {
+    if (dragStart === null) return;
+    document.body.classList.remove('dragging');
+    const totalDx = x - dragStartX;
+    const velocity = totalDx;
+    const panelIdx = Math.round(-dragStartTarget / panelWidth);
+    let next = panelIdx;
+    if (velocity < -40) next = panelIdx + 1;
+    else if (velocity > 40) next = panelIdx - 1;
+    else next = Math.round(-targetX / panelWidth);
+    goToPanel(next);
+    dragStart = null;
+  }
+
+  /* Mouse */
+  track.addEventListener('mousedown', e => { onDragStart(e.clientX); e.preventDefault(); });
+  window.addEventListener('mousemove', e => { onDragMove(e.clientX); });
+  window.addEventListener('mouseup', e => { onDragEnd(e.clientX); });
+
+  /* Touch */
+  track.addEventListener('touchstart', e => { onDragStart(e.touches[0].clientX); }, { passive: true });
+  window.addEventListener('touchmove', e => { onDragMove(e.touches[0].clientX); }, { passive: true });
+  window.addEventListener('touchend', e => { onDragEnd(e.changedTouches[0].clientX); }, { passive: true });
+
+  /* ─── KEYBOARD ─── */
+  window.addEventListener('keydown', e => {
+    const idx = Math.round(-targetX / panelWidth);
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') { goToPanel(idx + 1); if (!hintHidden) hideHint(); }
+    if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp')   { goToPanel(idx - 1); }
+  });
+
+  /* ─── START BUTTON ─── */
+  const startBtn = document.getElementById('startBtn');
+  if (startBtn) startBtn.addEventListener('click', () => { goToPanel(1); hideHint(); });
+
+  /* ─── HIDE HINT ─── */
+  function hideHint() {
+    hintHidden = true;
+    dragHint.classList.add('hidden');
+  }
+  setTimeout(() => {
+    if (!hintHidden) dragHint.style.opacity = '0.2';
+  }, 4000);
+
+  /* ══════════════════════════════════════
+     STAT COUNTERS
+  ══════════════════════════════════════ */
+  let countersTriggered = false;
+  function triggerCounters() {
+    if (countersTriggered) return;
+    countersTriggered = true;
+    document.querySelectorAll('.stat-block').forEach(block => {
+      const target = +block.dataset.count;
+      const el = block.querySelector('.count-num');
+      if (!el) return;
+      const duration = 1400;
+      const start = performance.now();
+      function update(now) {
+        const t = Math.min((now - start) / duration, 1);
+        const eased = 1 - Math.pow(1 - t, 3);
+        const val = Math.round(eased * target);
+        el.textContent = val >= 1000 ? (val >= 10000 ? Math.round(val/1000)*1000 : val).toLocaleString('ru') : val;
+        if (t < 1) requestAnimationFrame(update);
+        else el.textContent = target.toLocaleString('ru');
+      }
+      requestAnimationFrame(update);
+      block.classList.add('in-view');
+    });
+  }
+
+})();
+
+/* ══════════════════════════════════════
+   PHOTO PARALLAX ON PANEL 1
+══════════════════════════════════════ */
+(function() {
+  const photo = document.getElementById('p1photo');
+  if (!photo) return;
+  setTimeout(() => { photo.style.transform = 'scale(1)'; }, 100);
+})();
+</script>
+</body>
+</html>
