@@ -781,6 +781,127 @@ textarea.form-input { resize: none; height: 100px; }
 .form-note { font-size: 0.7rem; color: var(--muted); margin-top: 14px; text-align: center; line-height: 1.7; }
 
 /* ═══════════════════════════════════════════
+   STORY BANNER
+═══════════════════════════════════════════ */
+.story-banner {
+  position: relative;
+  background: #0D0B09;
+  overflow: hidden;
+  padding: 0 60px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+  min-height: 580px;
+  align-items: center;
+}
+.story-banner-bg {
+  position: absolute; inset: 0;
+  background: url('story media/back/IMG_0014.JPG') center 25% / cover no-repeat;
+  opacity: 0.07;
+}
+.story-banner-vignette {
+  position: absolute; inset: 0;
+  background: linear-gradient(to right,
+    rgba(13,11,9,0.0) 0%,
+    rgba(13,11,9,0.5) 50%,
+    rgba(13,11,9,0.98) 100%
+  );
+}
+/* Content side */
+.story-banner-content {
+  position: relative; z-index: 2;
+  padding: 80px 0;
+}
+.story-banner-eyebrow {
+  font-size: 0.58rem; letter-spacing: 0.38em; text-transform: uppercase;
+  color: var(--gold); margin-bottom: 24px;
+  display: flex; align-items: center; gap: 12px;
+}
+.story-banner-eyebrow::before { content: ''; width: 28px; height: 1px; background: var(--gold); }
+.story-banner-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(2.4rem, 4vw, 4rem);
+  font-weight: 300; line-height: 1.1; color: var(--cream);
+  margin-bottom: 20px;
+}
+.story-banner-title em { font-style: italic; color: var(--gold-light); display: block; }
+.story-banner-sub {
+  font-size: 0.85rem; line-height: 1.9;
+  color: rgba(248,244,239,0.4); max-width: 380px; margin-bottom: 40px;
+}
+.story-banner-stats {
+  display: flex; gap: 32px; margin-bottom: 44px;
+}
+.story-banner-stat-num {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2.2rem; font-weight: 300; color: var(--cream); line-height: 1;
+}
+.story-banner-stat-num span { color: var(--gold); font-size: 0.7em; }
+.story-banner-stat-label {
+  font-size: 0.58rem; letter-spacing: 0.18em; text-transform: uppercase;
+  color: rgba(248,244,239,0.35); margin-top: 4px;
+}
+.story-banner-cta {
+  display: inline-flex; align-items: center; gap: 14px;
+  padding: 15px 36px;
+  background: var(--gold); color: var(--dark);
+  text-decoration: none; font-size: 0.62rem; font-weight: 500;
+  letter-spacing: 0.2em; text-transform: uppercase; border-radius: 3px;
+  transition: background .3s, gap .3s;
+}
+.story-banner-cta:hover { background: var(--gold-light); gap: 20px; }
+.story-banner-cta svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 2; flex-shrink: 0; }
+
+/* Media preview grid */
+.story-banner-media {
+  position: relative; z-index: 2;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 6px;
+  height: 520px;
+  padding: 40px 0 40px 40px;
+}
+.story-banner-thumb {
+  overflow: hidden; border-radius: 3px;
+  position: relative;
+}
+.story-banner-thumb:first-child {
+  grid-row: 1 / 3; /* tall left column */
+}
+.story-banner-thumb img {
+  width: 100%; height: 100%;
+  object-fit: cover; object-position: center top;
+  display: block;
+  transition: transform .7s ease;
+}
+.story-banner-thumb:hover img { transform: scale(1.05); }
+.story-banner-thumb::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(to bottom, transparent 60%, rgba(13,11,9,0.35) 100%);
+  pointer-events: none;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .story-banner {
+    grid-template-columns: 1fr;
+    padding: 0 24px;
+    min-height: auto;
+  }
+  .story-banner-media { display: none; }
+  .story-banner-content { padding: 60px 0; }
+  .story-banner-vignette { background: rgba(13,11,9,0.65); }
+  .story-banner-stats { gap: 20px; }
+  .story-banner-cta { width: 100%; justify-content: center; }
+}
+@media (max-width: 1100px) and (min-width: 769px) {
+  .story-banner { padding: 0 40px; }
+  .story-banner-media { height: 420px; padding-left: 24px; }
+}
+
+/* ═══════════════════════════════════════════
    FOOTER
 ═══════════════════════════════════════════ */
 footer {
@@ -1478,6 +1599,53 @@ footer {
   <img src="" alt="Сертификат" id="certLightboxImg">
   <button class="cert-lightbox-nav cert-lightbox-next" id="certNext">&#8250;</button>
 </div>
+
+<!-- ─── STORY BANNER ─── -->
+<section class="story-banner reveal">
+  <div class="story-banner-bg"></div>
+  <div class="story-banner-vignette"></div>
+
+  <div class="story-banner-content">
+    <div class="story-banner-eyebrow">История врача</div>
+    <h2 class="story-banner-title">
+      16 лет.<br>30 000 историй.
+      <em>Одна миссия.</em>
+    </h2>
+    <p class="story-banner-sub">
+      Путь от белорусского медуниверситета до онлайн-практики по всему миру — трихология, косметология, дерматология и нутрициология как единый системный подход.
+    </p>
+    <div class="story-banner-stats">
+      <div class="story-banner-stat">
+        <div class="story-banner-stat-num">16</div>
+        <div class="story-banner-stat-label">Лет в медицине</div>
+      </div>
+      <div class="story-banner-stat">
+        <div class="story-banner-stat-num">30<span>K+</span></div>
+        <div class="story-banner-stat-label">Пациентов</div>
+      </div>
+      <div class="story-banner-stat">
+        <div class="story-banner-stat-num">30<span>+</span></div>
+        <div class="story-banner-stat-label">Сертификатов</div>
+      </div>
+    </div>
+    <a href="story.html" class="story-banner-cta">
+      Читать историю
+      <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+    </a>
+  </div>
+
+  <div class="story-banner-media">
+    <div class="story-banner-thumb">
+      <img src="story media/info media/tri/IMG_2017.jpg" alt="Трихология">
+    </div>
+    <div class="story-banner-thumb">
+      <img src="story media/info media/cosme/IMG_0407.jpg" alt="Косметология">
+    </div>
+    <div class="story-banner-thumb">
+      <img src="story media/info media/cosme/IMG_0442.jpg" alt="Косметология">
+    </div>
+  </div>
+</section>
 
 <!-- ─── SERVICES ─── -->
 <section class="services" id="services">
