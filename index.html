@@ -400,9 +400,9 @@ nav.scrolled {
   overflow: hidden;
 }
 .about-photo {
-  width: 100%; height: 100%;
+  width: 100%; height: 110%;
   object-fit: cover; object-position: center top;
-  display: block;
+  display: block; will-change: transform;
 }
 .about-img-deco {
   position: absolute; top: -24px; left: -24px;
@@ -452,6 +452,14 @@ nav.scrolled {
   cursor: pointer; position: relative;
   transition: border-color .3s, transform .3s;
 }
+.cert-thumb::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: rgba(28,24,22,0.28);
+  transition: background .3s;
+  pointer-events: none;
+}
+.cert-thumb:hover::after { background: rgba(28,24,22,0.05); }
 .cert-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .4s; }
 .cert-thumb:hover { border-color: rgba(184,150,90,0.6); transform: translateY(-3px); }
 .cert-thumb:hover img { transform: scale(1.05); }
@@ -1638,12 +1646,35 @@ footer {
     <!-- TAB: Сертификаты -->
     <div class="about-tab-panel" id="tab-certs">
       <div class="certs-grid" id="certs-grid">
-        <!-- сюда добавьте сертификаты: <div class="cert-thumb" data-index="0"><img src="cert1.jpg" alt="Сертификат"></div> -->
-        <div class="cert-thumb cert-placeholder-item"><div class="cert-placeholder"><span>Добавьте фото сертификата</span></div></div>
-        <div class="cert-thumb cert-placeholder-item"><div class="cert-placeholder"><span>Добавьте фото сертификата</span></div></div>
-        <div class="cert-thumb cert-placeholder-item"><div class="cert-placeholder"><span>Добавьте фото сертификата</span></div></div>
-        <div class="cert-thumb cert-placeholder-item"><div class="cert-placeholder"><span>Добавьте фото сертификата</span></div></div>
-        <div class="cert-thumb cert-placeholder-item"><div class="cert-placeholder"><span>Добавьте фото сертификата</span></div></div>
+        <div class="cert-thumb" data-index="0"><img src="сертификаты/IMG_9862.PNG" alt="Сертификат"></div>
+        <div class="cert-thumb" data-index="1"><img src="сертификаты/IMG_9863.PNG" alt="Сертификат"></div>
+        <div class="cert-thumb" data-index="2"><img src="сертификаты/IMG_9864.PNG" alt="Сертификат"></div>
+        <div class="cert-thumb" data-index="3"><img src="сертификаты/IMG_9865.PNG" alt="Сертификат"></div>
+        <div class="cert-thumb" data-index="4"><img src="сертификаты/IMG_9866.PNG" alt="Сертификат"></div>
+        <div class="cert-thumb" data-index="5"><img src="сертификаты/IMG_9867.PNG" alt="Сертификат"></div>
+        <div class="cert-thumb" data-index="6"><img src="сертификаты/IMG_9869.PNG" alt="Сертификат"></div>
+        <div class="cert-thumb" data-index="7"><img src="сертификаты/IMG_9870.PNG" alt="Сертификат"></div>
+        <div class="cert-thumb" data-index="8"><img src="сертификаты/IMG_9871.PNG" alt="Сертификат"></div>
+        <div class="cert-thumb" data-index="9"><img src="сертификаты/IMG_9872.PNG" alt="Сертификат"></div>
+        <div class="cert-thumb" data-index="10"><img src="сертификаты/IMG_9873.PNG" alt="Сертификат"></div>
+        <div class="cert-thumb" data-index="11"><img src="сертификаты/IMG_9874.PNG" alt="Сертификат"></div>
+        <div class="cert-thumb" data-index="12"><img src="сертификаты/IMG_9875.PNG" alt="Сертификат"></div>
+        <div class="cert-thumb" data-index="13"><img src="сертификаты/IMG_9876.PNG" alt="Сертификат"></div>
+        <div class="cert-thumb" data-index="14"><img src="сертификаты/IMG_9877.PNG" alt="Сертификат"></div>
+        <div class="cert-thumb" data-index="15"><img src="сертификаты/IMG_9878.PNG" alt="Сертификат"></div>
+        <div class="cert-thumb" data-index="16"><img src="сертификаты/IMG_9879.PNG" alt="Сертификат"></div>
+        <div class="cert-thumb" data-index="17"><img src="сертификаты/IMG_9880.PNG" alt="Сертификат"></div>
+        <div class="cert-thumb" data-index="18"><img src="сертификаты/IMG_9883.PNG" alt="Сертификат"></div>
+        <div class="cert-thumb" data-index="19"><img src="сертификаты/IMG_9884.PNG" alt="Сертификат"></div>
+        <div class="cert-thumb" data-index="20"><img src="сертификаты/IMG_9885.PNG" alt="Сертификат"></div>
+        <div class="cert-thumb" data-index="21"><img src="сертификаты/IMG_9886.PNG" alt="Сертификат"></div>
+        <div class="cert-thumb" data-index="22"><img src="сертификаты/IMG_9887.PNG" alt="Сертификат"></div>
+        <div class="cert-thumb" data-index="23"><img src="сертификаты/IMG_9888.PNG" alt="Сертификат"></div>
+        <div class="cert-thumb" data-index="24"><img src="сертификаты/IMG_9891.PNG" alt="Сертификат"></div>
+        <div class="cert-thumb" data-index="25"><img src="сертификаты/IMG_9892.PNG" alt="Сертификат"></div>
+        <div class="cert-thumb" data-index="26"><img src="сертификаты/IMG_9893.PNG" alt="Сертификат"></div>
+        <div class="cert-thumb" data-index="27"><img src="сертификаты/IMG_9896.PNG" alt="Сертификат"></div>
+        <div class="cert-thumb" data-index="28"><img src="сертификаты/IMG_9897.PNG" alt="Сертификат"></div>
       </div>
     </div>
 
@@ -2399,6 +2430,20 @@ document.querySelectorAll('.seg-btn').forEach(btn => {
     if (y < window.innerHeight) {
       heroRight.style.transform = 'translateY(' + (y * 0.2) + 'px)';
     }
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+})();
+
+/* ─── ABOUT PHOTO PARALLAX ─── */
+(function() {
+  const aboutPhoto = document.querySelector('.about-img-main');
+  if (!aboutPhoto) return;
+  function onScroll() {
+    if (window.innerWidth <= 768) return;
+    const rect = aboutPhoto.getBoundingClientRect();
+    const centerY = rect.top + rect.height / 2 - window.innerHeight / 2;
+    aboutPhoto.querySelector('img') &&
+      (aboutPhoto.querySelector('img').style.transform = 'translateY(' + (centerY * 0.08) + 'px)');
   }
   window.addEventListener('scroll', onScroll, { passive: true });
 })();
