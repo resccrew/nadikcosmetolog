@@ -498,6 +498,21 @@ nav.scrolled {
 .cert-lightbox-prev { left: 32px; }
 .cert-lightbox-next { right: 32px; }
 
+/* ─── DIPLOMA LIGHTBOX ─── */
+.credential-item[data-diploma]:not([data-diploma=""]) {
+  cursor: pointer;
+}
+.credential-item[data-diploma]:not([data-diploma=""]) .cred-text::after {
+  content: ' ↗';
+  color: var(--gold);
+  font-size: 0.65rem;
+  opacity: 0.7;
+}
+.credential-item[data-diploma]:not([data-diploma=""]):hover {
+  border-color: rgba(184,150,90,0.55);
+  transform: translateX(4px);
+}
+
 .credentials { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 20px; margin-top: 20px; }
 .credential-item {
   display: flex; align-items: flex-start; gap: 10px;
@@ -1587,59 +1602,59 @@ footer {
     <!-- TAB: Образование -->
     <div class="about-tab-panel active" id="tab-education">
       <div class="credentials">
-        <div class="credential-item">
+        <div class="credential-item" data-diploma="дипломы/">
           <div class="cred-dot"></div>
           <div class="cred-text">Гродненский государственный медицинский университет, специальность «Лечебное дело»<span class="cred-year">2001–2009</span></div>
         </div>
-        <div class="credential-item">
+        <div class="credential-item" data-diploma="дипломы/">
           <div class="cred-dot"></div>
           <div class="cred-text">Интернатура по дерматовенерологии, Гродненский областной кожно-венерологический диспансер<span class="cred-year">2009–2010</span></div>
         </div>
-        <div class="credential-item">
+        <div class="credential-item" data-diploma="дипломы/">
           <div class="cred-dot"></div>
           <div class="cred-text">Врач-дерматовенеролог, Гродненский областной кожно-венерологический диспансер<span class="cred-year">2010–2013</span></div>
         </div>
-        <div class="credential-item">
+        <div class="credential-item" data-diploma="дипломы/">
           <div class="cred-dot"></div>
           <div class="cred-text">Повышение квалификации «Трихология», СЗГМУ им. И.И. Мечникова, Санкт-Петербург<span class="cred-year">2013</span></div>
         </div>
-        <div class="credential-item">
+        <div class="credential-item" data-diploma="дипломы/">
           <div class="cred-dot"></div>
           <div class="cred-text">Врач-дерматовенеролог, КУП «Медицинский центр красоты и здоровья», г. Гродно<span class="cred-year">2013–2022</span></div>
         </div>
-        <div class="credential-item">
+        <div class="credential-item" data-diploma="дипломы/">
           <div class="cred-dot"></div>
           <div class="cred-text">Переподготовка «Косметология», БелМАПО, Минск<span class="cred-year">2014</span></div>
         </div>
-        <div class="credential-item">
+        <div class="credential-item" data-diploma="дипломы/">
           <div class="cred-dot"></div>
           <div class="cred-text">Повышение квалификации «Хронические дерматозы», БелМАПО, Минск<span class="cred-year">2016</span></div>
         </div>
-        <div class="credential-item">
+        <div class="credential-item" data-diploma="дипломы/">
           <div class="cred-dot"></div>
           <div class="cred-text">2-я квалификационная категория, Министерство здравоохранения Республики Беларусь<span class="cred-year">2017</span></div>
         </div>
-        <div class="credential-item">
+        <div class="credential-item" data-diploma="дипломы/">
           <div class="cred-dot"></div>
           <div class="cred-text">Повышение квалификации «Дерматоскопия и трихоскопия», БелМАПО, Минск<span class="cred-year">2020</span></div>
         </div>
-        <div class="credential-item">
+        <div class="credential-item" data-diploma="дипломы/">
           <div class="cred-dot"></div>
           <div class="cred-text">Повышение квалификации «Лазерные методики в косметологии и дерматовенерологии», БелМАПО, Минск<span class="cred-year">2021</span></div>
         </div>
-        <div class="credential-item">
+        <div class="credential-item" data-diploma="дипломы/">
           <div class="cred-dot"></div>
           <div class="cred-text">1-я квалификационная категория, Министерство здравоохранения Республики Беларусь<span class="cred-year">2021</span></div>
         </div>
-        <div class="credential-item">
+        <div class="credential-item" data-diploma="дипломы/">
           <div class="cred-dot"></div>
           <div class="cred-text">Статус ИП, Грузия, г. Батуми. Открытие кабинета эстетической косметологии и консультативной практики<span class="cred-year">2022</span></div>
         </div>
-        <div class="credential-item">
+        <div class="credential-item" data-diploma="дипломы/">
           <div class="cred-dot"></div>
           <div class="cred-text">Профессиональная переподготовка «Интегративная и клиническая нутрициология», Институт Функциональной Интегративной Диетологии и Нутрициологии, Москва<span class="cred-year">2024–2025</span></div>
         </div>
-        <div class="credential-item">
+        <div class="credential-item" data-diploma="дипломы/">
           <div class="cred-dot"></div>
           <div class="cred-text">Консультативная онлайн-практика в области клинической нутрициологии, Кипр<span class="cred-year">2025 — н.в.</span></div>
         </div>
@@ -1690,6 +1705,12 @@ footer {
   <button class="cert-lightbox-nav cert-lightbox-prev" id="certPrev">&#8249;</button>
   <img src="" alt="Сертификат" id="certLightboxImg">
   <button class="cert-lightbox-nav cert-lightbox-next" id="certNext">&#8250;</button>
+</div>
+
+<!-- ─── DIPLOMA LIGHTBOX ─── -->
+<div class="cert-lightbox" id="diplomaLightbox">
+  <button class="cert-lightbox-close" id="diplomaClose">✕</button>
+  <img src="" alt="Диплом" id="diplomaLightboxImg">
 </div>
 
 <!-- ─── STORY BANNER ─── -->
@@ -2469,6 +2490,37 @@ document.querySelectorAll('.seg-btn').forEach(btn => {
 
   initDots('servicesGrid', 'servicesDots', '.service-card');
   initDots('reviewsTrack', 'reviewsDots',  '.review-card');
+})();
+
+/* ─── DIPLOMA LIGHTBOX ─── */
+(function() {
+  const lightbox = document.getElementById('diplomaLightbox');
+  const lbImg    = document.getElementById('diplomaLightboxImg');
+  const closeBtn = document.getElementById('diplomaClose');
+
+  function open(src) {
+    lbImg.src = src;
+    lightbox.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function close() {
+    lightbox.classList.remove('open');
+    document.body.style.overflow = '';
+    lbImg.src = '';
+  }
+
+  document.querySelectorAll('.credential-item[data-diploma]').forEach(item => {
+    item.addEventListener('click', () => {
+      const src = item.dataset.diploma;
+      if (src) open(src);
+    });
+  });
+
+  closeBtn.addEventListener('click', close);
+  lightbox.addEventListener('click', e => { if (e.target === lightbox) close(); });
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && lightbox.classList.contains('open')) close();
+  });
 })();
 </script>
 
