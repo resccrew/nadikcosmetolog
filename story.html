@@ -285,6 +285,10 @@ body {
   display: block;
   flex-shrink: 0;
 }
+#dir-tri .dir-layer img,
+#dir-tri .dir-layer video {
+  object-position: center 40%;
+}
 
 /* Gradient: fades media into the dark content panel */
 .dir-overlay {
@@ -522,24 +526,23 @@ body {
     position: absolute;
     left: 0; right: 0; bottom: 0; top: auto;
     width: 100%; height: auto;
+    max-height: 58vh;
+    overflow-y: auto;
     padding: 18px 22px calc(32px + env(safe-area-inset-bottom));
-    background: transparent;
+    background: linear-gradient(to top, rgba(10,8,7,0.92) 0%, rgba(10,8,7,0.75) 70%, transparent 100%);
     justify-content: flex-end;
   }
   .dir-panel-num {
-    font-size: 5rem;
+    font-size: 4rem;
     color: rgba(184,150,90,0.10);
-    margin-bottom: -14px;
+    margin-bottom: -10px;
   }
-  .dir-panel-title { font-size: clamp(1.9rem, 7.5vw, 2.6rem); margin-bottom: 6px; }
-  .dir-panel-sub   { font-size: 0.88rem; margin-bottom: 10px; }
+  .dir-panel-title { font-size: clamp(1.7rem, 7vw, 2.4rem); margin-bottom: 5px; }
+  .dir-panel-sub   { font-size: 0.82rem; margin-bottom: 8px; }
   .dir-panel-text  {
-    font-size: 0.74rem; line-height: 1.72; margin-bottom: 14px;
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    line-clamp: 3;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
+    font-size: 0.74rem; line-height: 1.72; margin-bottom: 12px;
+    overflow: visible;
+    display: block;
   }
   .dir-panel-tags { gap: 6px; }
   .dir-panel-tag  { font-size: 0.5rem; padding: 5px 10px; }
@@ -725,7 +728,7 @@ body.loading { overflow: hidden; }
     </div>
     <div class="dir-layer" data-i="2">
       <video autoplay muted loop playsinline>
-        <source src="story media/info media/tri/IMG_0426.MOV" type="video/mp4">
+        <source src="story media/info media/tri/IMG_0872.MOV" type="video/mp4">
       </video>
     </div>
     <div class="dir-overlay"></div>
@@ -754,7 +757,9 @@ body.loading { overflow: hidden; }
       <img src="story media/info media/cosme/IMG_0407.jpg" alt="">
     </div>
     <div class="dir-layer" data-i="1">
-      <img src="story media/info media/cosme/IMG_0412.jpg" alt="">
+      <video autoplay muted loop playsinline>
+        <source src="story media/info media/cosme/IMG_0873.MOV" type="video/mp4">
+      </video>
     </div>
     <div class="dir-layer" data-i="2">
       <img src="story media/info media/cosme/IMG_0442.jpg" alt="">
