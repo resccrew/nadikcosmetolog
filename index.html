@@ -390,9 +390,11 @@ nav.scrolled {
 .about {
   padding: 140px 60px; display: grid;
   grid-template-columns: 1fr 1fr; gap: 100px;
-  align-items: center; max-width: 1400px; margin: 0 auto;
+  align-items: start; max-width: 1400px; margin: 0 auto;
 }
-.about-img-col { position: relative; }
+.about-img-col {
+  position: sticky; top: 100px;
+}
 .about-img-main {
   width: 100%; aspect-ratio: 3/4;
   background: linear-gradient(145deg, #EDE0D0, #C8B49A);
@@ -400,9 +402,9 @@ nav.scrolled {
   overflow: hidden;
 }
 .about-photo {
-  width: 100%; height: 110%;
+  width: 100%; height: 100%;
   object-fit: cover; object-position: center top;
-  display: block; will-change: transform;
+  display: block;
 }
 .about-img-deco {
   position: absolute; top: -24px; left: -24px;
@@ -2430,20 +2432,6 @@ document.querySelectorAll('.seg-btn').forEach(btn => {
     if (y < window.innerHeight) {
       heroRight.style.transform = 'translateY(' + (y * 0.2) + 'px)';
     }
-  }
-  window.addEventListener('scroll', onScroll, { passive: true });
-})();
-
-/* ─── ABOUT PHOTO PARALLAX ─── */
-(function() {
-  const aboutPhoto = document.querySelector('.about-img-main');
-  if (!aboutPhoto) return;
-  function onScroll() {
-    if (window.innerWidth <= 768) return;
-    const rect = aboutPhoto.getBoundingClientRect();
-    const centerY = rect.top + rect.height / 2 - window.innerHeight / 2;
-    aboutPhoto.querySelector('img') &&
-      (aboutPhoto.querySelector('img').style.transform = 'translateY(' + (centerY * 0.08) + 'px)');
   }
   window.addEventListener('scroll', onScroll, { passive: true });
 })();
