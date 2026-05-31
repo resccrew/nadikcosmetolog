@@ -49,7 +49,7 @@ body {
 }
 .hero-bg {
   position: absolute; inset: -6%;
-  background: url('story media/back/IMG_0014.webp') center 20% / cover no-repeat;
+  background: url('/story media/back/IMG_0014.webp') center 20% / cover no-repeat;
   will-change: transform, opacity;
   transform-origin: center;
 }
@@ -383,7 +383,7 @@ body {
 }
 .cta-bg {
   position: absolute; inset: 0;
-  background: url('story media/back/IMG_0018.webp') center / cover no-repeat;
+  background: url('/story media/back/IMG_0018.webp') center / cover no-repeat;
   opacity: 0.11;
   transform: scale(1.04);
 }

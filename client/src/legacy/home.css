@@ -834,7 +834,7 @@ textarea.form-input { resize: none; height: 100px; }
 }
 .story-banner-bg {
   position: absolute; inset: 0;
-  background: url('story media/back/IMG_0014.webp') center 25% / cover no-repeat;
+  background: url('/story media/back/IMG_0014.webp') center 25% / cover no-repeat;
   opacity: 0.22;
 }
 .story-banner-vignette {
