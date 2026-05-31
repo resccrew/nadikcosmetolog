@@ -3,7 +3,6 @@ import { createRoot } from 'react-dom/client';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import ScrollToTop from './components/ScrollToTop.jsx';
 import Home from './pages/Home.jsx';
-import './styles/global.css';
 
 // Страница истории грузится отдельным чанком — только когда на неё заходят
 const Story = lazy(() => import('./pages/Story.jsx'));

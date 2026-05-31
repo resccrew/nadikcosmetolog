@@ -1,0 +1,625 @@
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursor-ring"></div>
+<div id="progress-bar"></div>
+
+<!-- ─── MOBILE MENU DRAWER ─── -->
+<div class="mobile-menu" id="mobileMenu">
+  <button class="mobile-menu-close" onclick="closeMenu()" aria-label="Закрыть меню"></button>
+  <ul class="mobile-menu-links">
+    <li><a href="#about"    onclick="closeMenu()">О враче</a></li>
+    <li><a href="#services" onclick="closeMenu()">Услуги</a></li>
+    <li><a href="/story" data-spa onclick="closeMenu()">История</a></li>
+    <li><a href="#reviews"  onclick="closeMenu()">Отзывы</a></li>
+    <li><a href="#contact"  onclick="closeMenu()">Контакты</a></li>
+  </ul>
+  <div class="mobile-menu-cta">
+    <a href="#contact" onclick="closeMenu()">Записаться на консультацию</a>
+  </div>
+  <div class="mobile-menu-socials">
+    <a href="#">Instagram</a>
+    <a href="#">Telegram</a>
+    <a href="#">WhatsApp</a>
+  </div>
+</div>
+
+<!-- ─── NAV ─── -->
+<nav id="navbar">
+  <a href="#" class="nav-logo">Nadezda.<span>antiage</span></a>
+  <ul class="nav-links">
+    <li><a href="#about">О враче</a></li>
+    <li><a href="#services">Услуги</a></li>
+    <li><a href="/story" data-spa>История</a></li>
+    <li><a href="#reviews">Отзывы</a></li>
+    <li><a href="#contact">Контакты</a></li>
+  </ul>
+  <a href="#contact" class="nav-btn">Записаться</a>
+  <button class="menu-toggle" id="menuToggle" aria-label="Меню">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- ─── HERO ─── -->
+<section class="hero">
+  <div class="hero-bg-pattern"></div>
+  <div class="deco-ring" style="top:-80px; right:-80px; width:400px; height:400px; opacity:0.5;"></div>
+
+  <div class="hero-left">
+    <div class="hero-eyebrow">Превентивная медицина</div>
+    <h1 class="hero-name">
+      Надежда<br>
+      <em>Праворова</em>
+    </h1>
+    <div class="hero-title">Врач-трихолог, дерматокосметолог, клинический нутрициолог</div>
+    <p class="hero-desc">
+      Помогаю женщинам и мужчинам выглядеть и чувствовать себя лучше, замедлить старение , восстановить здоровье кожи и волос через системную диагностику и комплексный персонализированный подход.
+    </p>
+    <div class="hero-ctas">
+      <a href="#contact" class="btn-primary">Записаться на консультацию</a>
+      <a href="#services" class="btn-outline">Все услуги</a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat-item">
+        <span class="stat-num">16</span>
+        <div class="stat-label">Лет опыта</div>
+      </div>
+      <div class="stat-item">
+        <span class="stat-num">30000<span style="font-size:1.4rem; color:var(--gold)">+</span></span>
+        <div class="stat-label">Клиентов</div>
+      </div>
+      <div class="stat-item">
+        <span class="stat-num">98<span style="font-size:1.4rem; color:var(--gold)">%</span></span>
+        <div class="stat-label">Довольны</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-right">
+    <div class="hero-img-wrap">
+      <img src="IMG_9656.webp" alt="Фото" class="hero-photo">
+    </div>
+    <div class="hero-img-overlay"></div>
+    <div class="hero-badge">
+      <span class="badge-num">№1</span>
+      <div class="badge-text">в вопросах молодости и красоты</div>
+    </div>
+    <div class="float-line"></div>
+  </div>
+
+  <div class="scroll-indicator">
+    <div class="scroll-line"></div>
+    Прокрутите вниз
+  </div>
+</section>
+
+<!-- ─── ABOUT ─── -->
+<section class="about" id="about">
+  <div class="about-img-col reveal">
+    <div class="about-img-main">
+      <img loading="lazy" decoding="async" src="IMG_9689.webp" alt="Dr. Nadik" class="about-photo">
+    </div>
+    <div class="about-img-deco"></div>
+    <div class="about-img-deco2"></div>
+  </div>
+
+  <div class="reveal" style="transition-delay:0.15s">
+    <div class="section-label">Обо мне</div>
+    <h2 class="section-title">Красота — это <em>не только инъекции и поверхностные процедуры</em> это в том числе внутреннее здоровье.</h2>
+    <p class="section-text">
+      Я - Надежда Праворова, врач 1 категории. Дерматокосметолог, трихолог, нутрициолог с 13-летним опытом в клинической медицине + 4 года работы с клиентами в частной и онлайн-практике. 
+Окончила ГрГМУ по специальности «Лечебное дело». Прошла специализацию по дерматовенерологии, трихологии и косметологии. Закончила Университет Образовательной Медицины по курсу «Интегративная и клиническая нутрициология».
+    </p>
+    <p class="section-text">
+      Работаю в концепции «индивидуальный комплексный подход» - не существует двух одинаковых организмов , а значит , не существует и одинаковых протоколов. 
+Здоровье и красота нашей кожи и волос - это зеркало нашего здоровья в целом.
+    </p>
+    <!-- TABS -->
+    <!-- Segmented control (mobile only) -->
+    <div class="about-seg-control">
+      <button class="seg-btn seg-active" data-tab="education">Образование</button>
+      <button class="seg-btn" data-tab="certs">Сертификаты</button>
+    </div>
+    <div class="about-tabs">
+      <button class="about-tab-btn active" data-tab="education">Образование</button>
+      <button class="about-tab-btn" data-tab="certs">Сертификаты</button>
+    </div>
+
+    <!-- TAB: Образование -->
+    <div class="about-tab-panel active" id="tab-education">
+      <div class="credentials">
+        <div class="credential-item" data-diploma="дипломы/IMG_9732.webp,дипломы/IMG_9731.webp,дипломы/IMG_9730.webp">
+          <div class="cred-dot"></div>
+          <div class="cred-text">Гродненский государственный медицинский университет, специальность «Лечебное дело»<span class="cred-year">2001–2009</span></div>
+        </div>
+        <div class="credential-item" data-diploma="дипломы/IMG_9724.webp,дипломы/IMG_9722.webp">
+          <div class="cred-dot"></div>
+          <div class="cred-text">Интернатура по дерматовенерологии, Гродненский областной кожно-венерологический диспансер<span class="cred-year">2009–2010</span></div>
+        </div>
+        <div class="credential-item" data-diploma="">
+          <div class="cred-dot"></div>
+          <div class="cred-text">Врач-дерматовенеролог, Гродненский областной кожно-венерологический диспансер<span class="cred-year">2010–2013</span></div>
+        </div>
+        <div class="credential-item" data-diploma="дипломы/IMG_9727.webp">
+          <div class="cred-dot"></div>
+          <div class="cred-text">Повышение квалификации «Трихология», СЗГМУ им. И.И. Мечникова, Санкт-Петербург<span class="cred-year">2013</span></div>
+        </div>
+        <div class="credential-item" data-diploma="">
+          <div class="cred-dot"></div>
+          <div class="cred-text">Врач-дерматовенеролог, КУП «Медицинский центр красоты и здоровья», г. Гродно<span class="cred-year">2013–2022</span></div>
+        </div>
+        <div class="credential-item" data-diploma="дипломы/IMG_9733.webp,дипломы/IMG_9734.webp,дипломы/IMG_9735.webp">
+          <div class="cred-dot"></div>
+          <div class="cred-text">Переподготовка «Косметология», БелМАПО, Минск<span class="cred-year">2014</span></div>
+        </div>
+        <div class="credential-item" data-diploma="дипломы/IMG_9719.webp">
+          <div class="cred-dot"></div>
+          <div class="cred-text">Повышение квалификации «Хронические дерматозы», БелМАПО, Минск<span class="cred-year">2016</span></div>
+        </div>
+        <div class="credential-item" data-diploma="дипломы/IMG_9716.webp,дипломы/IMG_9717.webp">
+          <div class="cred-dot"></div>
+          <div class="cred-text">2-я квалификационная категория, Министерство здравоохранения Республики Беларусь<span class="cred-year">2017</span></div>
+        </div>
+        <div class="credential-item" data-diploma="дипломы/IMG_9718.webp">
+          <div class="cred-dot"></div>
+          <div class="cred-text">Повышение квалификации «Дерматоскопия и трихоскопия», БелМАПО, Минск<span class="cred-year">2020</span></div>
+        </div>
+        <div class="credential-item" data-diploma="дипломы/IMG_9720.webp">
+          <div class="cred-dot"></div>
+          <div class="cred-text">Повышение квалификации «Лазерные методики в косметологии и дерматовенерологии», БелМАПО, Минск<span class="cred-year">2021</span></div>
+        </div>
+        <div class="credential-item" data-diploma="дипломы/IMG_9725.webp,дипломы/IMG_9726.webp">
+          <div class="cred-dot"></div>
+          <div class="cred-text">1-я квалификационная категория, Министерство здравоохранения Республики Беларусь<span class="cred-year">2021</span></div>
+        </div>
+        <div class="credential-item" data-diploma="дипломы/IMG_0908.webp,дипломы/IMG_0909.webp,дипломы/IMG_0910.webp">
+          <div class="cred-dot"></div>
+          <div class="cred-text">Статус ИП, Грузия, г. Батуми. Открытие кабинета эстетической косметологии и консультативной практики<span class="cred-year">2022</span></div>
+        </div>
+        <div class="credential-item" data-diploma="дипломы/IMG_9728.webp">
+          <div class="cred-dot"></div>
+          <div class="cred-text">Профессиональная переподготовка «Интегративная и клиническая нутрициология», Институт Функциональной Интегративной Диетологии и Нутрициологии, Москва<span class="cred-year">2024–2025</span></div>
+        </div>
+        <div class="credential-item" data-diploma="дипломы/IMG_9728.webp">
+          <div class="cred-dot"></div>
+          <div class="cred-text">Консультативная онлайн-практика в области клинической нутрициологии, Кипр<span class="cred-year">2025 — н.в.</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB: Сертификаты -->
+    <div class="about-tab-panel" id="tab-certs">
+      <div class="certs-grid" id="certs-grid">
+        <div class="cert-thumb" data-index="0"><img loading="lazy" decoding="async" src="сертификаты/IMG_9862.webp" alt="Сертификат"></div>
+        <div class="cert-thumb" data-index="1"><img loading="lazy" decoding="async" src="сертификаты/IMG_9863.webp" alt="Сертификат"></div>
+        <div class="cert-thumb" data-index="2"><img loading="lazy" decoding="async" src="сертификаты/IMG_9864.webp" alt="Сертификат"></div>
+        <div class="cert-thumb" data-index="3"><img loading="lazy" decoding="async" src="сертификаты/IMG_9865.webp" alt="Сертификат"></div>
+        <div class="cert-thumb" data-index="4"><img loading="lazy" decoding="async" src="сертификаты/IMG_9866.webp" alt="Сертификат"></div>
+        <div class="cert-thumb" data-index="5"><img loading="lazy" decoding="async" src="сертификаты/IMG_9867.webp" alt="Сертификат"></div>
+        <div class="cert-thumb" data-index="6"><img loading="lazy" decoding="async" src="сертификаты/IMG_9869.webp" alt="Сертификат"></div>
+        <div class="cert-thumb" data-index="7"><img loading="lazy" decoding="async" src="сертификаты/IMG_9870.webp" alt="Сертификат"></div>
+        <div class="cert-thumb" data-index="8"><img loading="lazy" decoding="async" src="сертификаты/IMG_9871.webp" alt="Сертификат"></div>
+        <div class="cert-thumb" data-index="9"><img loading="lazy" decoding="async" src="сертификаты/IMG_9872.webp" alt="Сертификат"></div>
+        <div class="cert-thumb" data-index="10"><img loading="lazy" decoding="async" src="сертификаты/IMG_9873.webp" alt="Сертификат"></div>
+        <div class="cert-thumb" data-index="11"><img loading="lazy" decoding="async" src="сертификаты/IMG_9874.webp" alt="Сертификат"></div>
+        <div class="cert-thumb" data-index="12"><img loading="lazy" decoding="async" src="сертификаты/IMG_9875.webp" alt="Сертификат"></div>
+        <div class="cert-thumb" data-index="13"><img loading="lazy" decoding="async" src="сертификаты/IMG_9876.webp" alt="Сертификат"></div>
+        <div class="cert-thumb" data-index="14"><img loading="lazy" decoding="async" src="сертификаты/IMG_9877.webp" alt="Сертификат"></div>
+        <div class="cert-thumb" data-index="15"><img loading="lazy" decoding="async" src="сертификаты/IMG_9878.webp" alt="Сертификат"></div>
+        <div class="cert-thumb" data-index="16"><img loading="lazy" decoding="async" src="сертификаты/IMG_9879.webp" alt="Сертификат"></div>
+        <div class="cert-thumb" data-index="17"><img loading="lazy" decoding="async" src="сертификаты/IMG_9880.webp" alt="Сертификат"></div>
+        <div class="cert-thumb" data-index="18"><img loading="lazy" decoding="async" src="сертификаты/IMG_9883.webp" alt="Сертификат"></div>
+        <div class="cert-thumb" data-index="19"><img loading="lazy" decoding="async" src="сертификаты/IMG_9884.webp" alt="Сертификат"></div>
+        <div class="cert-thumb" data-index="20"><img loading="lazy" decoding="async" src="сертификаты/IMG_9885.webp" alt="Сертификат"></div>
+        <div class="cert-thumb" data-index="21"><img loading="lazy" decoding="async" src="сертификаты/IMG_9886.webp" alt="Сертификат"></div>
+        <div class="cert-thumb" data-index="22"><img loading="lazy" decoding="async" src="сертификаты/IMG_9887.webp" alt="Сертификат"></div>
+        <div class="cert-thumb" data-index="23"><img loading="lazy" decoding="async" src="сертификаты/IMG_9888.webp" alt="Сертификат"></div>
+        <div class="cert-thumb" data-index="24"><img loading="lazy" decoding="async" src="сертификаты/IMG_9891.webp" alt="Сертификат"></div>
+        <div class="cert-thumb" data-index="25"><img loading="lazy" decoding="async" src="сертификаты/IMG_9892.webp" alt="Сертификат"></div>
+        <div class="cert-thumb" data-index="26"><img loading="lazy" decoding="async" src="сертификаты/IMG_9893.webp" alt="Сертификат"></div>
+        <div class="cert-thumb" data-index="27"><img loading="lazy" decoding="async" src="сертификаты/IMG_9896.webp" alt="Сертификат"></div>
+        <div class="cert-thumb" data-index="28"><img loading="lazy" decoding="async" src="сертификаты/IMG_9897.webp" alt="Сертификат"></div>
+        <div class="cert-thumb" data-index="29"><img loading="lazy" decoding="async" src="дипломы/IMG_9729.webp" alt="Сертификат"></div>
+        <div class="cert-thumb" data-index="29"><img loading="lazy" decoding="async" src="дипломы/IMG_9723.webp" alt="Сертификат"></div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ─── CERT LIGHTBOX ─── -->
+<div class="cert-lightbox" id="certLightbox">
+  <button class="cert-lightbox-close" id="certClose">✕</button>
+  <button class="cert-lightbox-nav cert-lightbox-prev" id="certPrev">&#8249;</button>
+  <img loading="lazy" decoding="async" src="" alt="Сертификат" id="certLightboxImg">
+  <button class="cert-lightbox-nav cert-lightbox-next" id="certNext">&#8250;</button>
+</div>
+
+<!-- ─── DIPLOMA LIGHTBOX ─── -->
+<div class="cert-lightbox" id="diplomaLightbox">
+  <button class="cert-lightbox-close" id="diplomaClose">✕</button>
+  <button class="cert-lightbox-nav cert-lightbox-prev" id="diplomaPrev">&#8249;</button>
+  <img loading="lazy" decoding="async" src="" alt="Диплом" id="diplomaLightboxImg">
+  <button class="cert-lightbox-nav cert-lightbox-next" id="diplomaNext">&#8250;</button>
+</div>
+
+<!-- ─── STORY BANNER ─── -->
+<section class="story-banner reveal">
+  <div class="story-banner-bg"></div>
+  <div class="story-banner-vignette"></div>
+
+  <div class="story-banner-content">
+    <div class="story-banner-eyebrow">История врача</div>
+    <h2 class="story-banner-title">
+      16 лет.<br>30 000 историй.
+      <em>Одна миссия.</em>
+    </h2>
+    <p class="story-banner-sub">
+      Путь от белорусского медуниверситета до онлайн-практики по всему миру — трихология, косметология, дерматология и нутрициология как единый системный подход.
+    </p>
+    <div class="story-banner-stats">
+      <div class="story-banner-stat">
+        <div class="story-banner-stat-num">16</div>
+        <div class="story-banner-stat-label">Лет в медицине</div>
+      </div>
+      <div class="story-banner-stat">
+        <div class="story-banner-stat-num">30<span>K+</span></div>
+        <div class="story-banner-stat-label">Пациентов</div>
+      </div>
+      <div class="story-banner-stat">
+        <div class="story-banner-stat-num">30<span>+</span></div>
+        <div class="story-banner-stat-label">Сертификатов</div>
+      </div>
+    </div>
+    <a href="/story" data-spa class="story-banner-cta">
+      Окунуться в историю
+      <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+    </a>
+  </div>
+  <div class="story-banner-media">
+    <div class="story-banner-thumb">
+      <img loading="lazy" decoding="async" src="story media/info media/tri/IMG_2017.webp" alt="Трихология">
+    </div>
+    <div class="story-banner-thumb">
+      <img loading="lazy" decoding="async" src="story media/info media/cosme/IMG_0407.webp" alt="Косметология">
+    </div>
+    <div class="story-banner-thumb">
+      <img loading="lazy" decoding="async" src="story media/info media/cosme/IMG_0442.webp" alt="Косметология">
+    </div>
+  </div>
+</section>
+
+<!-- ─── SERVICES ─── -->
+<section class="services" id="services">
+  <div class="services-bg"></div>
+  <div class="services-header reveal">
+    <div>
+      <div class="section-label">Мои решения</div>
+      <h2 class="section-title"> Решения для <em>каждой</em> задачи</h2>
+    </div>
+    <a href="#contact" class="nav-btn" style="color:var(--gold);border-color:var(--gold);">Консультация</a>
+  </div>
+  <div class="services-grid" id="servicesGrid">
+    <div class="service-card reveal" data-solution="0">
+      <div class="service-num">01</div>
+      <div class="service-name">Здоровье волос</div>
+      <div class="service-desc-short">Выпадение, истончение, перхоть — нахожу причину и устраняю её через индивидуальную схему корекции.</div>
+      <div class="service-arrow">Подробнее →</div>
+    </div>
+    <div class="service-card reveal" style="transition-delay:.08s" data-solution="1">
+      <div class="service-num">02</div>
+      <div class="service-name">Здоровая кожа изнутри и снаружи</div>
+      <div class="service-desc-short">Акне,высыпания,сухость, тусклость — работаю с кожей комплексно: изнутри и снаружи одновременно.</div>
+      <div class="service-arrow">Подробнее →</div>
+    </div>
+    <div class="service-card reveal" style="transition-delay:.16s" data-solution="2">
+      <div class="service-num">03</div>
+      <div class="service-name">Дефициты и энергия</div>
+      <div class="service-desc-short">Хроническая усталость и апатия — выявляю скрытые причины и восстанавливаю ресурс.</div>
+      <div class="service-arrow">Подробнее →</div>
+    </div>
+    <div class="service-card reveal" style="transition-delay:.08s" data-solution="3">
+      <div class="service-num">04</div>
+      <div class="service-name">Женское здоровье</div>
+      <div class="service-desc-short">ПМС, нарушения цикла,молочница,цистит,гормональный дисбаланс — нутрициологическая поддержка без лишней химии.</div>
+      <div class="service-arrow">Подробнее →</div>
+    </div>
+    <div class="service-card reveal" style="transition-delay:.16s" data-solution="4">
+      <div class="service-num">05</div>
+      <div class="service-name">Детокс и поддержка печени</div>
+      <div class="service-desc-short">Мягкий детокс без жёстких диет — снижаю нагрузку на печень и запускаю естественное очищение.</div>
+      <div class="service-arrow">Подробнее →</div>
+    </div>
+    <div class="service-card reveal" style="transition-delay:.24s" data-solution="5">
+      <div class="service-num">06</div>
+      <div class="service-name">Персональный anti-age подход</div>
+      <div class="service-desc-short">Работаю с причинами старения: воспалением, гликацией и дефицитами — изнутри и снаружи.</div>
+      <div class="service-arrow">Подробнее →</div>
+    </div>
+    <div class="service-card reveal" style="transition-delay:.08s" data-solution="6">
+      <div class="service-num">07</div>
+      <div class="service-name">Подготовка к беременности</div>
+      <div class="service-desc-short">Восполняю нутриентный статус за 3–6 месяцев до зачатия — для здоровья мамы и ребёнка.</div>
+      <div class="service-arrow">Подробнее →</div>
+    </div>
+    <div class="service-card reveal" style="transition-delay:.16s" data-solution="7">
+      <div class="service-num">08</div>
+      <div class="service-name">Антистресс / ресурс / сон</div>
+      <div class="service-desc-short">Восстанавливаю надпочечники и сон через питание и адаптогены — без стимуляторов.</div>
+      <div class="service-arrow">Подробнее →</div>
+    </div>
+    <div class="service-card reveal" style="transition-delay:.24s" data-solution="8">
+      <div class="service-num">09</div>
+      <div class="service-name">Программа восстановления ЖКТ</div>
+      <div class="service-desc-short">Вздутие, дисбиоз, синдром дырявого кишечника — устраняю причину, а не симптомы.</div>
+      <div class="service-arrow">Подробнее →</div>
+    </div>
+    <div class="service-card reveal" style="transition-delay:.16s" data-solution="9">
+      <div class="service-num">10</div>
+      <div class="service-name">Разбор анализов (полный чекап)</div>
+      <div class="service-desc-short">Читаю анализы по функциональным диапазонам — нахожу то, что лаборатория считает «нормой».</div>
+      <div class="service-arrow">Подробнее →</div>
+    </div>
+    <div class="service-card reveal" style="transition-delay:.24s" data-solution="10">
+      <div class="service-num">11</div>
+      <div class="service-name">Коррекция веса</div>
+      <div class="service-desc-short">Ищу метаболическую причину лишнего веса — без жестких диет и последующих откатов.</div>
+      <div class="service-arrow">Подробнее →</div>
+    </div>
+    <div class="service-card reveal" style="transition-delay:.24s" data-solution="11">
+      <div class="service-num">12</div>
+      <div class="service-name">Индивидуальное сопровождение</div>
+      <div class="service-desc-short">Долгосрочная работа под ключ — от анализов до видимого результата с регулярным контролем.</div>
+      <div class="service-arrow">Подробнее →</div>
+    </div>
+  </div>
+  <div class="swipe-dots" id="servicesDots">
+    <div class="swipe-dot on"></div><div class="swipe-dot"></div><div class="swipe-dot"></div>
+    <div class="swipe-dot"></div><div class="swipe-dot"></div><div class="swipe-dot"></div>
+    <div class="swipe-dot"></div><div class="swipe-dot"></div><div class="swipe-dot"></div>
+    <div class="swipe-dot"></div><div class="swipe-dot"></div><div class="swipe-dot"></div>
+  </div>
+</section>
+
+<!-- ─── SOLUTION DRAWER ─── -->
+<div class="solution-overlay" id="solutionOverlay"></div>
+<div class="solution-drawer" id="solutionDrawer">
+  <div class="drawer-sheet-handle"><div class="drawer-handle"></div></div>
+  <button class="drawer-close" id="drawerClose">✕</button>
+  <div class="drawer-num" id="drawerNum"></div>
+  <div class="drawer-title" id="drawerTitle"></div>
+  <div class="drawer-body" id="drawerBody"></div>
+  <a href="#contact" class="drawer-cta">Записаться на консультацию</a>
+</div>
+
+<!-- ─── PHILOSOPHY ─── -->
+<section id="philosophy" style="padding:40px 60px 120px; background:var(--cream); position:relative; overflow:hidden;">
+  <div class="phil-img-panel">
+    <img loading="lazy" decoding="async" src="IMG_9983.webp" alt="">
+  </div>
+  <div style="max-width:1400px; margin:0 auto;" class="philosophy">
+    <div class="phil-sticky">
+      <div class="section-label reveal">Подход</div>
+      <h2 class="section-title reveal" style="transition-delay:.1s">Моя <em>философия</em> здоровья и красоты</h2>
+    </div>
+    <div class="phil-items">
+      <div class="phil-para reveal">
+        <p class="phil-para-text">Я уверена, что тело всегда говорит с нами — через высыпания на коже, выпадение волос, пищеварение, гормональные сбои, снижение энергии, тревожность или хроническое воспаление. <em>И за каждым симптомом стоит причина, которую важно увидеть.</em></p>
+      </div>
+      <div class="phil-para reveal" style="transition-delay:.1s">
+        <p class="phil-para-text">Мой подход — это <em>внимательный, комплексный разбор</em> состояния человека: не только анализов, но и образа жизни, питания, уровня стресса, сна, эмоционального фона и внутренних ресурсов организма.</p>
+      </div>
+      <div class="phil-para reveal" style="transition-delay:.2s">
+        <p class="phil-para-text">Я соединяю знания медицины, нутрициологии и практический опыт сопровождения людей на пути восстановления здоровья. <em>Без крайностей, без жёстких запретов, без универсальных схем.</em> С уважением к телу, его ритму и индивидуальности каждого человека.</p>
+      </div>
+      <div class="phil-para reveal" style="transition-delay:.3s">
+        <p class="phil-para-text">Моя работа — помочь вам не просто «лечить симптомы», а по-настоящему <em>вернуть себе здоровье, энергию и качество жизни.</em></p>
+      </div>
+      <a href="#about" class="btn-primary reveal" style="transition-delay:.4s; margin-top:12px; display:inline-block;">Подробнее обо мне</a>
+    </div>
+  </div>
+</section>
+
+
+<!-- ─── TESTIMONIALS ─── -->
+<section class="testimonials" id="reviews">
+  <div class="testimonials-inner">
+    <div class="testimonials-header reveal">
+      <div>
+        <div class="section-label">Отзывы</div>
+        <h2 class="section-title">Говорят <em>клиенты</em></h2>
+      </div>
+      <a href="https://www.instagram.com/s/aGlnaGxpZ2h0OjE3OTM5ODQwNDgyOTY3NzM2?igsh=amtld21yeTk5MTE4" class="nav-btn" style="color:var(--gold);border-color:var(--gold);">Все отзывы</a>
+    </div>
+    <div class="reviews-track" id="reviewsTrack">
+      <div class="review-card reveal">
+        <div class="stars">★★★★★</div>
+        <div class="review-text">«Я начала работать с Надеждой по вопросу состояния моих волос, и постепенно расширила наше взаимодействие расширилось до полноценного нутрициологического ведения. Отличный профессионал, который опирается на данные анализов и подбирает лучший курс восстановления любых дефицитов в организме. Уже в процессе ведения отметила улучшение показателей - стал лучше сон, появилась энергия, поменялось отношение к питанию.
+Очень рекомендую Надежду как нутрициолога и трихолога, очень приятное и полезное взаимодействие, которое ведет к ощутимому результату!»
+</div>
+        <div class="review-author">
+          <div class="author-avatar">О</div>
+          <div>
+            <span class="author-name">Ольга</span>
+            <span class="author-date">Май 2026</span>
+          </div>
+        </div>
+      </div>
+      <div class="review-card reveal" style="transition-delay:.1s">
+        <div class="stars">★★★★★</div>
+        <div class="review-text">«Благодарен Надежде за внимательное и профессиональное отношение.
+После консультаций удалось не просто решить проблему, с которой обращался — волосы практически перестали выпадать - но и полностью пересмотреть питание и режим.
+Надежда очень понятно объясняет, откуда берутся проблемы и как с ними работать, без лишней терминологии и запугиваний, что особенно подкупает.
+Чувствуется опыт и уверенность.
+Теперь стало гораздо проще понимать, как поддерживать результат и заботиться о себе.»</div>
+        <div class="review-author">
+          <div class="author-avatar">А</div>
+          <div>
+            <span class="author-name">Алексей</span>
+            <span class="author-date">Октябрь 2025</span>
+          </div>
+        </div>
+      </div>
+      <div class="review-card reveal" style="transition-delay:.2s">
+        <div class="stars">★★★★★</div>
+        <div class="review-text">«Надежда, от всей семьи Орловых хочу написать вам большое спасибо за проделанную с нами работу.
+Однозначно сейчас наше состояние и ощущения себя стали другими, и это ценно. Настолько четко, структурировано, понятно и доходчиво вы заложили в нас базовые настройки , глаза сами теперь смотрят в сторону правильных продуктов и здорового образа жизни.
+Нам есть с кем сравнивать, опыт
+Подобной работы с другим специалистом у нас был, но результат с вами - однозначно круче.
+Остаемся на связи, успехов вам»</div>
+        <div class="review-author">
+          <div class="author-avatar">О</div>
+          <div>
+            <span class="author-name">Семья Орловых</span>
+            <span class="author-date">Февраль 2026</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="swipe-dots" id="reviewsDots">
+      <div class="swipe-dot on"></div><div class="swipe-dot"></div><div class="swipe-dot"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── PROCESS (mobile only) ─── -->
+<section class="process-section" id="process">
+  <div class="section-label reveal">Как это работает</div>
+  <h2 class="section-title reveal">Путь к <em>результату</em></h2>
+  <div class="process-steps">
+    <div class="process-step reveal">
+      <div class="step-num-wrap"><div class="step-num">1</div><div class="step-line"></div></div>
+      <div class="step-content"><div class="step-title">Первичная консультация</div><div class="step-text">Разбираем вашу ситуацию детально: анализы, симптомы, цели и образ жизни. Составляем план диагностики.</div></div>
+    </div>
+    <div class="process-step reveal">
+      <div class="step-num-wrap"><div class="step-num">2</div><div class="step-line"></div></div>
+      <div class="step-content"><div class="step-title">Диагностика и анализы</div><div class="step-text">Анализирую результаты по функциональным диапазонам — нахожу то, что скрыто в «норме» лаборатории.</div></div>
+    </div>
+    <div class="process-step reveal">
+      <div class="step-num-wrap"><div class="step-num">3</div><div class="step-line"></div></div>
+      <div class="step-content"><div class="step-title">Персональный протокол</div><div class="step-text">Составляю индивидуальный план питания, нутрицевтиков и образа жизни под вашу конкретную ситуацию.</div></div>
+    </div>
+    <div class="process-step reveal">
+      <div class="step-num-wrap"><div class="step-num">4</div><div class="step-line"></div></div>
+      <div class="step-content"><div class="step-title">Сопровождение и контроль</div><div class="step-text">Регулярные встречи для отслеживания прогресса, корректировки протокола и достижения устойчивого результата.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── BOOKING ─── -->
+<section class="booking" id="contact">
+  <div class="booking-info">
+    <div class="section-label reveal">Запись</div>
+    <h2 class="section-title reveal" style="transition-delay:.1s">Начните <em> свой путь</em> к здоровью и красоте</h2>
+    <p class="section-text reveal" style="transition-delay:.2s">
+      Не знаете с чего начать? 
+      Запишитесь на короткий бесплатный видеозвонок, и мы вместе составим ваш индивидуальный план
+    </p>
+    <div class="contact-items reveal" style="transition-delay:.3s">
+      <a class="contact-item" href="tel:+79001234567">
+        <div class="contact-icon">📞</div>
+        <div>
+          <span class="contact-label">Телефон</span>
+          <span class="contact-val">+ 357 97485636</span>
+        </div>
+      </a>
+      <a class="contact-item" href="https://t.me/tricholog_Nadezda" target="_blank">
+        <div class="contact-icon">💬</div>
+        <div>
+          <span class="contact-label">Telegram</span>
+          <span class="contact-val">@tricholog_Nadezda</span>
+        </div>
+      </a>
+      <a class="contact-item" href="https://www.instagram.com/nadezda.antiage?igsh=NTNobDJ6ZmVqNnpz&utm_source=qr" target="_blank">
+        <div class="contact-icon">📸</div>
+        <div>
+          <span class="contact-label">Instagram</span>
+          <span class="contact-val">@nadezda_antiage</span>
+        </div>
+      </a>
+      <div class="contact-item">
+        <div class="contact-icon">📍</div>
+        <div>
+          <span class="contact-label">Адрес</span>
+          <span class="contact-val">Кипр, Пафос</span>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-icon">🌎</div>
+        <div>
+          <span class="contact-label">Онлайн-консультации</span>
+          <span class="contact-val">По всему миру</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="booking-form reveal" style="transition-delay:.2s">
+    <div class="form-title">Записаться на приём</div>
+    <div class="form-group">
+      <input type="text" class="form-input" placeholder="Ваше имя" autocomplete="name">
+    </div>
+    <div class="form-group">
+      <input type="tel" class="form-input" placeholder="Номер телефона" autocomplete="tel">
+    </div>
+    <div class="form-group">
+      <input type="email" class="form-input" placeholder="Email (необязательно)" autocomplete="email">
+    </div>
+    <div class="form-group">
+      <select class="form-select">
+        <option value="" disabled selected>Выберите услугу</option>
+        <option>Первичная консультация</option>
+        <option>Биоревитализация / Мезотерапия</option>
+        <option>Контурная пластика</option>
+        <option>Ботулинотерапия</option>
+        <option>PRP-терапия</option>
+        <option>Аппаратная косметология</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <textarea class="form-input" placeholder="Ваш вопрос или пожелание (необязательно)"></textarea>
+    </div>
+    <button class="form-submit" id="formSubmit">Отправить заявку</button>
+  </div>
+</section>
+
+<!-- ─── FOOTER ─── -->
+<footer>
+  <div class="footer-inner">
+    <div>
+      <a href="#" class="footer-logo">Nadezda. <span>antiage</span></a>
+      <p class="footer-desc">Врач-трихолог, дерматокосметолог, клинический нутрициолог. Онлайн-консультации по всему миру.</p>
+    </div>
+    <div>
+      <div class="footer-col-title">Решения</div>
+      <ul class="footer-links">
+        <li><a href="#services">Здоровье волос</a></li>
+        <li><a href="#services">Здоровая кожа</a></li>
+        <li><a href="#services">Дефициты и энергия</a></li>
+        <li><a href="#services">Женское здоровье</a></li>
+        <li><a href="#services">Коррекция веса</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-title">Навигация</div>
+      <ul class="footer-links">
+        <li><a href="#about">О враче</a></li>
+        <li><a href="#services">Услуги</a></li>
+        <li><a href="#reviews">Отзывы</a></li>
+        <li><a href="#contact">Записаться</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-title">Контакты</div>
+      <ul class="footer-links">
+        <li><a href="tel:+35797485636">+357 97 485 636</a></li>
+        <li><a href="https://t.me/tricholog_Nadezda" target="_blank">@tricholog_Nadezda</a></li>
+        <li><a href="https://www.instagram.com/nadezda.antiage?igsh=NTNobDJ6ZmVqNnpz&utm_source=qr" target="_blank">@nadezda_antiage</a></li>
+        <li><a href="#contact">Кипр, Пафос · Онлайн</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2025 Надежда Праворова. Все права защищены.</span>
+    <span>Имеются противопоказания. Необходима консультация специалиста.</span>
+  </div>
+</footer>

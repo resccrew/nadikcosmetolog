@@ -1,26 +1,33 @@
-import { Link } from 'react-router-dom';
+import { useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
+import bodyHtml from '../legacy/story-body.html?raw';
+import { initStory } from '../legacy/story-script.js';
+import '../legacy/story.css';
 
-// ⚠️ Каркас-заглушка. На следующем этапе сюда переносится полный story.html
-// (hero, tagline, timeline, направления, цитата, CTA) как React-секции.
+// Страница истории: разметка и стили перенесены 1:1 из story.html,
+// вся интерактивность (loader, scroll-движок, анимации) — в initStory().
 export default function Story() {
-  return (
-    <main style={{ padding: '120px 8vw', textAlign: 'center' }}>
-      <h1
-        style={{
-          fontFamily: "'Cormorant Garamond', serif",
-          fontWeight: 300,
-          fontSize: 'clamp(2.5rem, 6vw, 5rem)',
-          marginBottom: 24,
-        }}
-      >
-        История <em>врача</em>
-      </h1>
-      <p style={{ color: 'rgba(248,244,239,0.5)', marginBottom: 32 }}>
-        Страница загружается отдельным чанком (lazy) — проверка роутинга.
-      </p>
-      <Link to="/" className="btn-primary">
-        На главную
-      </Link>
-    </main>
-  );
+  const ref = useRef(null);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const cleanup = initStory();
+    return cleanup;
+  }, []);
+
+  // Перехват SPA-ссылок (назад на главную) — без перезагрузки
+  useEffect(() => {
+    const root = ref.current;
+    if (!root) return;
+    const handler = (e) => {
+      const a = e.target.closest('a[data-spa]');
+      if (!a) return;
+      e.preventDefault();
+      navigate(a.getAttribute('href'));
+    };
+    root.addEventListener('click', handler);
+    return () => root.removeEventListener('click', handler);
+  }, [navigate]);
+
+  return <div ref={ref} dangerouslySetInnerHTML={{ __html: bodyHtml }} />;
 }

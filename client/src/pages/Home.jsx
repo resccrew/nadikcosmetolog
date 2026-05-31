@@ -1,46 +1,33 @@
-import { Link } from 'react-router-dom';
-import BookingForm from '../components/BookingForm.jsx';
+import { useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
+import bodyHtml from '../legacy/home-body.html?raw';
+import { initHome } from '../legacy/home-script.js';
+import '../legacy/home.css';
 
-// ⚠️ Каркас-заглушка. На следующем этапе сюда переносится полный дизайн index.html
-// (hero, about, услуги, философия, отзывы, баннер истории) как React-секции.
+// Главная страница: разметка и стили перенесены 1:1 из index.html,
+// вся интерактивность — в initHome() (drawer, lightbox, меню, форма записи → бэкенд).
 export default function Home() {
-  return (
-    <main>
-      <section style={{ padding: '120px 8vw 80px', textAlign: 'center' }}>
-        <p style={{ color: 'var(--gold)', letterSpacing: '0.3em', fontSize: '0.7rem', textTransform: 'uppercase' }}>
-          Каркас готов
-        </p>
-        <h1
-          style={{
-            fontFamily: "'Cormorant Garamond', serif",
-            fontWeight: 300,
-            fontSize: 'clamp(2.5rem, 6vw, 5rem)',
-            margin: '20px 0',
-          }}
-        >
-          Надежда <em>Праворова</em>
-        </h1>
-        <Link to="/story" className="btn-primary">
-          Открыть историю
-        </Link>
-      </section>
+  const ref = useRef(null);
+  const navigate = useNavigate();
 
-      <section style={{ padding: '40px 8vw 120px', display: 'flex', justifyContent: 'center' }}>
-        <div style={{ width: '100%', maxWidth: 480 }}>
-          <h2
-            style={{
-              fontFamily: "'Cormorant Garamond', serif",
-              fontWeight: 300,
-              fontSize: '2rem',
-              marginBottom: 24,
-              textAlign: 'center',
-            }}
-          >
-            Запись на <em>консультацию</em>
-          </h2>
-          <BookingForm />
-        </div>
-      </section>
-    </main>
-  );
+  useEffect(() => {
+    const cleanup = initHome();
+    return cleanup;
+  }, []);
+
+  // Перехват SPA-ссылок (на /story) — переход без перезагрузки
+  useEffect(() => {
+    const root = ref.current;
+    if (!root) return;
+    const handler = (e) => {
+      const a = e.target.closest('a[data-spa]');
+      if (!a) return;
+      e.preventDefault();
+      navigate(a.getAttribute('href'));
+    };
+    root.addEventListener('click', handler);
+    return () => root.removeEventListener('click', handler);
+  }, [navigate]);
+
+  return <div ref={ref} dangerouslySetInnerHTML={{ __html: bodyHtml }} />;
 }
