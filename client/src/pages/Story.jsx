@@ -2,13 +2,34 @@ import { useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import bodyHtml from '../legacy/story-body.html?raw';
 import { initStory } from '../legacy/story-script.js';
-import '../legacy/story.css';
+import storyCssUrl from '../legacy/story.css?url';
 
-// Страница истории: разметка и стили перенесены 1:1 из story.html,
-// вся интерактивность (loader, scroll-движок, анимации) — в initStory().
+// Страница истории: разметка 1:1 из story.html.
+// CSS грузится динамически (<link>) и удаляется при уходе —
+// чтобы стили story не конфликтовали со стилями главной.
 export default function Story() {
   const ref = useRef(null);
   const navigate = useNavigate();
+
+  // Динамический CSS: добавляем при монтировании, удаляем при размонтировании
+  useEffect(() => {
+    const link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = storyCssUrl;
+    document.head.appendChild(link);
+
+    // Восстанавливаем курсор (home.css скрывает его глобально через cursor:none)
+    const cursorFix = document.createElement('style');
+    cursorFix.textContent = '* { cursor: auto !important }';
+    cursorFix.id = 'story-cursor-fix';
+    document.head.appendChild(cursorFix);
+
+    return () => {
+      document.head.removeChild(link);
+      const fix = document.getElementById('story-cursor-fix');
+      if (fix) document.head.removeChild(fix);
+    };
+  }, []);
 
   useEffect(() => {
     const cleanup = initStory();
