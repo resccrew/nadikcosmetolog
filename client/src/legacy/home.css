@@ -791,7 +791,10 @@ nav.scrolled {
 .contact-val { font-size: 0.95rem; }
 .booking-form { padding: 56px; background: var(--beige); }
 .form-title { font-family: 'Cormorant Garamond', serif; font-size: 1.8rem; font-weight: 300; color: var(--dark); margin-bottom: 36px; }
-.form-group { margin-bottom: 20px; }
+.form-group { margin-bottom: 20px; position: relative; }
+.form-error { display: none; color: #b94040; font-size: 0.72rem; margin-top: 5px; letter-spacing: 0.03em; }
+.form-group.has-error .form-error { display: block; }
+.form-group.has-error .form-input { border-bottom-color: #b94040; }
 .form-input {
   width: 100%; padding: 16px 0; background: transparent; border: none;
   border-bottom: 1px solid rgba(184,150,90,0.3);

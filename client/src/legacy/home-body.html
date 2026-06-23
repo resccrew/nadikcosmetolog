@@ -555,28 +555,36 @@
 
   <div class="booking-form reveal" style="transition-delay:.2s">
     <div class="form-title">Записаться на приём</div>
-    <div class="form-group">
-      <input type="text" class="form-input" placeholder="Ваше имя" autocomplete="name">
+    <div class="form-group" id="nameGroup">
+      <input type="text" class="form-input" id="fieldName" placeholder="Ваше имя" autocomplete="name">
+      <span class="form-error" id="nameError">Пожалуйста, введите ваше имя</span>
     </div>
     <div class="form-group">
-      <input type="tel" class="form-input" placeholder="Номер телефона" autocomplete="tel">
+      <input type="tel" class="form-input" id="fieldPhone" placeholder="Номер телефона (необязательно)" autocomplete="tel">
+    </div>
+    <div class="form-group" id="emailGroup">
+      <input type="email" class="form-input" id="fieldEmail" placeholder="Email" autocomplete="email">
+      <span class="form-error" id="emailError">Пожалуйста, введите корректный email</span>
     </div>
     <div class="form-group">
-      <input type="email" class="form-input" placeholder="Email (необязательно)" autocomplete="email">
-    </div>
-    <div class="form-group">
-      <select class="form-select">
+      <select class="form-select" id="fieldService">
         <option value="" disabled selected>Выберите услугу</option>
-        <option>Первичная консультация</option>
-        <option>Биоревитализация / Мезотерапия</option>
-        <option>Контурная пластика</option>
-        <option>Ботулинотерапия</option>
-        <option>PRP-терапия</option>
-        <option>Аппаратная косметология</option>
+        <option>Здоровье волос</option>
+        <option>Здоровая кожа изнутри и снаружи</option>
+        <option>Дефициты и энергия</option>
+        <option>Женское здоровье</option>
+        <option>Детокс и поддержка печени</option>
+        <option>Персональный anti-age подход</option>
+        <option>Подготовка к беременности</option>
+        <option>Антистресс / ресурс / сон</option>
+        <option>Программа восстановления ЖКТ</option>
+        <option>Разбор анализов (полный чекап)</option>
+        <option>Коррекция веса</option>
+        <option>Индивидуальное сопровождение</option>
       </select>
     </div>
     <div class="form-group">
-      <textarea class="form-input" placeholder="Ваш вопрос или пожелание (необязательно)"></textarea>
+      <textarea class="form-input" id="fieldNote" placeholder="Ваш вопрос или пожелание (Для удобства можете указать номер Telegram или WhatsApp)"></textarea>
     </div>
     <button class="form-submit" id="formSubmit">Отправить заявку</button>
   </div>

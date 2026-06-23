@@ -45,20 +45,17 @@ app.post('/api/booking', bookingLimiter, async (req, res) => {
     // honeypot: если бот заполнил скрытое поле — молча отвечаем «ок»
     if (_honey) return res.json({ ok: true });
 
-    // ── Валидация ──
+    // ── Валидация: имя и email обязательны ──
     const errors = {};
     if (!name || String(name).trim().length < 2) errors.name = 'Укажите имя';
-    if (!phone || String(phone).replace(/\D/g, '').length < 7)
-      errors.phone = 'Укажите корректный телефон';
-    if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(email)))
-      errors.email = 'Некорректный email';
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(email))) errors.email = 'Укажите корректный email';
     if (Object.keys(errors).length)
       return res.status(400).json({ ok: false, errors });
 
     await sendBookingMail({
       name: String(name).trim(),
-      phone: String(phone).trim(),
-      email: email ? String(email).trim() : '',
+      phone: phone ? String(phone).trim() : '',
+      email: String(email).trim(),
       message: message ? String(message).trim() : '',
       ip: req.ip,
     });

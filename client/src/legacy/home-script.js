@@ -82,24 +82,32 @@ window.switchTab = function switchTab(idx) {
   const btn = document.getElementById('formSubmit');
   if (!btn) return;
   const form = btn.closest('.booking-form');
-  const getVal = (sel) => {
-    const el = form.querySelector(sel);
-    return el ? el.value.trim() : '';
-  };
   let busy = false;
+
+  const nameInput  = document.getElementById('fieldName');
+  const nameGroup  = document.getElementById('nameGroup');
+  const emailInput = document.getElementById('fieldEmail');
+  const emailGroup = document.getElementById('emailGroup');
+
+  if (nameInput)  on(nameInput,  'input', () => nameGroup.classList.remove('has-error'));
+  if (emailInput) on(emailInput, 'input', () => emailGroup.classList.remove('has-error'));
 
   on(btn, 'click', async () => {
     if (busy) return;
-    const name    = getVal('input[type="text"]');
-    const phone   = getVal('input[type="tel"]');
-    const email   = getVal('input[type="email"]');
-    const service = getVal('.form-select');
-    const note    = getVal('textarea');
-    const message = [service && `Услуга: ${service}`, note].filter(Boolean).join('\n');
 
-    if (name.length < 2 || phone.replace(/\D/g, '').length < 7) {
-      btn.textContent = 'Заполните имя и телефон';
-      setTimeout(() => { btn.textContent = 'Отправить заявку'; }, 2500);
+    const name    = nameInput  ? nameInput.value.trim()  : '';
+    const email   = emailInput ? emailInput.value.trim() : '';
+    const phone   = (document.getElementById('fieldPhone')   || {}).value || '';
+    const service = (document.getElementById('fieldService') || {}).value || '';
+    const note    = (document.getElementById('fieldNote')    || {}).value || '';
+    const message = [service && `Услуга: ${service}`, note.trim()].filter(Boolean).join('\n');
+
+    let hasError = false;
+    if (name.length < 2) { nameGroup.classList.add('has-error'); hasError = true; }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { emailGroup.classList.add('has-error'); hasError = true; }
+    if (hasError) {
+      if (name.length < 2) nameInput.focus();
+      else emailInput.focus();
       return;
     }
 
