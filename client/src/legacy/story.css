@@ -28,6 +28,9 @@ body {
 .back-btn:hover { color: var(--gold); }
 .back-btn svg { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 1.5; }
 
+/* переключатель языка на странице истории */
+.story-lang-toggle { position: fixed; top: 22px; right: 28px; z-index: 900; }
+
 /* ═══ PROGRESS BAR ═══ */
 .progress-bar {
   position: fixed; bottom: 0; left: 0; right: 0; z-index: 900;

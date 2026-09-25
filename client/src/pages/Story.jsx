@@ -1,7 +1,9 @@
 import { useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import bodyHtml from '../legacy/story-body.html?raw';
+import bodyRu from '../legacy/story-body.html?raw';
+import bodyEn from '../legacy/story-body.en.html?raw';
 import { initStory } from '../legacy/story-script.js';
+import { getLang } from '../lib/lang.js';
 import storyCssUrl from '../legacy/story.css?url';
 
 // Страница истории: разметка 1:1 из story.html.
@@ -50,5 +52,6 @@ export default function Story() {
     return () => root.removeEventListener('click', handler);
   }, [navigate]);
 
+  const bodyHtml = getLang() === 'en' ? bodyEn : bodyRu;
   return <div ref={ref} dangerouslySetInnerHTML={{ __html: bodyHtml }} />;
 }

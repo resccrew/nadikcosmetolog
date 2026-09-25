@@ -10,6 +10,25 @@ export function initHome() {
     cleanups.push(() => target.removeEventListener(ev, fn, opts));
   };
 
+/* ─── LANGUAGE ─── */
+const LANG = (() => { try { return localStorage.getItem('lang') === 'en' ? 'en' : 'ru'; } catch { return 'ru'; } })();
+document.documentElement.lang = LANG;
+document.title = LANG === 'en'
+  ? 'Nadezda Pravorova — trichologist, dermatocosmetologist, nutritionist'
+  : 'Надежда Праворова — врач-дерматокосметолог, трихолог, нутрициолог';
+const T = {
+  ru: { sending: 'Отправляем…', sent: 'Заявка отправлена ✓', error: 'Ошибка, попробуйте позже', service: 'Услуга' },
+  en: { sending: 'Sending…', sent: 'Request sent ✓', error: 'Something went wrong, please try again later', service: 'Service' },
+}[LANG];
+
+// переключатель языка: сохраняем выбор и перезагружаем страницу
+document.querySelectorAll('.lang-toggle').forEach((b) => {
+  on(b, 'click', () => {
+    try { localStorage.setItem('lang', LANG === 'en' ? 'ru' : 'en'); } catch { /* noop */ }
+    location.reload();
+  });
+});
+
 /* ─── CURSOR (desktop) ─── */
 const cursor = document.getElementById('cursor');
 const ring   = document.getElementById('cursor-ring');
@@ -100,7 +119,7 @@ window.switchTab = function switchTab(idx) {
     const phone   = (document.getElementById('fieldPhone')   || {}).value || '';
     const service = (document.getElementById('fieldService') || {}).value || '';
     const note    = (document.getElementById('fieldNote')    || {}).value || '';
-    const message = [service && `Услуга: ${service}`, note.trim()].filter(Boolean).join('\n');
+    const message = [service && `${T.service}: ${service}`, note.trim()].filter(Boolean).join('\n');
 
     let hasError = false;
     if (name.length < 2) { nameGroup.classList.add('has-error'); hasError = true; }
@@ -113,7 +132,7 @@ window.switchTab = function switchTab(idx) {
 
     busy = true;
     const orig = btn.textContent;
-    btn.textContent = 'Отправляем…';
+    btn.textContent = T.sending;
     btn.style.opacity = '0.7';
 
     const res = await submitBooking({ name, phone, email, message });
@@ -121,12 +140,12 @@ window.switchTab = function switchTab(idx) {
     busy = false;
     btn.style.opacity = '';
     if (res.ok) {
-      btn.textContent = 'Заявка отправлена ✓';
+      btn.textContent = T.sent;
       btn.style.background = 'var(--gold)';
       form.querySelectorAll('input, textarea, select').forEach((el) => { el.value = ''; });
       setTimeout(() => { btn.textContent = orig; btn.style.background = ''; }, 4000);
     } else {
-      btn.textContent = res.error || 'Ошибка, попробуйте позже';
+      btn.textContent = res.error || T.error;
       setTimeout(() => { btn.textContent = orig; }, 3500);
     }
   });
@@ -147,7 +166,7 @@ if (/iPad|iPhone|iPod/.test(navigator.userAgent)) {
 }
 
 /* ─── SOLUTION DRAWER ─── */
-const solutions = [
+const SOLUTIONS_RU = [
   {
     title: 'Здоровье волос',
     body: `<p>Выпадение волос, истончение, перхоть, жирность кожи головы — всё это симптомы, а не самостоятельные болезни. Я ищу причину: дефициты, гормональный фон, аутоиммунные процессы, нарушения работы ЖКТ.</p>
@@ -282,6 +301,144 @@ const solutions = [
     </ul>`
   }
 ];
+
+const SOLUTIONS_EN = [
+  {
+    title: 'Hair health',
+    body: `<p>Hair loss, thinning, dandruff, an oily scalp — these are symptoms, not standalone diseases. I look for the cause: deficiencies, hormonal imbalance, autoimmune processes, digestive issues.</p>
+    <ul>
+      <li>Trichoscopy and assessment of hair-follicle condition</li>
+      <li>Detecting deficiencies (iron, ferritin, zinc, vitamin D, biotin)</li>
+      <li>Nutritional correction and supplement support</li>
+      <li>Local and systemic treatment protocols</li>
+      <li>Guidance until visible results</li>
+      <li>Hair mesotherapy</li>
+    </ul>`
+  },
+  {
+    title: 'Healthy skin, inside and out',
+    body: `<p>Acne, rosacea, couperose, dryness, dullness — the state of your skin reflects the state of your whole body. I work with the skin externally and from within at the same time.</p>
+    <ul>
+      <li>Analysing triggers: nutrition, hormones, gut, stress</li>
+      <li>Nutritional support for the skin</li>
+      <li>A personalised home-care routine</li>
+      <li>Professional procedures where indicated</li>
+      <li>Dermatoscopy (skin-cancer risk assessment)</li>
+    </ul>`
+  },
+  {
+    title: 'Deficiencies & energy',
+    body: `<p>Chronic fatigue, brain fog, apathy — most often this is neither "normal" nor just your character. It's a signal that key nutrients are missing.</p>
+    <ul>
+      <li>Assessment of micronutrient and vitamin status</li>
+      <li>Detecting hidden deficiencies (B12, D, iron, magnesium, omega-3)</li>
+      <li>A personalised repletion plan</li>
+      <li>Adjusting your diet to your rhythm of life</li>
+      <li>Tracking progress and fine-tuning the protocol</li>
+    </ul>`
+  },
+  {
+    title: "Women's health",
+    body: `<p>PMS, cycle irregularities, weight gain, mood swings, low libido, thrush, cystitis — all of this is linked to hormonal balance and inflammation, which can be supported nutritionally.</p>
+    <ul>
+      <li>Reviewing your hormonal profile through lab tests</li>
+      <li>Nutritional support for the cycle</li>
+      <li>Working with estrogen dominance and progesterone deficiency</li>
+      <li>Protocols for PCOS, endometriosis, menopause</li>
+      <li>Support without hormone therapy (or alongside it)</li>
+      <li>Addressing chronic inflammation (cystitis, thrush)</li>
+    </ul>`
+  },
+  {
+    title: 'Detox & liver support',
+    body: `<p>The liver is the body's central organ of detoxification. When it is overloaded, it shows up as fatigue, skin reactions, hormonal imbalance and excess weight.</p>
+    <ul>
+      <li>Assessing the load on your detox systems</li>
+      <li>A gentle detox protocol without harsh diets</li>
+      <li>Supporting the detox phases with supplements</li>
+      <li>Adjusting nutrition and lifestyle</li>
+      <li>Working with fatty liver and elevated liver enzymes</li>
+    </ul>`
+  },
+  {
+    title: 'Personalised anti-age approach',
+    body: `<p>Ageing is a manageable process. I work with its causes — inflammation, glycation, oxidative stress, deficiencies — not just the outward signs.</p>
+    <ul>
+      <li>Assessing biological age via inflammation and metabolic markers</li>
+      <li>An anti-ageing nutritional protocol</li>
+      <li>Supporting collagen synthesis from within</li>
+      <li>Integration with aesthetic procedures</li>
+      <li>A long-term strategy for skin and body</li>
+    </ul>`
+  },
+  {
+    title: 'Preconception preparation',
+    body: `<p>Nutritional preparation for conception is an investment in the health of both mother and baby — ideally at least 3–6 months before a planned pregnancy.</p>
+    <ul>
+      <li>Assessing the nutrient status of both partners</li>
+      <li>Replenishing folate, iodine, iron, omega-3 and vitamin D</li>
+      <li>Supporting reproductive function</li>
+      <li>Reducing the risk of pregnancy complications</li>
+      <li>Nutritional guidance throughout the preparation period</li>
+    </ul>`
+  },
+  {
+    title: 'Anti-stress / energy / sleep',
+    body: `<p>Chronic stress depletes the adrenal glands, damages the gut and disrupts sleep. I address this through nutrition, supplements and lifestyle.</p>
+    <ul>
+      <li>Assessing cortisol levels and adrenal load</li>
+      <li>A protocol of adaptogens and neurotrophic nutrients</li>
+      <li>Working with magnesium, B-vitamin and GABA deficiencies</li>
+      <li>Recommendations for routine and sleep hygiene</li>
+      <li>Restoring your resources without stimulants</li>
+    </ul>`
+  },
+  {
+    title: 'Gut restoration programme',
+    body: `<p>The gut is your second brain and the foundation of immunity. Bloating, constipation, diarrhoea, dysbiosis, leaky-gut syndrome — all of this affects your skin, weight and mood.</p>
+    <ul>
+      <li>Analysing symptoms and food triggers</li>
+      <li>A protocol to restore the gut lining</li>
+      <li>Correcting dysbiosis through nutrition and probiotics</li>
+      <li>Reducing inflammation in the GI tract</li>
+      <li>Gentle gut cleansing where indicated</li>
+    </ul>`
+  },
+  {
+    title: 'Lab-test review (full check-up)',
+    body: `<p>Not sure which tests to take to check your health? Or already have your results but don't know what to do with them? I read lab tests not by the "laboratory norm", but by functional ranges.</p>
+    <ul>
+      <li>Reviewing complete blood count and biochemistry</li>
+      <li>Assessing your hormonal profile</li>
+      <li>Detecting hidden deficiencies and inflammatory markers</li>
+      <li>A clear list of correction priorities</li>
+      <li>Personalised nutrition and supplement recommendations</li>
+    </ul>`
+  },
+  {
+    title: 'Weight correction',
+    body: `<p>Excess weight is a symptom. I don't prescribe exhausting diets. I look for the cause: insulin resistance, hypothyroidism, chronic inflammation, deficiencies, stress.</p>
+    <ul>
+      <li>Metabolic diagnostics through lab tests</li>
+      <li>Detecting and correcting insulin resistance</li>
+      <li>A personal nutrition plan without harsh restrictions</li>
+      <li>Nutritional support for metabolism</li>
+      <li>Lasting results without rebounds or relapses</li>
+    </ul>`
+  },
+  {
+    title: 'One-to-one guidance',
+    body: `<p>One-to-one guidance over 2–3 months is comprehensive work on your health, where every recommendation is tailored to your body, lab tests, lifestyle and goals — with support and regular feedback at every stage.</p>
+    <ul>
+      <li>Ordering and interpreting lab tests</li>
+      <li>Personalised selection of supplements</li>
+      <li>Your personal nutrition review and correction</li>
+      <li>Regular calls with me personally and chat support</li>
+    </ul>`
+  }
+];
+
+const solutions = LANG === 'en' ? SOLUTIONS_EN : SOLUTIONS_RU;
 
 (function() {
   const overlay = document.getElementById('solutionOverlay');

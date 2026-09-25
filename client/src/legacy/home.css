@@ -113,6 +113,17 @@ nav.scrolled {
 }
 .nav-btn:hover { background: var(--gold); color: var(--warm-white); }
 
+/* ─── LANGUAGE TOGGLE ─── */
+.nav-right { display: flex; align-items: center; gap: 16px; }
+.lang-toggle {
+  background: transparent; border: 1px solid rgba(184,150,90,0.5);
+  color: var(--gold); font-family: 'Jost', sans-serif; font-size: 0.7rem;
+  font-weight: 500; letter-spacing: 0.12em; padding: 8px 13px;
+  border-radius: 20px; cursor: pointer; transition: background .3s, color .3s, border-color .3s;
+  line-height: 1;
+}
+.lang-toggle:hover { background: var(--gold); color: var(--warm-white); border-color: var(--gold); }
+
 /* ─── BURGER ─── */
 .menu-toggle {
   display: none; flex-direction: column; gap: 5px;
@@ -494,10 +505,11 @@ nav.scrolled {
   cursor: pointer;
 }
 .credential-item[data-diploma]:not([data-diploma=""]) .cred-text::after {
-  content: ' ↗';
+  content: ' ↗\FE0E';
   color: var(--gold);
   font-size: 0.65rem;
   opacity: 0.7;
+  font-variant-emoji: text;
 }
 .credential-item[data-diploma]:not([data-diploma=""]):hover {
   border-color: rgba(184,150,90,0.55);
@@ -784,9 +796,11 @@ nav.scrolled {
 .contact-icon {
   width: 44px; height: 44px; border: 1px solid rgba(184,150,90,0.3);
   display: flex; align-items: center; justify-content: center;
-  font-size: 1rem; flex-shrink: 0; transition: background .3s, border-color .3s;
+  color: var(--gold); flex-shrink: 0;
+  transition: background .3s, border-color .3s, color .3s;
 }
-.contact-item:hover .contact-icon { background: var(--gold); border-color: var(--gold); }
+.contact-icon svg { width: 20px; height: 20px; display: block; }
+.contact-item:hover .contact-icon { background: var(--gold); border-color: var(--gold); color: var(--warm-white); }
 .contact-label { font-size: 0.6rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); display: block; margin-bottom: 2px; }
 .contact-val { font-size: 0.95rem; }
 .booking-form { padding: 56px; background: var(--beige); }
@@ -1369,6 +1383,13 @@ footer {
   .testimonials-header .section-label { color: var(--gold); }
   .testimonials-header .section-label::before { background: var(--gold); }
   .testimonials-header .nav-btn { display: none; }
+  /* «Все отзывы» — возвращаем на мобильном (перекрываем глобальное скрытие .nav-btn) */
+  .testimonials-header .nav-btn.reviews-all-btn {
+    display: inline-block !important;
+    margin-top: 16px;
+    align-self: flex-start;
+    padding: 12px 26px;
+  }
   .reviews-track {
     display: -webkit-box;
     display: flex; gap: 14px; overflow-x: auto; overflow-y: hidden;
@@ -1463,4 +1484,77 @@ footer {
   .hero-name { font-size: 2.2rem; }
   .stat-num { font-size: 1.35rem; }
   .service-card { flex: 0 0 84vw; }
+}
+
+/* ─── GUIDE (digital product) ─── */
+.guide {
+  background: var(--warm-white);
+  padding: 120px 60px;
+  display: grid;
+  grid-template-columns: 1.15fr 1fr;
+  gap: 72px;
+  align-items: center;
+}
+.guide-cover {
+  display: block; position: relative;
+  border-radius: 4px; overflow: hidden;
+  box-shadow: 0 30px 60px -20px rgba(28,24,22,0.35), 0 0 0 1px rgba(184,150,90,0.25);
+  transform: rotate(-1.2deg);
+  transition: transform .6s ease, box-shadow .6s ease;
+}
+.guide-cover:hover {
+  transform: rotate(0deg) translateY(-6px);
+  box-shadow: 0 40px 70px -20px rgba(28,24,22,0.45), 0 0 0 1px rgba(184,150,90,0.5);
+}
+.guide-cover img { display: block; width: 100%; height: auto; }
+.guide-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(2.1rem, 3.4vw, 3.2rem);
+  font-weight: 300; line-height: 1.1; color: var(--dark);
+  margin-bottom: 20px;
+}
+.guide-title em { font-style: italic; color: var(--gold); }
+.guide-sub {
+  font-size: 0.88rem; line-height: 1.9; color: var(--muted);
+  max-width: 460px; margin-bottom: 28px;
+}
+.guide-list { list-style: none; padding: 0; margin: 0 0 36px; display: grid; gap: 12px; }
+.guide-list li {
+  position: relative; padding-left: 26px;
+  font-size: 0.85rem; line-height: 1.6; color: var(--text);
+}
+.guide-list li::before {
+  content: ''; position: absolute; left: 0; top: 0.8em;
+  width: 14px; height: 1px; background: var(--gold);
+}
+.guide-buy { display: flex; align-items: center; gap: 28px; flex-wrap: wrap; margin-bottom: 20px; }
+.guide-price {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2.4rem; font-weight: 300; color: var(--dark); line-height: 1;
+}
+.guide-price span {
+  display: block; margin-top: 6px;
+  font-family: 'Jost', sans-serif; font-size: 0.58rem; letter-spacing: 0.18em;
+  text-transform: uppercase; color: var(--muted);
+}
+.guide-cta {
+  display: inline-flex; align-items: center; gap: 14px;
+  padding: 16px 38px;
+  background: var(--dark); color: var(--cream);
+  text-decoration: none; font-size: 0.62rem; font-weight: 500;
+  letter-spacing: 0.2em; text-transform: uppercase; border-radius: 3px;
+  transition: background .3s, color .3s, gap .3s;
+}
+.guide-cta:hover { background: var(--gold); color: var(--dark); gap: 20px; }
+.guide-cta svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 2; flex-shrink: 0; }
+.guide-note { font-size: 0.7rem; line-height: 1.7; color: var(--muted); opacity: 0.8; max-width: 420px; }
+
+@media (max-width: 1100px) and (min-width: 769px) {
+  .guide { padding: 90px 40px; gap: 44px; }
+}
+@media (max-width: 768px) {
+  .guide { grid-template-columns: 1fr; padding: 72px 20px; gap: 40px; }
+  .guide-cover { transform: none; }
+  .guide-buy { gap: 20px; }
+  .guide-cta { width: 100%; justify-content: center; }
 }

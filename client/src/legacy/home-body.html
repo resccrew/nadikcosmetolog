@@ -9,17 +9,13 @@
   <ul class="mobile-menu-links">
     <li><a href="#about"    onclick="closeMenu()">О враче</a></li>
     <li><a href="#services" onclick="closeMenu()">Услуги</a></li>
+    <li><a href="#guide"    onclick="closeMenu()">Гайд</a></li>
     <li><a href="/story" data-spa onclick="closeMenu()">История</a></li>
     <li><a href="#reviews"  onclick="closeMenu()">Отзывы</a></li>
     <li><a href="#contact"  onclick="closeMenu()">Контакты</a></li>
   </ul>
   <div class="mobile-menu-cta">
     <a href="#contact" onclick="closeMenu()">Записаться на консультацию</a>
-  </div>
-  <div class="mobile-menu-socials">
-    <a href="#">Instagram</a>
-    <a href="#">Telegram</a>
-    <a href="#">WhatsApp</a>
   </div>
 </div>
 
@@ -29,14 +25,18 @@
   <ul class="nav-links">
     <li><a href="#about">О враче</a></li>
     <li><a href="#services">Услуги</a></li>
+    <li><a href="#guide">Гайд</a></li>
     <li><a href="/story" data-spa>История</a></li>
     <li><a href="#reviews">Отзывы</a></li>
     <li><a href="#contact">Контакты</a></li>
   </ul>
-  <a href="#contact" class="nav-btn">Записаться</a>
-  <button class="menu-toggle" id="menuToggle" aria-label="Меню">
-    <span></span><span></span><span></span>
-  </button>
+  <div class="nav-right">
+    <button class="lang-toggle" id="langToggle" aria-label="Switch to English">EN</button>
+    <a href="#contact" class="nav-btn">Записаться</a>
+    <button class="menu-toggle" id="menuToggle" aria-label="Меню">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
 </nav>
 
 <!-- ─── HERO ─── -->
@@ -60,7 +60,7 @@
     </div>
     <div class="hero-stats">
       <div class="stat-item">
-        <span class="stat-num">16</span>
+        <span class="stat-num">17</span>
         <div class="stat-label">Лет опыта</div>
       </div>
       <div class="stat-item">
@@ -68,8 +68,8 @@
         <div class="stat-label">Клиентов</div>
       </div>
       <div class="stat-item">
-        <span class="stat-num">98<span style="font-size:1.4rem; color:var(--gold)">%</span></span>
-        <div class="stat-label">Довольны</div>
+        <span class="stat-num">4</span>
+        <div class="stat-label">Направления</div>
       </div>
     </div>
   </div>
@@ -79,10 +79,6 @@
       <img src="IMG_9656.webp" alt="Фото" class="hero-photo">
     </div>
     <div class="hero-img-overlay"></div>
-    <div class="hero-badge">
-      <span class="badge-num">№1</span>
-      <div class="badge-text">в вопросах молодости и красоты</div>
-    </div>
     <div class="float-line"></div>
   </div>
 
@@ -250,7 +246,7 @@
   <div class="story-banner-content">
     <div class="story-banner-eyebrow">История врача</div>
     <h2 class="story-banner-title">
-      16 лет.<br>30 000 историй.
+      17 лет.<br>30 000 историй.
       <em>Одна миссия.</em>
     </h2>
     <p class="story-banner-sub">
@@ -258,15 +254,15 @@
     </p>
     <div class="story-banner-stats">
       <div class="story-banner-stat">
-        <div class="story-banner-stat-num">16</div>
-        <div class="story-banner-stat-label">Лет в медицине</div>
+        <div class="story-banner-stat-num">17</div>
+        <div class="story-banner-stat-label">Лет опыта</div>
       </div>
       <div class="story-banner-stat">
         <div class="story-banner-stat-num">30<span>K+</span></div>
         <div class="story-banner-stat-label">Пациентов</div>
       </div>
       <div class="story-banner-stat">
-        <div class="story-banner-stat-num">30<span>+</span></div>
+        <div class="story-banner-stat-num">40<span>+</span></div>
         <div class="story-banner-stat-label">Сертификатов</div>
       </div>
     </div>
@@ -391,6 +387,33 @@
   <a href="#contact" class="drawer-cta">Записаться на консультацию</a>
 </div>
 
+<!-- ─── GUIDE ─── -->
+<section class="guide reveal" id="guide">
+  <a href="https://pravorova.gumroad.com/l/ayckvb" target="_blank" rel="noopener" class="guide-cover" aria-label="Получить гайд">
+    <img loading="lazy" decoding="async" src="/guide-cover.jpg" alt="Обложка гайда «Самостоятельная консультация трихолога»" width="1005" height="566">
+  </a>
+  <div class="guide-content">
+    <div class="section-label">Цифровой гайд · PDF</div>
+    <h2 class="guide-title">Самостоятельная консультация <em>трихолога</em></h2>
+    <p class="guide-sub">Выпадают волосы, и непонятно, с чего начать? Пошаговый гайд поможет разобраться в проблеме самостоятельно и прийти к врачу уже подготовленной.</p>
+    <ul class="guide-list">
+      <li>Самоанкета из 10 вопросов и 4 домашних теста</li>
+      <li>Красные флаги: когда сразу идти к врачу</li>
+      <li>Какие анализы сдать и как подготовиться</li>
+      <li>Расшифровка ферритина, ОАК, ТТГ, D, B12 и гормонов</li>
+      <li>План: что делать самой и когда повторить оценку</li>
+    </ul>
+    <div class="guide-buy">
+      <div class="guide-price">$7.99<span>35 страниц</span></div>
+      <a href="https://pravorova.gumroad.com/l/ayckvb" target="_blank" rel="noopener" class="guide-cta">
+        Получить гайд
+        <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </a>
+    </div>
+    <p class="guide-note">Гайд носит образовательный характер и не заменяет очную консультацию врача.</p>
+  </div>
+</section>
+
 <!-- ─── PHILOSOPHY ─── -->
 <section id="philosophy" style="padding:40px 60px 120px; background:var(--cream); position:relative; overflow:hidden;">
   <div class="phil-img-panel">
@@ -428,7 +451,7 @@
         <div class="section-label">Отзывы</div>
         <h2 class="section-title">Говорят <em>клиенты</em></h2>
       </div>
-      <a href="https://www.instagram.com/s/aGlnaGxpZ2h0OjE3OTM5ODQwNDgyOTY3NzM2?igsh=amtld21yeTk5MTE4" class="nav-btn" style="color:var(--gold);border-color:var(--gold);">Все отзывы</a>
+      <a href="https://www.instagram.com/s/aGlnaGxpZ2h0OjE3OTM5ODQwNDgyOTY3NzM2?igsh=amtld21yeTk5MTE4" class="nav-btn reviews-all-btn" style="color:var(--gold);border-color:var(--gold);">Все отзывы</a>
     </div>
     <div class="reviews-track" id="reviewsTrack">
       <div class="review-card reveal">
@@ -511,40 +534,50 @@
     <div class="section-label reveal">Запись</div>
     <h2 class="section-title reveal" style="transition-delay:.1s">Начните <em> свой путь</em> к здоровью и красоте</h2>
     <p class="section-text reveal" style="transition-delay:.2s">
-      Не знаете с чего начать? 
+      Не знаете с чего начать?
       Запишитесь на короткий бесплатный видеозвонок, и мы вместе составим ваш индивидуальный план
     </p>
+    <p class="section-text reveal" style="transition-delay:.25s; margin-top:10px;">
+      Стоимость услуг — <span style="color:var(--gold); font-weight:500;">от 100&nbsp;€</span>
+    </p>
     <div class="contact-items reveal" style="transition-delay:.3s">
-      <a class="contact-item" href="tel:+79001234567">
-        <div class="contact-icon">📞</div>
+      <div class="contact-item">
+        <div class="contact-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div>
         <div>
           <span class="contact-label">Телефон</span>
-          <span class="contact-val">+ 357 97485636</span>
+          <span class="contact-val"><a href="tel:+35797485636" style="color:inherit;text-decoration:none">+357 97 485 636</a> · <a href="tel:+995591106441" style="color:inherit;text-decoration:none">+995 591 106 441</a></span>
         </div>
-      </a>
-      <a class="contact-item" href="https://t.me/tricholog_Nadezda" target="_blank">
-        <div class="contact-icon">💬</div>
+      </div>
+      <a class="contact-item" href="https://t.me/nadezdantiage" target="_blank">
+        <div class="contact-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></div>
         <div>
           <span class="contact-label">Telegram</span>
-          <span class="contact-val">@tricholog_Nadezda</span>
+          <span class="contact-val">@nadezdantiage</span>
+        </div>
+      </a>
+      <a class="contact-item" href="https://wa.me/message/37RC7WMMHT7II1" target="_blank">
+        <div class="contact-icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></div>
+        <div>
+          <span class="contact-label">WhatsApp</span>
+          <span class="contact-val">Написать в WhatsApp</span>
         </div>
       </a>
       <a class="contact-item" href="https://www.instagram.com/nadezda.antiage?igsh=NTNobDJ6ZmVqNnpz&utm_source=qr" target="_blank">
-        <div class="contact-icon">📸</div>
+        <div class="contact-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></div>
         <div>
           <span class="contact-label">Instagram</span>
           <span class="contact-val">@nadezda_antiage</span>
         </div>
       </a>
       <div class="contact-item">
-        <div class="contact-icon">📍</div>
+        <div class="contact-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
         <div>
           <span class="contact-label">Адрес</span>
-          <span class="contact-val">Кипр, Пафос</span>
+          <span class="contact-val">Кипр, Пафос · Грузия, Батуми</span>
         </div>
       </div>
       <div class="contact-item">
-        <div class="contact-icon">🌎</div>
+        <div class="contact-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div>
         <div>
           <span class="contact-label">Онлайн-консультации</span>
           <span class="contact-val">По всему миру</span>
@@ -619,10 +652,11 @@
     <div>
       <div class="footer-col-title">Контакты</div>
       <ul class="footer-links">
-        <li><a href="tel:+35797485636">+357 97 485 636</a></li>
-        <li><a href="https://t.me/tricholog_Nadezda" target="_blank">@tricholog_Nadezda</a></li>
+        <li><a href="tel:+35797485636">+357 97 485 636</a> · <a href="tel:+995591106441">+995 591 106 441</a></li>
+        <li><a href="https://t.me/nadezdantiage" target="_blank">@nadezdantiage</a></li>
+        <li><a href="https://wa.me/message/37RC7WMMHT7II1" target="_blank">WhatsApp</a></li>
         <li><a href="https://www.instagram.com/nadezda.antiage?igsh=NTNobDJ6ZmVqNnpz&utm_source=qr" target="_blank">@nadezda_antiage</a></li>
-        <li><a href="#contact">Кипр, Пафос · Онлайн</a></li>
+        <li><a href="#contact">Кипр, Пафос · Грузия, Батуми · Онлайн</a></li>
       </ul>
     </div>
   </div>

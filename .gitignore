@@ -1,3 +1,7 @@
 .tools/
 .DS_Store
 .playwright-mcp/
+.env
+*.env
+node_modules/
+*.db

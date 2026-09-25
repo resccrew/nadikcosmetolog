@@ -1,0 +1,666 @@
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursor-ring"></div>
+<div id="progress-bar"></div>
+
+<!-- ─── MOBILE MENU DRAWER ─── -->
+<div class="mobile-menu" id="mobileMenu">
+  <button class="mobile-menu-close" onclick="closeMenu()" aria-label="Close menu"></button>
+  <ul class="mobile-menu-links">
+    <li><a href="#about"    onclick="closeMenu()">About</a></li>
+    <li><a href="#services" onclick="closeMenu()">Services</a></li>
+    <li><a href="#guide"    onclick="closeMenu()">Guide</a></li>
+    <li><a href="/story" data-spa onclick="closeMenu()">Story</a></li>
+    <li><a href="#reviews"  onclick="closeMenu()">Reviews</a></li>
+    <li><a href="#contact"  onclick="closeMenu()">Contact</a></li>
+  </ul>
+  <div class="mobile-menu-cta">
+    <a href="#contact" onclick="closeMenu()">Book a consultation</a>
+  </div>
+</div>
+
+<!-- ─── NAV ─── -->
+<nav id="navbar">
+  <a href="#" class="nav-logo">Nadezda.<span>antiage</span></a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#guide">Guide</a></li>
+    <li><a href="/story" data-spa>Story</a></li>
+    <li><a href="#reviews">Reviews</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <div class="nav-right">
+    <button class="lang-toggle" id="langToggle" aria-label="Переключить на русский">RU</button>
+    <a href="#contact" class="nav-btn">Book</a>
+    <button class="menu-toggle" id="menuToggle" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- ─── HERO ─── -->
+<section class="hero">
+  <div class="hero-bg-pattern"></div>
+  <div class="deco-ring" style="top:-80px; right:-80px; width:400px; height:400px; opacity:0.5;"></div>
+
+  <div class="hero-left">
+    <div class="hero-eyebrow">Preventive medicine</div>
+    <h1 class="hero-name">
+      Nadezda<br>
+      <em>Pravorova</em>
+    </h1>
+    <div class="hero-title">Trichologist, dermatocosmetologist, clinical nutritionist</div>
+    <p class="hero-desc">
+      I help women and men look and feel better, slow down ageing, and restore the health of their skin and hair through systematic diagnostics and a comprehensive, personalised approach.
+    </p>
+    <div class="hero-ctas">
+      <a href="#contact" class="btn-primary">Book a consultation</a>
+      <a href="#services" class="btn-outline">All services</a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat-item">
+        <span class="stat-num">17</span>
+        <div class="stat-label">Years of experience</div>
+      </div>
+      <div class="stat-item">
+        <span class="stat-num">30000<span style="font-size:1.4rem; color:var(--gold)">+</span></span>
+        <div class="stat-label">Clients</div>
+      </div>
+      <div class="stat-item">
+        <span class="stat-num">4</span>
+        <div class="stat-label">Fields</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-right">
+    <div class="hero-img-wrap">
+      <img src="IMG_9656.webp" alt="Photo" class="hero-photo">
+    </div>
+    <div class="hero-img-overlay"></div>
+    <div class="float-line"></div>
+  </div>
+
+  <div class="scroll-indicator">
+    <div class="scroll-line"></div>
+    Scroll down
+  </div>
+</section>
+
+<!-- ─── ABOUT ─── -->
+<section class="about" id="about">
+  <div class="about-img-col reveal">
+    <div class="about-img-main">
+      <img loading="lazy" decoding="async" src="IMG_9689.webp" alt="Dr. Nadik" class="about-photo">
+    </div>
+    <div class="about-img-deco"></div>
+    <div class="about-img-deco2"></div>
+  </div>
+
+  <div class="reveal" style="transition-delay:0.15s">
+    <div class="section-label">About me</div>
+    <h2 class="section-title">Beauty is <em>not only injections and surface procedures</em> — it is also inner health.</h2>
+    <p class="section-text">
+      I'm Nadezda Pravorova, a physician of the 1st category. Dermatocosmetologist, trichologist and nutritionist with 13 years of experience in clinical medicine plus 4 years of working with clients in private and online practice.
+I graduated from Grodno State Medical University with a degree in General Medicine. I completed specialisations in dermatovenereology, trichology and cosmetology. I finished the University of Educational Medicine course in Integrative and Clinical Nutrition.
+    </p>
+    <p class="section-text">
+      I work within the concept of an "individual, comprehensive approach" — there are no two identical bodies, which means there are no identical protocols.
+The health and beauty of our skin and hair is a mirror of our overall health.
+    </p>
+    <!-- TABS -->
+    <!-- Segmented control (mobile only) -->
+    <div class="about-seg-control">
+      <button class="seg-btn seg-active" data-tab="education">Education</button>
+      <button class="seg-btn" data-tab="certs">Certificates</button>
+    </div>
+    <div class="about-tabs">
+      <button class="about-tab-btn active" data-tab="education">Education</button>
+      <button class="about-tab-btn" data-tab="certs">Certificates</button>
+    </div>
+
+    <!-- TAB: Education -->
+    <div class="about-tab-panel active" id="tab-education">
+      <div class="credentials">
+        <div class="credential-item" data-diploma="дипломы/IMG_9732.webp,дипломы/IMG_9731.webp,дипломы/IMG_9730.webp">
+          <div class="cred-dot"></div>
+          <div class="cred-text">Grodno State Medical University, degree in General Medicine<span class="cred-year">2001–2009</span></div>
+        </div>
+        <div class="credential-item" data-diploma="дипломы/IMG_9724.webp,дипломы/IMG_9722.webp">
+          <div class="cred-dot"></div>
+          <div class="cred-text">Residency in dermatovenereology, Grodno Regional Dermatovenereological Clinic<span class="cred-year">2009–2010</span></div>
+        </div>
+        <div class="credential-item" data-diploma="">
+          <div class="cred-dot"></div>
+          <div class="cred-text">Dermatovenereologist, Grodno Regional Dermatovenereological Clinic<span class="cred-year">2010–2013</span></div>
+        </div>
+        <div class="credential-item" data-diploma="дипломы/IMG_9727.webp">
+          <div class="cred-dot"></div>
+          <div class="cred-text">Advanced training in Trichology, Mechnikov North-Western State Medical University, St. Petersburg<span class="cred-year">2013</span></div>
+        </div>
+        <div class="credential-item" data-diploma="">
+          <div class="cred-dot"></div>
+          <div class="cred-text">Dermatovenereologist, Medical Centre for Beauty and Health, Grodno<span class="cred-year">2013–2022</span></div>
+        </div>
+        <div class="credential-item" data-diploma="дипломы/IMG_9733.webp,дипломы/IMG_9734.webp,дипломы/IMG_9735.webp">
+          <div class="cred-dot"></div>
+          <div class="cred-text">Professional retraining in Cosmetology, BelMAPO, Minsk<span class="cred-year">2014</span></div>
+        </div>
+        <div class="credential-item" data-diploma="дипломы/IMG_9719.webp">
+          <div class="cred-dot"></div>
+          <div class="cred-text">Advanced training in Chronic Dermatoses, BelMAPO, Minsk<span class="cred-year">2016</span></div>
+        </div>
+        <div class="credential-item" data-diploma="дипломы/IMG_9716.webp,дипломы/IMG_9717.webp">
+          <div class="cred-dot"></div>
+          <div class="cred-text">2nd qualification category, Ministry of Health of the Republic of Belarus<span class="cred-year">2017</span></div>
+        </div>
+        <div class="credential-item" data-diploma="дипломы/IMG_9718.webp">
+          <div class="cred-dot"></div>
+          <div class="cred-text">Advanced training in Dermatoscopy and Trichoscopy, BelMAPO, Minsk<span class="cred-year">2020</span></div>
+        </div>
+        <div class="credential-item" data-diploma="дипломы/IMG_9720.webp">
+          <div class="cred-dot"></div>
+          <div class="cred-text">Advanced training in Laser Techniques in Cosmetology and Dermatovenereology, BelMAPO, Minsk<span class="cred-year">2021</span></div>
+        </div>
+        <div class="credential-item" data-diploma="дипломы/IMG_9725.webp,дипломы/IMG_9726.webp">
+          <div class="cred-dot"></div>
+          <div class="cred-text">1st qualification category, Ministry of Health of the Republic of Belarus<span class="cred-year">2021</span></div>
+        </div>
+        <div class="credential-item" data-diploma="дипломы/IMG_0908.webp,дипломы/IMG_0909.webp,дипломы/IMG_0910.webp">
+          <div class="cred-dot"></div>
+          <div class="cred-text">Sole proprietor status, Batumi, Georgia. Opened an aesthetic cosmetology and consulting practice<span class="cred-year">2022</span></div>
+        </div>
+        <div class="credential-item" data-diploma="дипломы/IMG_9728.webp">
+          <div class="cred-dot"></div>
+          <div class="cred-text">Professional retraining in Integrative and Clinical Nutrition, Institute of Functional Integrative Dietetics and Nutrition, Moscow<span class="cred-year">2024–2025</span></div>
+        </div>
+        <div class="credential-item" data-diploma="дипломы/IMG_9728.webp">
+          <div class="cred-dot"></div>
+          <div class="cred-text">Online consulting practice in clinical nutrition, Cyprus<span class="cred-year">2025 — present</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB: Certificates -->
+    <div class="about-tab-panel" id="tab-certs">
+      <div class="certs-grid" id="certs-grid">
+        <div class="cert-thumb" data-index="0"><img loading="lazy" decoding="async" src="сертификаты/IMG_9862.webp" alt="Certificate"></div>
+        <div class="cert-thumb" data-index="1"><img loading="lazy" decoding="async" src="сертификаты/IMG_9863.webp" alt="Certificate"></div>
+        <div class="cert-thumb" data-index="2"><img loading="lazy" decoding="async" src="сертификаты/IMG_9864.webp" alt="Certificate"></div>
+        <div class="cert-thumb" data-index="3"><img loading="lazy" decoding="async" src="сертификаты/IMG_9865.webp" alt="Certificate"></div>
+        <div class="cert-thumb" data-index="4"><img loading="lazy" decoding="async" src="сертификаты/IMG_9866.webp" alt="Certificate"></div>
+        <div class="cert-thumb" data-index="5"><img loading="lazy" decoding="async" src="сертификаты/IMG_9867.webp" alt="Certificate"></div>
+        <div class="cert-thumb" data-index="6"><img loading="lazy" decoding="async" src="сертификаты/IMG_9869.webp" alt="Certificate"></div>
+        <div class="cert-thumb" data-index="7"><img loading="lazy" decoding="async" src="сертификаты/IMG_9870.webp" alt="Certificate"></div>
+        <div class="cert-thumb" data-index="8"><img loading="lazy" decoding="async" src="сертификаты/IMG_9871.webp" alt="Certificate"></div>
+        <div class="cert-thumb" data-index="9"><img loading="lazy" decoding="async" src="сертификаты/IMG_9872.webp" alt="Certificate"></div>
+        <div class="cert-thumb" data-index="10"><img loading="lazy" decoding="async" src="сертификаты/IMG_9873.webp" alt="Certificate"></div>
+        <div class="cert-thumb" data-index="11"><img loading="lazy" decoding="async" src="сертификаты/IMG_9874.webp" alt="Certificate"></div>
+        <div class="cert-thumb" data-index="12"><img loading="lazy" decoding="async" src="сертификаты/IMG_9875.webp" alt="Certificate"></div>
+        <div class="cert-thumb" data-index="13"><img loading="lazy" decoding="async" src="сертификаты/IMG_9876.webp" alt="Certificate"></div>
+        <div class="cert-thumb" data-index="14"><img loading="lazy" decoding="async" src="сертификаты/IMG_9877.webp" alt="Certificate"></div>
+        <div class="cert-thumb" data-index="15"><img loading="lazy" decoding="async" src="сертификаты/IMG_9878.webp" alt="Certificate"></div>
+        <div class="cert-thumb" data-index="16"><img loading="lazy" decoding="async" src="сертификаты/IMG_9879.webp" alt="Certificate"></div>
+        <div class="cert-thumb" data-index="17"><img loading="lazy" decoding="async" src="сертификаты/IMG_9880.webp" alt="Certificate"></div>
+        <div class="cert-thumb" data-index="18"><img loading="lazy" decoding="async" src="сертификаты/IMG_9883.webp" alt="Certificate"></div>
+        <div class="cert-thumb" data-index="19"><img loading="lazy" decoding="async" src="сертификаты/IMG_9884.webp" alt="Certificate"></div>
+        <div class="cert-thumb" data-index="20"><img loading="lazy" decoding="async" src="сертификаты/IMG_9885.webp" alt="Certificate"></div>
+        <div class="cert-thumb" data-index="21"><img loading="lazy" decoding="async" src="сертификаты/IMG_9886.webp" alt="Certificate"></div>
+        <div class="cert-thumb" data-index="22"><img loading="lazy" decoding="async" src="сертификаты/IMG_9887.webp" alt="Certificate"></div>
+        <div class="cert-thumb" data-index="23"><img loading="lazy" decoding="async" src="сертификаты/IMG_9888.webp" alt="Certificate"></div>
+        <div class="cert-thumb" data-index="24"><img loading="lazy" decoding="async" src="сертификаты/IMG_9891.webp" alt="Certificate"></div>
+        <div class="cert-thumb" data-index="25"><img loading="lazy" decoding="async" src="сертификаты/IMG_9892.webp" alt="Certificate"></div>
+        <div class="cert-thumb" data-index="26"><img loading="lazy" decoding="async" src="сертификаты/IMG_9893.webp" alt="Certificate"></div>
+        <div class="cert-thumb" data-index="27"><img loading="lazy" decoding="async" src="сертификаты/IMG_9896.webp" alt="Certificate"></div>
+        <div class="cert-thumb" data-index="28"><img loading="lazy" decoding="async" src="сертификаты/IMG_9897.webp" alt="Certificate"></div>
+        <div class="cert-thumb" data-index="29"><img loading="lazy" decoding="async" src="дипломы/IMG_9729.webp" alt="Certificate"></div>
+        <div class="cert-thumb" data-index="29"><img loading="lazy" decoding="async" src="дипломы/IMG_9723.webp" alt="Certificate"></div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ─── CERT LIGHTBOX ─── -->
+<div class="cert-lightbox" id="certLightbox">
+  <button class="cert-lightbox-close" id="certClose">✕</button>
+  <button class="cert-lightbox-nav cert-lightbox-prev" id="certPrev">&#8249;</button>
+  <img loading="lazy" decoding="async" src="" alt="Certificate" id="certLightboxImg">
+  <button class="cert-lightbox-nav cert-lightbox-next" id="certNext">&#8250;</button>
+</div>
+
+<!-- ─── DIPLOMA LIGHTBOX ─── -->
+<div class="cert-lightbox" id="diplomaLightbox">
+  <button class="cert-lightbox-close" id="diplomaClose">✕</button>
+  <button class="cert-lightbox-nav cert-lightbox-prev" id="diplomaPrev">&#8249;</button>
+  <img loading="lazy" decoding="async" src="" alt="Diploma" id="diplomaLightboxImg">
+  <button class="cert-lightbox-nav cert-lightbox-next" id="diplomaNext">&#8250;</button>
+</div>
+
+<!-- ─── STORY BANNER ─── -->
+<section class="story-banner reveal">
+  <div class="story-banner-bg"></div>
+  <div class="story-banner-vignette"></div>
+
+  <div class="story-banner-content">
+    <div class="story-banner-eyebrow">A doctor's story</div>
+    <h2 class="story-banner-title">
+      17 years.<br>30,000 stories.
+      <em>One mission.</em>
+    </h2>
+    <p class="story-banner-sub">
+      The journey from a Belarusian medical university to an online practice worldwide — trichology, cosmetology, dermatology and nutrition as one systematic approach.
+    </p>
+    <div class="story-banner-stats">
+      <div class="story-banner-stat">
+        <div class="story-banner-stat-num">17</div>
+        <div class="story-banner-stat-label">Years of experience</div>
+      </div>
+      <div class="story-banner-stat">
+        <div class="story-banner-stat-num">30<span>K+</span></div>
+        <div class="story-banner-stat-label">Patients</div>
+      </div>
+      <div class="story-banner-stat">
+        <div class="story-banner-stat-num">40<span>+</span></div>
+        <div class="story-banner-stat-label">Certificates</div>
+      </div>
+    </div>
+    <a href="/story" data-spa class="story-banner-cta">
+      Dive into the story
+      <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+    </a>
+  </div>
+  <div class="story-banner-media">
+    <div class="story-banner-thumb">
+      <img loading="lazy" decoding="async" src="story media/info media/tri/IMG_2017.webp" alt="Trichology">
+    </div>
+    <div class="story-banner-thumb">
+      <img loading="lazy" decoding="async" src="story media/info media/cosme/IMG_0407.webp" alt="Cosmetology">
+    </div>
+    <div class="story-banner-thumb">
+      <img loading="lazy" decoding="async" src="story media/info media/cosme/IMG_1111.webp" alt="Cosmetology">
+    </div>
+  </div>
+</section>
+
+<!-- ─── SERVICES ─── -->
+<section class="services" id="services">
+  <div class="services-bg"></div>
+  <div class="services-header reveal">
+    <div>
+      <div class="section-label">My solutions</div>
+      <h2 class="section-title"> Solutions for <em>every</em> concern</h2>
+    </div>
+    <a href="#contact" class="nav-btn" style="color:var(--gold);border-color:var(--gold);">Consultation</a>
+  </div>
+  <div class="services-grid" id="servicesGrid">
+    <div class="service-card reveal" data-solution="0">
+      <div class="service-num">01</div>
+      <div class="service-name">Hair health</div>
+      <div class="service-desc-short">Hair loss, thinning, dandruff — I find the cause and eliminate it with a personalised correction plan.</div>
+      <div class="service-arrow">Learn more →</div>
+    </div>
+    <div class="service-card reveal" style="transition-delay:.08s" data-solution="1">
+      <div class="service-num">02</div>
+      <div class="service-name">Healthy skin, inside and out</div>
+      <div class="service-desc-short">Acne, breakouts, dryness, dullness — I treat skin comprehensively: from within and outside at once.</div>
+      <div class="service-arrow">Learn more →</div>
+    </div>
+    <div class="service-card reveal" style="transition-delay:.16s" data-solution="2">
+      <div class="service-num">03</div>
+      <div class="service-name">Deficiencies & energy</div>
+      <div class="service-desc-short">Chronic fatigue and apathy — I uncover the hidden causes and restore your resources.</div>
+      <div class="service-arrow">Learn more →</div>
+    </div>
+    <div class="service-card reveal" style="transition-delay:.08s" data-solution="3">
+      <div class="service-num">04</div>
+      <div class="service-name">Women's health</div>
+      <div class="service-desc-short">PMS, cycle disorders, thrush, cystitis, hormonal imbalance — nutritional support without excess chemistry.</div>
+      <div class="service-arrow">Learn more →</div>
+    </div>
+    <div class="service-card reveal" style="transition-delay:.16s" data-solution="4">
+      <div class="service-num">05</div>
+      <div class="service-name">Detox & liver support</div>
+      <div class="service-desc-short">Gentle detox without harsh diets — I ease the load on the liver and start natural cleansing.</div>
+      <div class="service-arrow">Learn more →</div>
+    </div>
+    <div class="service-card reveal" style="transition-delay:.24s" data-solution="5">
+      <div class="service-num">06</div>
+      <div class="service-name">Personalised anti-age approach</div>
+      <div class="service-desc-short">I work with the causes of ageing: inflammation, glycation and deficiencies — inside and out.</div>
+      <div class="service-arrow">Learn more →</div>
+    </div>
+    <div class="service-card reveal" style="transition-delay:.08s" data-solution="6">
+      <div class="service-num">07</div>
+      <div class="service-name">Preconception preparation</div>
+      <div class="service-desc-short">I replenish your nutrient status 3–6 months before conception — for the health of mother and baby.</div>
+      <div class="service-arrow">Learn more →</div>
+    </div>
+    <div class="service-card reveal" style="transition-delay:.16s" data-solution="7">
+      <div class="service-num">08</div>
+      <div class="service-name">Anti-stress / energy / sleep</div>
+      <div class="service-desc-short">I restore the adrenal glands and sleep through nutrition and adaptogens — without stimulants.</div>
+      <div class="service-arrow">Learn more →</div>
+    </div>
+    <div class="service-card reveal" style="transition-delay:.24s" data-solution="8">
+      <div class="service-num">09</div>
+      <div class="service-name">Gut restoration programme</div>
+      <div class="service-desc-short">Bloating, dysbiosis, leaky gut — I remove the cause, not just the symptoms.</div>
+      <div class="service-arrow">Learn more →</div>
+    </div>
+    <div class="service-card reveal" style="transition-delay:.16s" data-solution="9">
+      <div class="service-num">10</div>
+      <div class="service-name">Lab-test review (full check-up)</div>
+      <div class="service-desc-short">I read lab tests by functional ranges — finding what the laboratory calls "normal".</div>
+      <div class="service-arrow">Learn more →</div>
+    </div>
+    <div class="service-card reveal" style="transition-delay:.24s" data-solution="10">
+      <div class="service-num">11</div>
+      <div class="service-name">Weight correction</div>
+      <div class="service-desc-short">I look for the metabolic cause of excess weight — without harsh diets or rebounds.</div>
+      <div class="service-arrow">Learn more →</div>
+    </div>
+    <div class="service-card reveal" style="transition-delay:.24s" data-solution="11">
+      <div class="service-num">12</div>
+      <div class="service-name">One-to-one guidance</div>
+      <div class="service-desc-short">Long-term, done-for-you work — from lab tests to visible results with regular monitoring.</div>
+      <div class="service-arrow">Learn more →</div>
+    </div>
+  </div>
+  <div class="swipe-dots" id="servicesDots">
+    <div class="swipe-dot on"></div><div class="swipe-dot"></div><div class="swipe-dot"></div>
+    <div class="swipe-dot"></div><div class="swipe-dot"></div><div class="swipe-dot"></div>
+    <div class="swipe-dot"></div><div class="swipe-dot"></div><div class="swipe-dot"></div>
+    <div class="swipe-dot"></div><div class="swipe-dot"></div><div class="swipe-dot"></div>
+  </div>
+</section>
+
+<!-- ─── SOLUTION DRAWER ─── -->
+<div class="solution-overlay" id="solutionOverlay"></div>
+<div class="solution-drawer" id="solutionDrawer">
+  <div class="drawer-sheet-handle"><div class="drawer-handle"></div></div>
+  <button class="drawer-close" id="drawerClose">✕</button>
+  <div class="drawer-num" id="drawerNum"></div>
+  <div class="drawer-title" id="drawerTitle"></div>
+  <div class="drawer-body" id="drawerBody"></div>
+  <a href="#contact" class="drawer-cta">Book a consultation</a>
+</div>
+
+<!-- ─── GUIDE ─── -->
+<section class="guide reveal" id="guide">
+  <a href="https://pravorova.gumroad.com/l/ayckvb" target="_blank" rel="noopener" class="guide-cover" aria-label="Get the guide">
+    <img loading="lazy" decoding="async" src="/guide-cover.jpg" alt="Cover of the self-guided trichologist consultation guide" width="1005" height="566">
+  </a>
+  <div class="guide-content">
+    <div class="section-label">Digital guide · PDF</div>
+    <h2 class="guide-title">Self-guided <em>trichologist</em> consultation</h2>
+    <p class="guide-sub">Losing hair and not sure where to start? This step-by-step guide helps you understand the problem on your own and come to a doctor prepared.</p>
+    <ul class="guide-list">
+      <li>A 10-question self-assessment and 4 at-home tests</li>
+      <li>Red flags: when to see a doctor right away</li>
+      <li>Which lab tests to take and how to prepare</li>
+      <li>Reading ferritin, CBC, TSH, vitamin D, B12 and hormones</li>
+      <li>A plan: what to do yourself and when to reassess</li>
+    </ul>
+    <div class="guide-buy">
+      <div class="guide-price">$7.99<span>35 pages · in Russian</span></div>
+      <a href="https://pravorova.gumroad.com/l/ayckvb" target="_blank" rel="noopener" class="guide-cta">
+        Get the guide
+        <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </a>
+    </div>
+    <p class="guide-note">The guide is educational and does not replace an in-person consultation.</p>
+  </div>
+</section>
+
+<!-- ─── PHILOSOPHY ─── -->
+<section id="philosophy" style="padding:40px 60px 120px; background:var(--cream); position:relative; overflow:hidden;">
+  <div class="phil-img-panel">
+    <img loading="lazy" decoding="async" src="IMG_0907.webp" alt="">
+  </div>
+  <div style="max-width:1400px; margin:0 auto;" class="philosophy">
+    <div class="phil-sticky">
+      <div class="section-label reveal">Approach</div>
+      <h2 class="section-title reveal" style="transition-delay:.1s">My <em>philosophy</em> of health and beauty</h2>
+    </div>
+    <div class="phil-items">
+      <div class="phil-para reveal">
+        <p class="phil-para-text">I'm convinced that the body is always speaking to us — through skin breakouts, hair loss, digestion, hormonal disruptions, low energy, anxiety or chronic inflammation. <em>And behind every symptom there is a cause that is important to see.</em></p>
+      </div>
+      <div class="phil-para reveal" style="transition-delay:.1s">
+        <p class="phil-para-text">My approach is an <em>attentive, comprehensive review</em> of the whole person: not just lab tests, but also lifestyle, nutrition, stress levels, sleep, emotional state and the body's inner resources.</p>
+      </div>
+      <div class="phil-para reveal" style="transition-delay:.2s">
+        <p class="phil-para-text">I combine knowledge of medicine and nutrition with hands-on experience guiding people back to health. <em>No extremes, no rigid bans, no one-size-fits-all schemes.</em> With respect for the body, its rhythm and each person's individuality.</p>
+      </div>
+      <div class="phil-para reveal" style="transition-delay:.3s">
+        <p class="phil-para-text">My work is to help you not just "treat symptoms", but to truly <em>reclaim your health, energy and quality of life.</em></p>
+      </div>
+      <a href="#about" class="btn-primary reveal" style="transition-delay:.4s; margin-top:12px; display:inline-block;">More about me</a>
+    </div>
+  </div>
+</section>
+
+
+<!-- ─── TESTIMONIALS ─── -->
+<section class="testimonials" id="reviews">
+  <div class="testimonials-inner">
+    <div class="testimonials-header reveal">
+      <div>
+        <div class="section-label">Reviews</div>
+        <h2 class="section-title">What <em>clients say</em></h2>
+      </div>
+      <a href="https://www.instagram.com/s/aGlnaGxpZ2h0OjE3OTM5ODQwNDgyOTY3NzM2?igsh=amtld21yeTk5MTE4" class="nav-btn reviews-all-btn" style="color:var(--gold);border-color:var(--gold);">All reviews</a>
+    </div>
+    <div class="reviews-track" id="reviewsTrack">
+      <div class="review-card reveal">
+        <div class="stars">★★★★★</div>
+        <div class="review-text">"I first came to Nadezda about the condition of my hair, and gradually our work grew into full nutritional guidance. A wonderful professional who relies on lab data and selects the best course to restore any deficiencies in the body. Even during the process I noticed improvements — my sleep got better, my energy came back, my attitude to food changed.
+I highly recommend Nadezda as a nutritionist and trichologist — a pleasant and valuable experience that leads to tangible results!"
+</div>
+        <div class="review-author">
+          <div class="author-avatar">O</div>
+          <div>
+            <span class="author-name">Olga</span>
+            <span class="author-date">May 2026</span>
+          </div>
+        </div>
+      </div>
+      <div class="review-card reveal" style="transition-delay:.1s">
+        <div class="stars">★★★★★</div>
+        <div class="review-text">"I'm grateful to Nadezda for her attentive and professional approach.
+After the consultations I managed not only to solve the problem I came with — my hair has practically stopped falling out — but also to completely rethink my nutrition and daily routine.
+Nadezda explains very clearly where problems come from and how to work with them, without unnecessary jargon or scare tactics, which is especially winning.
+You can feel her experience and confidence.
+Now it's much easier to understand how to maintain results and take care of myself."</div>
+        <div class="review-author">
+          <div class="author-avatar">A</div>
+          <div>
+            <span class="author-name">Alexey</span>
+            <span class="author-date">October 2025</span>
+          </div>
+        </div>
+      </div>
+      <div class="review-card reveal" style="transition-delay:.2s">
+        <div class="stars">★★★★★</div>
+        <div class="review-text">"Nadezda, on behalf of the whole Orlov family I want to say a huge thank you for the work you've done with us.
+Our condition and the way we feel are now genuinely different, and that is precious. So clearly, in such a structured and understandable way, you set our basic foundations — now our eyes naturally turn toward the right foods and a healthy lifestyle.
+We have something to compare with — we'd had similar work with another specialist before, but the result with you is definitely better.
+We're staying in touch, wishing you all the best."</div>
+        <div class="review-author">
+          <div class="author-avatar">O</div>
+          <div>
+            <span class="author-name">The Orlov family</span>
+            <span class="author-date">February 2026</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="swipe-dots" id="reviewsDots">
+      <div class="swipe-dot on"></div><div class="swipe-dot"></div><div class="swipe-dot"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── PROCESS (mobile only) ─── -->
+<section class="process-section" id="process">
+  <div class="section-label reveal">How it works</div>
+  <h2 class="section-title reveal">The path to <em>results</em></h2>
+  <div class="process-steps">
+    <div class="process-step reveal">
+      <div class="step-num-wrap"><div class="step-num">1</div><div class="step-line"></div></div>
+      <div class="step-content"><div class="step-title">Initial consultation</div><div class="step-text">We look at your situation in detail: tests, symptoms, goals and lifestyle. Together we draw up a diagnostic plan.</div></div>
+    </div>
+    <div class="process-step reveal">
+      <div class="step-num-wrap"><div class="step-num">2</div><div class="step-line"></div></div>
+      <div class="step-content"><div class="step-title">Diagnostics and tests</div><div class="step-text">I analyse the results by functional ranges — finding what's hidden inside the laboratory's "normal".</div></div>
+    </div>
+    <div class="process-step reveal">
+      <div class="step-num-wrap"><div class="step-num">3</div><div class="step-line"></div></div>
+      <div class="step-content"><div class="step-title">Personal protocol</div><div class="step-text">I build an individual plan of nutrition, supplements and lifestyle tailored to your specific situation.</div></div>
+    </div>
+    <div class="process-step reveal">
+      <div class="step-num-wrap"><div class="step-num">4</div><div class="step-line"></div></div>
+      <div class="step-content"><div class="step-title">Guidance and monitoring</div><div class="step-text">Regular meetings to track progress, adjust the protocol and reach a lasting result.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── BOOKING ─── -->
+<section class="booking" id="contact">
+  <div class="booking-info">
+    <div class="section-label reveal">Booking</div>
+    <h2 class="section-title reveal" style="transition-delay:.1s">Start <em>your journey</em> to health and beauty</h2>
+    <p class="section-text reveal" style="transition-delay:.2s">
+      Not sure where to begin?
+      Book a short free video call and together we'll draw up your individual plan.
+    </p>
+    <p class="section-text reveal" style="transition-delay:.25s; margin-top:10px;">
+      Services — <span style="color:var(--gold); font-weight:500;">from&nbsp;€100</span>
+    </p>
+    <div class="contact-items reveal" style="transition-delay:.3s">
+      <div class="contact-item">
+        <div class="contact-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div>
+        <div>
+          <span class="contact-label">Phone</span>
+          <span class="contact-val"><a href="tel:+35797485636" style="color:inherit;text-decoration:none">+357 97 485 636</a> · <a href="tel:+995591106441" style="color:inherit;text-decoration:none">+995 591 106 441</a></span>
+        </div>
+      </div>
+      <a class="contact-item" href="https://t.me/nadezdantiage" target="_blank">
+        <div class="contact-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></div>
+        <div>
+          <span class="contact-label">Telegram</span>
+          <span class="contact-val">@nadezdantiage</span>
+        </div>
+      </a>
+      <a class="contact-item" href="https://wa.me/message/37RC7WMMHT7II1" target="_blank">
+        <div class="contact-icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></div>
+        <div>
+          <span class="contact-label">WhatsApp</span>
+          <span class="contact-val">Message on WhatsApp</span>
+        </div>
+      </a>
+      <a class="contact-item" href="https://www.instagram.com/nadezda.antiage?igsh=NTNobDJ6ZmVqNnpz&utm_source=qr" target="_blank">
+        <div class="contact-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></div>
+        <div>
+          <span class="contact-label">Instagram</span>
+          <span class="contact-val">@nadezda_antiage</span>
+        </div>
+      </a>
+      <div class="contact-item">
+        <div class="contact-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+        <div>
+          <span class="contact-label">Address</span>
+          <span class="contact-val">Cyprus, Paphos · Georgia, Batumi</span>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div>
+        <div>
+          <span class="contact-label">Online consultations</span>
+          <span class="contact-val">Worldwide</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="booking-form reveal" style="transition-delay:.2s">
+    <div class="form-title">Book an appointment</div>
+    <div class="form-group" id="nameGroup">
+      <input type="text" class="form-input" id="fieldName" placeholder="Your name" autocomplete="name">
+      <span class="form-error" id="nameError">Please enter your name</span>
+    </div>
+    <div class="form-group">
+      <input type="tel" class="form-input" id="fieldPhone" placeholder="Phone number (optional)" autocomplete="tel">
+    </div>
+    <div class="form-group" id="emailGroup">
+      <input type="email" class="form-input" id="fieldEmail" placeholder="Email" autocomplete="email">
+      <span class="form-error" id="emailError">Please enter a valid email</span>
+    </div>
+    <div class="form-group">
+      <select class="form-select" id="fieldService">
+        <option value="" disabled selected>Choose a service</option>
+        <option>Hair health</option>
+        <option>Healthy skin, inside and out</option>
+        <option>Deficiencies & energy</option>
+        <option>Women's health</option>
+        <option>Detox & liver support</option>
+        <option>Personalised anti-age approach</option>
+        <option>Preconception preparation</option>
+        <option>Anti-stress / energy / sleep</option>
+        <option>Gut restoration programme</option>
+        <option>Lab-test review (full check-up)</option>
+        <option>Weight correction</option>
+        <option>One-to-one guidance</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <textarea class="form-input" id="fieldNote" placeholder="Your question or message (feel free to add your Telegram or WhatsApp)"></textarea>
+    </div>
+    <button class="form-submit" id="formSubmit">Send request</button>
+  </div>
+</section>
+
+<!-- ─── FOOTER ─── -->
+<footer>
+  <div class="footer-inner">
+    <div>
+      <a href="#" class="footer-logo">Nadezda. <span>antiage</span></a>
+      <p class="footer-desc">Trichologist, dermatocosmetologist, clinical nutritionist. Online consultations worldwide.</p>
+    </div>
+    <div>
+      <div class="footer-col-title">Solutions</div>
+      <ul class="footer-links">
+        <li><a href="#services">Hair health</a></li>
+        <li><a href="#services">Healthy skin</a></li>
+        <li><a href="#services">Deficiencies & energy</a></li>
+        <li><a href="#services">Women's health</a></li>
+        <li><a href="#services">Weight correction</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-title">Navigation</div>
+      <ul class="footer-links">
+        <li><a href="#about">About</a></li>
+        <li><a href="#services">Services</a></li>
+        <li><a href="#reviews">Reviews</a></li>
+        <li><a href="#contact">Book</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-title">Contacts</div>
+      <ul class="footer-links">
+        <li><a href="tel:+35797485636">+357 97 485 636</a> · <a href="tel:+995591106441">+995 591 106 441</a></li>
+        <li><a href="https://t.me/nadezdantiage" target="_blank">@nadezdantiage</a></li>
+        <li><a href="https://wa.me/message/37RC7WMMHT7II1" target="_blank">WhatsApp</a></li>
+        <li><a href="https://www.instagram.com/nadezda.antiage?igsh=NTNobDJ6ZmVqNnpz&utm_source=qr" target="_blank">@nadezda_antiage</a></li>
+        <li><a href="#contact">Cyprus, Paphos · Georgia, Batumi · Online</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2025 Nadezda Pravorova. All rights reserved.</span>
+    <span>Contraindications may apply. Consult a specialist.</span>
+  </div>
+</footer>
