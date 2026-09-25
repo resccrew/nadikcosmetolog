@@ -9,6 +9,19 @@ export function initStory() {
   };
   document.body.classList.add('loading');
 
+  /* ─── LANGUAGE TOGGLE ─── */
+  const LANG = (() => { try { return localStorage.getItem('lang') === 'en' ? 'en' : 'ru'; } catch { return 'ru'; } })();
+  document.documentElement.lang = LANG;
+  document.title = LANG === 'en'
+    ? "Nadezda Pravorova — a doctor's story"
+    : 'Надежда Праворова — история врача';
+  document.querySelectorAll('.lang-toggle').forEach((b) => {
+    on(b, 'click', () => {
+      try { localStorage.setItem('lang', LANG === 'en' ? 'ru' : 'en'); } catch { /* noop */ }
+      location.reload();
+    });
+  });
+
 /* ═══════════════════════════════════════
    UTILITY
 ═══════════════════════════════════════ */

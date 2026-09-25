@@ -1,0 +1,290 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="robots" content="noindex, nofollow" />
+<title>Статистика · Надежда Праворова</title>
+<style>
+  :root{
+    --bg:#141210; --card:#1f1a15; --card2:#26201a; --line:#332a21;
+    --gold:#c2a063; --gold-soft:#d8bd86; --text:#efe7db; --muted:#9c8f7d;
+    --green:#7fb37a; --radius:14px;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--text);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    -webkit-font-smoothing:antialiased;padding:0 0 60px}
+  a{color:var(--gold)}
+  h1{font-size:22px;font-weight:600;margin:0}
+  .wrap{max-width:1100px;margin:0 auto;padding:24px 18px}
+  .top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:22px;flex-wrap:wrap}
+  .eyebrow{color:var(--gold);font-size:12px;letter-spacing:2px;text-transform:uppercase;margin-bottom:4px}
+  .btn{background:transparent;border:1px solid var(--line);color:var(--muted);padding:8px 14px;
+    border-radius:8px;cursor:pointer;font-size:13px}
+  .btn:hover{border-color:var(--gold);color:var(--gold)}
+
+  /* login */
+  .login{max-width:360px;margin:16vh auto 0;padding:32px 26px;background:var(--card);
+    border:1px solid var(--line);border-radius:var(--radius);text-align:center}
+  .login h1{margin-bottom:6px}
+  .login p{color:var(--muted);font-size:14px;margin:0 0 20px}
+  .login input{width:100%;padding:12px 14px;background:var(--bg);border:1px solid var(--line);
+    border-radius:9px;color:var(--text);font-size:15px;margin-bottom:12px}
+  .login input:focus{outline:none;border-color:var(--gold)}
+  .login button{width:100%;padding:12px;background:var(--gold);color:#20180d;border:none;
+    border-radius:9px;font-weight:600;font-size:15px;cursor:pointer}
+  .err{color:#e08a7a;font-size:13px;min-height:18px;margin-top:4px}
+
+  /* period switch */
+  .periods{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+  .periods button{background:var(--card);border:1px solid var(--line);color:var(--muted);
+    padding:8px 16px;border-radius:20px;cursor:pointer;font-size:13px}
+  .periods button.on{background:var(--gold);border-color:var(--gold);color:#20180d;font-weight:600}
+  /* tiles */
+  .tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:22px}
+  .tile{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:16px 18px}
+  .tile .label{color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:1px}
+  .tile .val{font-size:30px;font-weight:600;margin-top:8px;line-height:1}
+  .tile .sub{color:var(--muted);font-size:12px;margin-top:6px}
+  .tile .val.g{color:var(--gold)}
+  .tile .val.gr{color:var(--green)}
+
+  .grid2{display:grid;grid-template-columns:1.6fr 1fr;gap:16px;margin-bottom:22px}
+  .panel{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:18px}
+  .panel h2{font-size:14px;font-weight:600;margin:0 0 16px;color:var(--text);
+    text-transform:uppercase;letter-spacing:1px}
+  .panel h2 span{color:var(--muted);font-weight:400;text-transform:none;letter-spacing:0}
+
+  /* chart */
+  .chart{display:flex;align-items:flex-end;gap:4px;height:160px}
+  .bar-col{flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:3px;height:100%}
+  .bar{width:70%;max-width:22px;background:linear-gradient(180deg,var(--gold),#8a6e3c);border-radius:3px 3px 0 0;min-height:2px;position:relative}
+  .bar.book{background:linear-gradient(180deg,var(--green),#4f7a4b)}
+  .bar-col .d{font-size:9px;color:var(--muted);white-space:nowrap}
+  .legend{display:flex;gap:16px;font-size:12px;color:var(--muted);margin-top:12px}
+  .legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px;vertical-align:middle}
+  .legend i.v{background:var(--gold)} .legend i.b{background:var(--green)}
+
+  /* rows */
+  .row{display:flex;align-items:center;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--line);font-size:14px}
+  .row:last-child{border-bottom:none}
+  .row .n{color:var(--muted)}
+  .rowbar{height:6px;background:var(--card2);border-radius:4px;overflow:hidden;margin-top:5px}
+  .rowbar i{display:block;height:100%;background:var(--gold)}
+
+  /* table */
+  table{width:100%;border-collapse:collapse;font-size:14px}
+  th{text-align:left;color:var(--muted);font-weight:500;font-size:12px;text-transform:uppercase;
+    letter-spacing:1px;padding:10px 12px;border-bottom:1px solid var(--line)}
+  td{padding:12px;border-bottom:1px solid var(--line);vertical-align:top}
+  tr:last-child td{border-bottom:none}
+  td.msg{color:var(--muted);max-width:340px}
+  td .ph{color:var(--gold)}
+  .empty{color:var(--muted);text-align:center;padding:26px;font-size:14px}
+  .updated{color:var(--muted);font-size:12px}
+  @media(max-width:760px){
+    .tiles{grid-template-columns:repeat(2,1fr)}
+    .grid2{grid-template-columns:1fr}
+    .hide-sm{display:none}
+    .chart{height:130px}
+  }
+</style>
+</head>
+<body>
+
+<div id="loginView">
+  <div class="login">
+    <div class="eyebrow">Панель</div>
+    <h1>Статистика сайта</h1>
+    <p>Введите пароль для входа</p>
+    <input id="pass" type="password" placeholder="Пароль" autocomplete="current-password" />
+    <button id="loginBtn">Войти</button>
+    <div class="err" id="loginErr"></div>
+  </div>
+</div>
+
+<div id="dash" class="wrap" style="display:none">
+  <div class="top">
+    <div>
+      <div class="eyebrow">Панель · nadezdantiage.com</div>
+      <h1>Статистика сайта</h1>
+    </div>
+    <div style="display:flex;gap:8px;align-items:center">
+      <span class="updated" id="updated"></span>
+      <button class="btn" id="refresh">Обновить</button>
+      <button class="btn" id="logout">Выйти</button>
+    </div>
+  </div>
+
+  <div class="periods" id="periods">
+    <button data-p="today">Сегодня</button>
+    <button data-p="week">Неделя</button>
+    <button data-p="month">Месяц</button>
+    <button data-p="total" class="on">Всё время</button>
+  </div>
+  <div class="tiles" id="tiles"></div>
+
+  <div class="grid2">
+    <div class="panel">
+      <h2>Активность <span>· последние 14 дней</span></h2>
+      <div class="chart" id="chart"></div>
+      <div class="legend"><span><i class="v"></i>Посещения</span><span><i class="b"></i>Заявки</span></div>
+    </div>
+    <div class="panel">
+      <h2>Откуда приходят</h2>
+      <div id="sources"></div>
+    </div>
+  </div>
+
+  <div class="grid2">
+    <div class="panel">
+      <h2>Заявки <span id="bkCount"></span></h2>
+      <div style="overflow-x:auto">
+        <table id="bookings"><thead><tr>
+          <th>Дата</th><th>Имя</th><th>Телефон</th><th class="hide-sm">Email</th><th class="hide-sm">Сообщение</th>
+        </tr></thead><tbody></tbody></table>
+      </div>
+    </div>
+    <div class="panel">
+      <h2>Страницы и устройства</h2>
+      <div id="pages"></div>
+      <div style="height:14px"></div>
+      <div id="devices"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+const KEY='nadez_admin_pass';
+const $=s=>document.querySelector(s);
+let pass=sessionStorage.getItem(KEY)||'';
+
+function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
+function fmtDate(iso){ if(!iso) return '';
+  const d=new Date(iso.replace(' ','T')+'Z');
+  return d.toLocaleString('ru-RU',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'}); }
+
+async function api(path){
+  const r=await fetch(path,{headers:{Authorization:'Bearer '+pass}});
+  if(r.status===401) throw new Error('401');
+  return r.json();
+}
+
+async function login(){
+  pass=$('#pass').value.trim();
+  $('#loginErr').textContent='';
+  try{
+    await api('/api/admin/stats');
+    sessionStorage.setItem(KEY,pass);
+    $('#loginView').style.display='none';
+    $('#dash').style.display='block';
+    load();
+  }catch(e){ $('#loginErr').textContent='Неверный пароль'; }
+}
+
+function tile(label,val,sub,cls){
+  return `<div class="tile"><div class="label">${label}</div>
+    <div class="val ${cls||''}">${val}</div><div class="sub">${sub||''}</div></div>`;
+}
+
+function rows(list,total,accent){
+  if(!list.length) return '<div class="empty">Пока нет данных</div>';
+  const max=Math.max(...list.map(x=>x.c));
+  return list.map(x=>`<div>
+    <div class="row"><span>${esc(x.label)}</span><span class="n">${x.c}</span></div>
+    <div class="rowbar"><i style="width:${Math.round(x.c/max*100)}%${accent?';background:'+accent:''}"></i></div>
+  </div>`).join('');
+}
+
+function drawChart(visits,books){
+  // объединяем последние 14 дней
+  const days=[]; const today=new Date();
+  for(let i=13;i>=0;i--){const d=new Date(today);d.setDate(d.getDate()-i);days.push(d.toISOString().slice(0,10));}
+  const vMap=Object.fromEntries(visits.map(x=>[x.d,x.c]));
+  const bMap=Object.fromEntries(books.map(x=>[x.d,x.c]));
+  const max=Math.max(1,...days.map(d=>Math.max(vMap[d]||0,bMap[d]||0)));
+  $('#chart').innerHTML=days.map(d=>{
+    const v=vMap[d]||0,b=bMap[d]||0;
+    const lbl=d.slice(8)+'.'+d.slice(5,7);
+    return `<div class="bar-col" title="${lbl}: ${v} посещ., ${b} заявок">
+      <div class="bar" style="height:${Math.round(v/max*100)}%"></div>
+      ${b?`<div class="bar book" style="height:${Math.round(b/max*100)}%"></div>`:''}
+      <span class="d">${d.slice(8)}</span></div>`;
+  }).join('');
+}
+
+let lastStats=null, period='total';
+const P_LABEL={today:'сегодня',week:'за неделю',month:'за месяц',total:'за всё время'};
+
+function renderTiles(){
+  if(!lastStats) return;
+  const s=lastStats, lbl=P_LABEL[period];
+  $('#tiles').innerHTML=
+    tile('Посещений · '+lbl, s.visits[period], `всего: ${s.visits.total}`,'g')+
+    tile('Уникальных · '+lbl, s.unique[period], `всего: ${s.unique.total}`,'')+
+    tile('Заявок · '+lbl, s.bookings[period], `всего: ${s.bookings.total}`,'gr')+
+    tile('Конверсия', s.conversion+'%','заявки ÷ посетители (за всё время)','');
+}
+
+async function load(){
+  try{
+    const {stats}=await api('/api/admin/stats');
+    const {bookings}=await api('/api/admin/bookings');
+
+    lastStats=stats;
+    renderTiles();
+
+    drawChart(stats.visitsByDay,stats.bookingsByDay);
+
+    $('#sources').innerHTML=rows(stats.sources.map(x=>({label:x.s,c:x.c})));
+    $('#pages').innerHTML='<div style="color:var(--muted);font-size:12px;margin-bottom:8px">Популярные страницы</div>'+
+      rows(stats.pages.map(x=>({label:x.p==='/'?'Главная':x.p,c:x.c})));
+    $('#devices').innerHTML='<div style="color:var(--muted);font-size:12px;margin:14px 0 8px">Устройства</div>'+
+      rows(stats.devices.map(x=>({label:x.dv,c:x.c})),0,'var(--green)');
+
+    $('#bkCount').textContent='· всего '+stats.bookings.total;
+    const tb=$('#bookings tbody');
+    tb.innerHTML=bookings.length? bookings.map(b=>`<tr>
+      <td>${fmtDate(b.created_at)}</td>
+      <td>${esc(b.name)}</td>
+      <td><span class="ph">${esc(b.phone)||'—'}</span></td>
+      <td class="hide-sm">${esc(b.email)}</td>
+      <td class="hide-sm msg">${esc(b.message)||'—'}</td>
+    </tr>`).join('') : '<tr><td colspan="5" class="empty">Заявок пока нет</td></tr>';
+
+    $('#updated').textContent='обновлено '+new Date().toLocaleTimeString('ru-RU',{hour:'2-digit',minute:'2-digit'});
+  }catch(e){
+    if(String(e.message)==='401'){ logout(); }
+  }
+}
+
+function logout(){
+  sessionStorage.removeItem(KEY); pass='';
+  $('#dash').style.display='none';
+  $('#loginView').style.display='block';
+  $('#pass').value='';
+}
+
+$('#loginBtn').onclick=login;
+$('#pass').addEventListener('keydown',e=>{if(e.key==='Enter')login();});
+$('#refresh').onclick=load;
+$('#logout').onclick=logout;
+
+// переключатель периода
+$('#periods').addEventListener('click',e=>{
+  const b=e.target.closest('button'); if(!b) return;
+  period=b.dataset.p;
+  document.querySelectorAll('#periods button').forEach(x=>x.classList.toggle('on',x===b));
+  renderTiles();
+});
+
+// автовход, если пароль уже сохранён в сессии
+if(pass){
+  api('/api/admin/stats').then(()=>{
+    $('#loginView').style.display='none'; $('#dash').style.display='block'; load();
+  }).catch(()=>logout());
+}
+</script>
+</body>
+</html>

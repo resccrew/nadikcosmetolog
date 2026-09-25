@@ -503,10 +503,11 @@ nav.scrolled {
   cursor: pointer;
 }
 .credential-item[data-diploma]:not([data-diploma=""]) .cred-text::after {
-  content: ' ↗';
+  content: ' ↗\FE0E';
   color: var(--gold);
   font-size: 0.65rem;
   opacity: 0.7;
+  font-variant-emoji: text;
 }
 .credential-item[data-diploma]:not([data-diploma=""]):hover {
   border-color: rgba(184,150,90,0.55);
@@ -1762,7 +1763,6 @@ footer {
     </div>
   </div>
 </section>
-
 <!-- ─── SERVICES ─── -->
 <section class="services" id="services">
   <div class="services-bg"></div>
