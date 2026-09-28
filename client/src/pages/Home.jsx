@@ -56,6 +56,12 @@ export default function Home() {
       }
       busy = false;
       buttons.forEach((b) => (b.disabled = false));
+      // Оплата на сайте не настроена — отправляем на Gumroad, чтобы покупка не терялась
+      const gumroad = root.querySelector('.guide-alt');
+      if (res.status === 503 && gumroad) {
+        window.location.href = gumroad.href;
+        return;
+      }
       if (errEl) errEl.hidden = false;
     };
     root.addEventListener('click', handler);
