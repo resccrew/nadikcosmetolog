@@ -1556,3 +1556,16 @@ footer {
   .guide-buy { gap: 20px; }
   .guide-cta { width: 100%; justify-content: center; }
 }
+
+/* Покупка гайда на сайте (Stripe) + запасной Gumroad */
+button.guide-cta { border: none; cursor: pointer; font-family: inherit; }
+button.guide-cta[disabled] { opacity: .6; pointer-events: none; }
+.guide-alt {
+  font-size: 0.62rem; letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--muted); text-decoration: underline; text-underline-offset: 4px;
+}
+.guide-alt:hover { color: var(--gold); }
+.guide-error { font-size: 0.75rem; color: #a8453a; margin: -8px 0 16px; }
+@media (max-width: 768px) {
+  .guide-alt { width: 100%; text-align: center; }
+}

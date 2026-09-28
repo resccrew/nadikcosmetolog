@@ -6,6 +6,7 @@ import Home from './pages/Home.jsx';
 
 // Страница истории грузится отдельным чанком — только когда на неё заходят
 const Story = lazy(() => import('./pages/Story.jsx'));
+const GuideAccess = lazy(() => import('./pages/GuideAccess.jsx'));
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
@@ -15,6 +16,7 @@ createRoot(document.getElementById('root')).render(
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/story" element={<Story />} />
+          <Route path="/guide/access" element={<GuideAccess />} />
         </Routes>
       </Suspense>
     </BrowserRouter>
