@@ -1,12 +1,14 @@
 // База API. В разработке Vite проксирует /api на localhost:3001.
 // На проде nginx проксирует /api на Node-сервер — поэтому путь относительный.
+import { getLang } from './lang.js';
+
 const BASE = import.meta.env.VITE_API_URL || '';
 
 export async function submitBooking(data) {
   const res = await fetch(`${BASE}/api/booking`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(data),
+    body: JSON.stringify({ ...data, lang: getLang() }),
   });
   let body = {};
   try {
