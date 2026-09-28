@@ -5,3 +5,6 @@
 *.env
 node_modules/
 *.db
+server/private/
+*.pdf
+*.sqlite*

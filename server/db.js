@@ -5,7 +5,7 @@ import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const db = new DatabaseSync(join(__dirname, 'data.sqlite'));
+const db = new DatabaseSync(process.env.DB_PATH || join(__dirname, 'data.sqlite'));
 db.exec('PRAGMA journal_mode = WAL;');
 
 db.exec(`
@@ -19,6 +19,16 @@ db.exec(`
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     path TEXT, referrer TEXT, source TEXT, device TEXT,
     ip TEXT,
+    created_at TEXT DEFAULT (datetime('now'))
+  );
+  CREATE TABLE IF NOT EXISTS orders (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    session_id TEXT UNIQUE,
+    email TEXT,
+    amount INTEGER, currency TEXT,
+    token TEXT UNIQUE,
+    downloads INTEGER DEFAULT 0,
+    emailed INTEGER DEFAULT 0,
     created_at TEXT DEFAULT (datetime('now'))
   );
   CREATE INDEX IF NOT EXISTS idx_visits_created ON visits(created_at);
@@ -36,6 +46,38 @@ export function saveVisit(v) {
   db.prepare(
     'INSERT INTO visits (path, referrer, source, device, ip) VALUES (?,?,?,?,?)'
   ).run(v.path || '/', v.referrer || '', v.source || '', v.device || '', v.ip || '');
+}
+
+// ── Заказы гайда (Stripe) ──
+// INSERT OR IGNORE: повторный вебхук с тем же session_id не создаст дубль
+export function createOrder(o) {
+  const r = db.prepare(
+    'INSERT OR IGNORE INTO orders (session_id, email, amount, currency, token) VALUES (?,?,?,?,?)'
+  ).run(o.sessionId, o.email || '', o.amount || 0, o.currency || '', o.token);
+  return r.changes > 0;
+}
+
+export const getOrderBySession = (sessionId) =>
+  db.prepare('SELECT * FROM orders WHERE session_id = ?').get(sessionId);
+
+export const getOrderByToken = (token) =>
+  db.prepare('SELECT * FROM orders WHERE token = ?').get(token);
+
+// Атомарно «забираем» отправку письма: true только у одного из параллельных вызовов
+export function claimOrderEmail(id) {
+  return db.prepare('UPDATE orders SET emailed = 1 WHERE id = ? AND emailed = 0').run(id).changes > 0;
+}
+
+export function releaseOrderEmail(id) {
+  db.prepare('UPDATE orders SET emailed = 0 WHERE id = ?').run(id);
+}
+
+export function countDownload(id) {
+  db.prepare('UPDATE orders SET downloads = downloads + 1 WHERE id = ?').run(id);
+}
+
+export function getOrders(limit = 300) {
+  return db.prepare('SELECT id, email, amount, currency, downloads, emailed, created_at FROM orders ORDER BY id DESC LIMIT ?').all(limit);
 }
 
 // ── Чтение для админки ──

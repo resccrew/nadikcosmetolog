@@ -389,7 +389,7 @@
 
 <!-- ─── GUIDE ─── -->
 <section class="guide reveal" id="guide">
-  <a href="https://pravorova.gumroad.com/l/ayckvb" target="_blank" rel="noopener" class="guide-cover" aria-label="Получить гайд">
+  <a href="#guide" data-checkout class="guide-cover" aria-label="Получить гайд">
     <img loading="lazy" decoding="async" src="/guide-cover.jpg" alt="Обложка гайда «Самостоятельная консультация трихолога»" width="1005" height="566">
   </a>
   <div class="guide-content">
@@ -405,11 +405,13 @@
     </ul>
     <div class="guide-buy">
       <div class="guide-price">$7.99<span>35 страниц</span></div>
-      <a href="https://pravorova.gumroad.com/l/ayckvb" target="_blank" rel="noopener" class="guide-cta">
-        Получить гайд
+      <button type="button" data-checkout class="guide-cta">
+        Купить картой на сайте
         <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-      </a>
+      </button>
+      <a href="https://pravorova.gumroad.com/l/ayckvb" target="_blank" rel="noopener" class="guide-alt">или через Gumroad</a>
     </div>
+    <p class="guide-error" data-checkout-error hidden>Не удалось открыть оплату. Попробуйте ещё раз.</p>
     <p class="guide-note">Гайд носит образовательный характер и не заменяет очную консультацию врача.</p>
   </div>
 </section>
