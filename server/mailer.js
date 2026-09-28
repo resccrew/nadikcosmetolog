@@ -1,4 +1,5 @@
 import nodemailer from 'nodemailer';
+import { readFile } from 'fs/promises';
 
 let transporter;
 
@@ -21,6 +22,27 @@ function getTransporter() {
     socketTimeout: 8000,
   });
   return transporter;
+}
+
+// Resend шлёт письма по HTTPS (порт 443) — хостинг блокирует SMTP-порты,
+// поэтому на проде используем его API. Без RESEND_API_KEY — обычный SMTP.
+async function sendViaResend({ from, to, replyTo, subject, text, html, attachments = [] }) {
+  const files = await Promise.all(
+    attachments.map(async (a) => ({ filename: a.filename, content: (await readFile(a.path)).toString('base64') }))
+  );
+  const res = await fetch('https://api.resend.com/emails', {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${process.env.RESEND_API_KEY}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ from, to: [to], reply_to: replyTo || undefined, subject, text, html, attachments: files }),
+    signal: AbortSignal.timeout(15000),
+  });
+  if (!res.ok) throw new Error(`Resend ${res.status}: ${await res.text()}`);
+  return res.json();
+}
+
+function sendMail(msg) {
+  if (process.env.RESEND_API_KEY && process.env.MAIL_JSON_TRANSPORT !== 'true') return sendViaResend(msg);
+  return getTransporter().sendMail(msg);
 }
 
 const esc = (s = '') =>
@@ -58,7 +80,7 @@ export async function sendBookingMail({ name, phone, email, message, ip }) {
     .filter(Boolean)
     .join('\n');
 
-  await getTransporter().sendMail({
+  await sendMail({
     from: process.env.MAIL_FROM || process.env.SMTP_USER,
     to,
     replyTo: email,
@@ -91,7 +113,7 @@ export async function sendGuideMail({ email, token, pdfPath, siteUrl }) {
     `Скачать ещё раз: ${link}`,
   ].join('\n');
 
-  await getTransporter().sendMail({
+  await sendMail({
     from: process.env.MAIL_FROM || process.env.SMTP_USER,
     to: email,
     subject: 'Ваш гайд трихолога (PDF)',
@@ -146,7 +168,7 @@ export async function sendBookingConfirmation({ name, email, lang }) {
 
   const text = [t.hello(name), '', ...t.body, '', t.signText].join('\n');
 
-  return getTransporter().sendMail({
+  return sendMail({
     from: process.env.MAIL_FROM || process.env.SMTP_USER,
     to: email,
     replyTo: process.env.MAIL_TO || undefined,
