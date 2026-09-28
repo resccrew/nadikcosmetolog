@@ -6,7 +6,7 @@ import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 import { existsSync } from 'fs';
 import Stripe from 'stripe';
-import { sendBookingMail, sendGuideMail } from './mailer.js';
+import { sendBookingMail, sendBookingConfirmation, sendGuideMail } from './mailer.js';
 import * as db from './db.js';
 import { saveBooking, saveVisit, getBookings, getStats } from './db.js';
 import { checkoutParams, fulfillSession, accessBySession, accessByToken, maskEmail } from './shop.js';
@@ -84,7 +84,7 @@ app.get('/api/health', (_req, res) => res.json({ ok: true }));
 // ── Приём заявки ──
 app.post('/api/booking', bookingLimiter, async (req, res) => {
   try {
-    const { name, phone, email, message, _honey } = req.body || {};
+    const { name, phone, email, message, lang, _honey } = req.body || {};
 
     // honeypot: если бот заполнил скрытое поле — молча отвечаем «ок»
     if (_honey) return res.json({ ok: true });
@@ -112,6 +112,10 @@ app.post('/api/booking', bookingLimiter, async (req, res) => {
 
     // 3) Письмо — в фоне, best-effort (SMTP может быть недоступен у хостинга)
     sendBookingMail(data).catch((e) => console.error('Mail send failed:', e.message));
+    // 4) Клиенту — автоответ «заявка получена»
+    sendBookingConfirmation({ name: data.name, email: data.email, lang }).catch((e) =>
+      console.error('Confirmation mail failed:', e.message)
+    );
   } catch (err) {
     console.error('Booking error:', err);
     if (!res.headersSent)
