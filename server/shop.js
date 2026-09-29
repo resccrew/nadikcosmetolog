@@ -35,12 +35,12 @@ export function checkoutParams({ siteUrl, priceId, lang }) {
 
 // Выдача заказа по оплаченной сессии. Идемпотентно: повторный вызов
 // (вебхук + страница успеха, повтор вебхука) вернёт тот же заказ и не отправит письмо дважды.
-export async function fulfillSession(session, { db, sendGuide }) {
+export async function fulfillSession(session, { db, sendGuide, notifyOwner }) {
   if (!session || session.payment_status !== 'paid')
     return { ok: false, error: 'not_paid' };
 
   const email = session.customer_details?.email || session.customer_email || '';
-  db.createOrder({
+  const created = db.createOrder({
     sessionId: session.id,
     email,
     amount: session.amount_total,
@@ -57,6 +57,21 @@ export async function fulfillSession(session, { db, sendGuide }) {
       db.releaseOrderEmail(order.id);
       // письмо не ушло — доступ всё равно есть через страницу; повторим на следующем вызове
       console.error('Guide mail failed:', e.message);
+    }
+  }
+
+  // Владельцу — после письма покупателю, чтобы не задерживать выдачу гайда
+  if (created && notifyOwner) {
+    try {
+      await notifyOwner({
+        email: order.email,
+        amount: order.amount,
+        currency: order.currency,
+        createdAt: order.created_at,
+      });
+    } catch (e) {
+      // уведомление владельцу не должно ломать покупку — только логируем
+      console.error('Owner purchase notice failed:', e.message);
     }
   }
   return { ok: true, order };

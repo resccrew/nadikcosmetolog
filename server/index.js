@@ -6,7 +6,7 @@ import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 import { existsSync } from 'fs';
 import Stripe from 'stripe';
-import { sendBookingMail, sendBookingConfirmation, sendGuideMail } from './mailer.js';
+import { sendBookingMail, sendBookingConfirmation, sendGuideMail, sendPurchaseNotice } from './mailer.js';
 import * as db from './db.js';
 import { saveBooking, saveVisit, getBookings, getStats } from './db.js';
 import { checkoutParams, fulfillSession, accessBySession, accessByToken, maskEmail } from './shop.js';
@@ -27,6 +27,8 @@ const shopDeps = {
   retrieveSession: (id) => stripe.checkout.sessions.retrieve(id),
   sendGuide: ({ email, token }) =>
     sendGuideMail({ email, token, pdfPath: GUIDE_PDF, siteUrl: SITE_URL }),
+  notifyOwner: ({ email, amount, currency, createdAt }) =>
+    sendPurchaseNotice({ email, amount, currency, createdAt }),
 };
 
 // Вебхук регистрируется ДО express.json — Stripe подписывает сырое тело запроса

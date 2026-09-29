@@ -88,3 +88,33 @@ test('fulfillSession: concurrent calls send only one email', async () => {
   await Promise.all([shop.fulfillSession(paid('cs_test_RACE'), deps), shop.fulfillSession(paid('cs_test_RACE'), deps)]);
   assert.equal(sent, 1);
 });
+
+test('fulfillSession: notifyOwner fires exactly once on replayed webhook', async () => {
+  let notified = 0;
+  const deps = { db, sendGuide: async () => {}, notifyOwner: async () => { notified++; } };
+  const a = await shop.fulfillSession(paid('cs_test_OWNER1'), deps);
+  const b = await shop.fulfillSession(paid('cs_test_OWNER1'), deps);
+  assert.ok(a.ok && b.ok);
+  assert.equal(notified, 1);
+});
+
+test('fulfillSession: notifyOwner does not fire for unpaid session', async () => {
+  let notified = 0;
+  const deps = { db, sendGuide: async () => {}, notifyOwner: async () => { notified++; } };
+  const r = await shop.fulfillSession({ id: 'cs_test_unpaid2', payment_status: 'unpaid' }, deps);
+  assert.deepEqual(r, { ok: false, error: 'not_paid' });
+  assert.equal(notified, 0);
+});
+
+test('fulfillSession: notifyOwner failure does not break buyer flow', async () => {
+  const mails = [];
+  const deps = {
+    db,
+    sendGuide: async (m) => mails.push(m),
+    notifyOwner: async () => { throw new Error('owner mail down'); },
+  };
+  const r = await shop.fulfillSession(paid('cs_test_OWNER2'), deps);
+  assert.equal(r.ok, true);
+  assert.equal(mails.length, 1);
+  assert.equal(mails[0].email, 'anna@example.com');
+});

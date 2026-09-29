@@ -54,6 +54,31 @@ test('resend: posts to Resend API with base64 attachment when key is set', async
   assert.match(body.html, /guide\/access\?token=tok/);
 });
 
+test('purchase notice: goes to the owner, subject/amount/email formatted correctly', async () => {
+  const { sendPurchaseNotice } = await import('../mailer.js');
+  const res = await sendPurchaseNotice({ email: 'buyer@example.com', amount: 799, currency: 'usd', createdAt: '2026-01-01T00:00:00Z' });
+  const m = JSON.parse(res.message);
+  assert.equal(m.to[0].address, 'doctor@example.com');
+  assert.equal(m.subject, 'Куплен гайд — buyer@example.com');
+  assert.match(m.text, /\$7\.99/);
+  assert.match(m.html, /\$7\.99/);
+  assert.match(m.text, /buyer@example\.com/);
+});
+
+test('purchase notice: throws when MAIL_TO is not set', async () => {
+  const { sendPurchaseNotice } = await import('../mailer.js');
+  const prev = process.env.MAIL_TO;
+  delete process.env.MAIL_TO;
+  try {
+    await assert.rejects(
+      sendPurchaseNotice({ email: 'buyer@example.com', amount: 799, currency: 'usd' }),
+      /MAIL_TO/
+    );
+  } finally {
+    process.env.MAIL_TO = prev;
+  }
+});
+
 test('resend: API error is thrown (caller logs it)', async () => {
   const { sendBookingConfirmation } = await import('../mailer.js');
   const realFetch = globalThis.fetch;
@@ -67,4 +92,10 @@ test('resend: API error is thrown (caller logs it)', async () => {
     delete process.env.RESEND_API_KEY;
     process.env.MAIL_JSON_TRANSPORT = 'true';
   }
+});
+
+test('purchase notice: SQLite UTC time is shown in Warsaw time', async () => {
+  const { sendPurchaseNotice } = await import('../mailer.js');
+  const m = JSON.parse((await sendPurchaseNotice({ email: 'b@example.com', amount: 799, currency: 'usd', createdAt: '2026-01-15 12:00:00' })).message);
+  assert.match(m.text, /15\.01\.2026, 13:00:00/);
 });

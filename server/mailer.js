@@ -123,6 +123,51 @@ export async function sendGuideMail({ email, token, pdfPath, siteUrl }) {
   });
 }
 
+// ── Уведомление владельцу сайта о покупке гайда ──
+export async function sendPurchaseNotice({ email, amount, currency, createdAt }) {
+  const to = process.env.MAIL_TO;
+  if (!to) throw new Error('MAIL_TO не задан в .env');
+
+  // SQLite хранит datetime('now') в UTC без пометки зоны — добавляем Z, иначе Date прочтёт как локальное
+  const utc = typeof createdAt === 'string' && /^\d{4}-\d\d-\d\d \d\d:\d\d:\d\d$/.test(createdAt)
+    ? createdAt.replace(' ', 'T') + 'Z'
+    : createdAt;
+  const when = new Date(utc || Date.now()).toLocaleString('ru-RU', { timeZone: 'Europe/Warsaw' });
+  const sum = ((amount || 0) / 100).toFixed(2);
+  const cur = (currency || 'usd').toUpperCase();
+  const symbol = cur === 'USD' ? '$' : cur === 'EUR' ? '€' : '';
+  const formatted = symbol ? `${symbol}${sum}` : `${sum} ${cur}`;
+
+  const html = `
+  <div style="font-family:Arial,sans-serif;max-width:560px;margin:0 auto;border:1px solid #eee;border-radius:8px;overflow:hidden">
+    <div style="background:#1C1816;color:#D4B483;padding:20px 24px;font-size:18px">
+      Куплен гайд
+    </div>
+    <div style="padding:24px;color:#2E2924;font-size:15px;line-height:1.7">
+      <p><b>Сумма:</b> ${esc(formatted)}</p>
+      <p><b>Email покупателя:</b> <a href="mailto:${esc(email)}">${esc(email)}</a></p>
+      <hr style="border:none;border-top:1px solid #eee;margin:20px 0">
+      <p style="color:#999;font-size:12px">Отправлено: ${when}</p>
+    </div>
+  </div>`;
+
+  const text = [
+    'Куплен гайд',
+    `Сумма: ${formatted}`,
+    `Email покупателя: ${email}`,
+    `Отправлено: ${when}`,
+  ].join('\n');
+
+  return sendMail({
+    from: process.env.MAIL_FROM || process.env.SMTP_USER,
+    to,
+    replyTo: email,
+    subject: `Куплен гайд — ${email}`,
+    text,
+    html,
+  });
+}
+
 // ── Автоответ клиенту после заявки ──
 const CONFIRM = {
   ru: {
