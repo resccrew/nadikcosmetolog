@@ -50,6 +50,17 @@ export async function fulfillSession(session, { db, sendGuide, notifyOwner }) {
   const order = db.getOrderBySession(session.id);
   if (!order) return { ok: false, error: 'db_error' };
 
+  if (order.email && db.claimOrderEmail(order.id)) {
+    try {
+      await sendGuide({ email: order.email, token: order.token });
+    } catch (e) {
+      db.releaseOrderEmail(order.id);
+      // письмо не ушло — доступ всё равно есть через страницу; повторим на следующем вызове
+      console.error('Guide mail failed:', e.message);
+    }
+  }
+
+  // Владельцу — после письма покупателю, чтобы не задерживать выдачу гайда
   if (created && notifyOwner) {
     try {
       await notifyOwner({
@@ -61,16 +72,6 @@ export async function fulfillSession(session, { db, sendGuide, notifyOwner }) {
     } catch (e) {
       // уведомление владельцу не должно ломать покупку — только логируем
       console.error('Owner purchase notice failed:', e.message);
-    }
-  }
-
-  if (order.email && db.claimOrderEmail(order.id)) {
-    try {
-      await sendGuide({ email: order.email, token: order.token });
-    } catch (e) {
-      db.releaseOrderEmail(order.id);
-      // письмо не ушло — доступ всё равно есть через страницу; повторим на следующем вызове
-      console.error('Guide mail failed:', e.message);
     }
   }
   return { ok: true, order };

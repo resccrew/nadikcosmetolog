@@ -93,3 +93,9 @@ test('resend: API error is thrown (caller logs it)', async () => {
     process.env.MAIL_JSON_TRANSPORT = 'true';
   }
 });
+
+test('purchase notice: SQLite UTC time is shown in Warsaw time', async () => {
+  const { sendPurchaseNotice } = await import('../mailer.js');
+  const m = JSON.parse((await sendPurchaseNotice({ email: 'b@example.com', amount: 799, currency: 'usd', createdAt: '2026-01-15 12:00:00' })).message);
+  assert.match(m.text, /15\.01\.2026, 13:00:00/);
+});

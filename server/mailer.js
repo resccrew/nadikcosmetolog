@@ -128,7 +128,11 @@ export async function sendPurchaseNotice({ email, amount, currency, createdAt })
   const to = process.env.MAIL_TO;
   if (!to) throw new Error('MAIL_TO не задан в .env');
 
-  const when = new Date(createdAt || Date.now()).toLocaleString('ru-RU', { timeZone: 'Europe/Warsaw' });
+  // SQLite хранит datetime('now') в UTC без пометки зоны — добавляем Z, иначе Date прочтёт как локальное
+  const utc = typeof createdAt === 'string' && /^\d{4}-\d\d-\d\d \d\d:\d\d:\d\d$/.test(createdAt)
+    ? createdAt.replace(' ', 'T') + 'Z'
+    : createdAt;
+  const when = new Date(utc || Date.now()).toLocaleString('ru-RU', { timeZone: 'Europe/Warsaw' });
   const sum = ((amount || 0) / 100).toFixed(2);
   const cur = (currency || 'usd').toUpperCase();
   const symbol = cur === 'USD' ? '$' : cur === 'EUR' ? '€' : '';
