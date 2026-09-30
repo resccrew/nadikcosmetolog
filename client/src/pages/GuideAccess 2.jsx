@@ -46,8 +46,6 @@ export default function GuideAccess() {
       return;
     }
     getGuideAccess(token ? { token } : { session_id: sessionId }).then((res) => {
-      // Онлайн-версия — сразу открываем гайд, без промежуточной страницы
-      if (res.ok && res.product === 'web') return window.location.replace(res.url);
       if (res.ok) return setState({ status: 'ok', ...res });
       setState({ status: res.status === 402 ? 'pending' : 'fail' });
     });

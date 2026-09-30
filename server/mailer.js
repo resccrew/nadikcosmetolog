@@ -90,9 +90,16 @@ export async function sendBookingMail({ name, phone, email, message, ip }) {
   });
 }
 
-// ── Письмо покупателю гайда: PDF во вложении + ссылка на страницу доступа ──
-export async function sendGuideMail({ email, token, pdfPath, siteUrl }) {
-  const link = `${siteUrl}/guide/access?token=${encodeURIComponent(token)}`;
+// ── Письмо покупателю гайда ──
+// PDF: файл во вложении + ссылка скачать ещё раз. Онлайн-версия: ссылка на закрытую страницу.
+export async function sendGuideMail({ email, token, pdfPath, siteUrl, product = 'pdf' }) {
+  const web = product === 'web';
+  const link = web
+    ? `${siteUrl}/api/guide/online?token=${encodeURIComponent(token)}`
+    : `${siteUrl}/guide/access?token=${encodeURIComponent(token)}`;
+  const intro = web
+    ? 'Онлайн-версия гайда «Самостоятельная консультация трихолога» открывается по вашей личной ссылке — с любого устройства, в любой момент:'
+    : 'Гайд «Самостоятельная консультация трихолога» — во вложении к этому письму (PDF).</p><p>Скачать его ещё раз можно в любой момент по вашей личной ссылке:';
 
   const html = `
   <div style="font-family:Arial,sans-serif;max-width:560px;margin:0 auto;border:1px solid #eee;border-radius:8px;overflow:hidden">
@@ -100,8 +107,7 @@ export async function sendGuideMail({ email, token, pdfPath, siteUrl }) {
       Спасибо за покупку!
     </div>
     <div style="padding:24px;color:#2E2924;font-size:15px;line-height:1.7">
-      <p>Гайд «Самостоятельная консультация трихолога» — во вложении к этому письму (PDF).</p>
-      <p>Скачать его ещё раз можно в любой момент по вашей личной ссылке:</p>
+      <p>${intro}</p>
       <p><a href="${esc(link)}" style="display:inline-block;background:#1C1816;color:#D4B483;padding:12px 22px;border-radius:4px;text-decoration:none">Открыть гайд</a></p>
       <p style="color:#999;font-size:12px">Не пересылайте эту ссылку — она привязана к вашему заказу.</p>
     </div>
@@ -109,22 +115,25 @@ export async function sendGuideMail({ email, token, pdfPath, siteUrl }) {
 
   const text = [
     'Спасибо за покупку!',
-    'Гайд «Самостоятельная консультация трихолога» — во вложении (PDF).',
-    `Скачать ещё раз: ${link}`,
+    web
+      ? 'Онлайн-версия гайда «Самостоятельная консультация трихолога»:'
+      : 'Гайд «Самостоятельная консультация трихолога» — во вложении (PDF). Скачать ещё раз:',
+    link,
   ].join('\n');
 
-  await sendMail({
+  return sendMail({
     from: process.env.MAIL_FROM || process.env.SMTP_USER,
     to: email,
-    subject: 'Ваш гайд трихолога (PDF)',
+    subject: web ? 'Ваш гайд трихолога — онлайн-версия' : 'Ваш гайд трихолога (PDF)',
     text,
     html,
-    attachments: [{ filename: 'Гайд-трихолога.pdf', path: pdfPath }],
+    attachments: web ? [] : [{ filename: 'Гайд-трихолога.pdf', path: pdfPath }],
   });
 }
 
 // ── Уведомление владельцу сайта о покупке гайда ──
-export async function sendPurchaseNotice({ email, amount, currency, createdAt }) {
+export async function sendPurchaseNotice({ email, amount, currency, createdAt, product = 'pdf' }) {
+  const item = product === 'web' ? 'онлайн-версия' : 'PDF';
   const to = process.env.MAIL_TO;
   if (!to) throw new Error('MAIL_TO не задан в .env');
 
@@ -144,6 +153,7 @@ export async function sendPurchaseNotice({ email, amount, currency, createdAt })
       Куплен гайд
     </div>
     <div style="padding:24px;color:#2E2924;font-size:15px;line-height:1.7">
+      <p><b>Продукт:</b> ${item}</p>
       <p><b>Сумма:</b> ${esc(formatted)}</p>
       <p><b>Email покупателя:</b> <a href="mailto:${esc(email)}">${esc(email)}</a></p>
       <hr style="border:none;border-top:1px solid #eee;margin:20px 0">
@@ -153,6 +163,7 @@ export async function sendPurchaseNotice({ email, amount, currency, createdAt })
 
   const text = [
     'Куплен гайд',
+    `Продукт: ${item}`,
     `Сумма: ${formatted}`,
     `Email покупателя: ${email}`,
     `Отправлено: ${when}`,
@@ -162,7 +173,7 @@ export async function sendPurchaseNotice({ email, amount, currency, createdAt })
     from: process.env.MAIL_FROM || process.env.SMTP_USER,
     to,
     replyTo: email,
-    subject: `Куплен гайд — ${email}`,
+    subject: product === 'web' ? `Куплен гайд (онлайн-версия) — ${email}` : `Куплен гайд — ${email}`,
     text,
     html,
   });

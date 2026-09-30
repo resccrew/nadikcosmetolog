@@ -49,7 +49,7 @@ export default function Home() {
       const buttons = root.querySelectorAll('button[data-checkout]');
       if (errEl) errEl.hidden = true;
       buttons.forEach((b) => (b.disabled = true));
-      const res = await startCheckout(getLang());
+      const res = await startCheckout(getLang(), btn.dataset.checkout === 'web' ? 'web' : 'pdf');
       if (res.ok && res.url) {
         window.location.href = res.url;
         return;
