@@ -107,3 +107,12 @@ test('guide mail (web): link to the online guide, no attachment', async () => {
   assert.equal((m.attachments || []).length, 0);
   assert.match(m.subject, /онлайн/);
 });
+
+test('guide results: go to the doctor, reply-to buyer, text is escaped in HTML', async () => {
+  const { sendGuideResults } = await import('../mailer.js');
+  const m = JSON.parse((await sendGuideResults({ buyerEmail: 'b@example.com', text: 'Баллы: 5\n<b>x</b>' })).message);
+  assert.equal(m.to[0].address, 'doctor@example.com');
+  assert.equal(m.replyTo[0].address, 'b@example.com');
+  assert.match(m.text, /Баллы: 5/);
+  assert.ok(!m.html.includes('<b>x</b>'));
+});

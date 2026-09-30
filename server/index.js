@@ -6,7 +6,7 @@ import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 import { existsSync } from 'fs';
 import Stripe from 'stripe';
-import { sendBookingMail, sendBookingConfirmation, sendGuideMail, sendPurchaseNotice } from './mailer.js';
+import { sendBookingMail, sendBookingConfirmation, sendGuideMail, sendPurchaseNotice, sendGuideResults } from './mailer.js';
 import * as db from './db.js';
 import { saveBooking, saveVisit, getBookings, getStats } from './db.js';
 import { checkoutParams, fulfillSession, accessBySession, accessByToken, accessUrl, maskEmail, productOf } from './shop.js';
@@ -199,6 +199,23 @@ app.get('/api/guide/online', shopLimiter, (req, res) => {
   }
   db.countDownload(result.order.id);
   res.sendFile(GUIDE_WEB);
+});
+
+// Кнопка «Отправить врачу» в онлайн-гайде: итог анкеты уходит на почту врача.
+// Только для покупателей онлайн-версии (по их токену), не чаще 5 раз за 10 минут.
+const shareLimiter = rateLimit({ windowMs: 10 * 60 * 1000, max: 5, standardHeaders: true, legacyHeaders: false });
+app.post('/api/guide/share', shareLimiter, async (req, res) => {
+  const result = accessByToken(String(req.body?.token || ''), shopDeps, 'web');
+  if (!result.ok) return res.status(result.error === 'bad_request' ? 400 : 404).json({ ok: false, error: result.error });
+  const text = String(req.body?.text || '').trim().slice(0, 5000);
+  if (!text) return res.status(400).json({ ok: false, error: 'empty' });
+  try {
+    await sendGuideResults({ buyerEmail: result.order.email, text });
+    res.json({ ok: true });
+  } catch (e) {
+    console.error('Guide results mail failed:', e.message);
+    res.status(502).json({ ok: false, error: 'mail_failed' });
+  }
 });
 
 // ── Счётчик посещений ──

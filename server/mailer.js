@@ -233,3 +233,29 @@ export async function sendBookingConfirmation({ name, email, lang }) {
     html,
   });
 }
+
+// ── Итог самоанкеты из онлайн-гайда → на почту врача ──
+export async function sendGuideResults({ buyerEmail, text }) {
+  const to = process.env.MAIL_TO;
+  if (!to) throw new Error('MAIL_TO не задан в .env');
+
+  const html = `
+  <div style="font-family:Arial,sans-serif;max-width:560px;margin:0 auto;border:1px solid #eee;border-radius:8px;overflow:hidden">
+    <div style="background:#1C1816;color:#D4B483;padding:20px 24px;font-size:18px">
+      Результат самоанкеты из гайда
+    </div>
+    <div style="padding:24px;color:#2E2924;font-size:15px;line-height:1.7">
+      <p><b>От:</b> <a href="mailto:${esc(buyerEmail)}">${esc(buyerEmail)}</a></p>
+      <p>${esc(text).replace(/\n/g, '<br>')}</p>
+    </div>
+  </div>`;
+
+  return sendMail({
+    from: process.env.MAIL_FROM || process.env.SMTP_USER,
+    to,
+    replyTo: buyerEmail || undefined,
+    subject: `Результат самоанкеты — ${buyerEmail}`,
+    text: `От: ${buyerEmail}\n\n${text}`,
+    html,
+  });
+}
