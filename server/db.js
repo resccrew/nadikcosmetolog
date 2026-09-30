@@ -35,6 +35,13 @@ db.exec(`
   CREATE INDEX IF NOT EXISTS idx_bookings_created ON bookings(created_at);
 `);
 
+// Миграция: тип продукта в заказе ('pdf' | 'web'). Старые заказы — PDF.
+try {
+  db.exec("ALTER TABLE orders ADD COLUMN product TEXT DEFAULT 'pdf'");
+} catch {
+  /* колонка уже есть */
+}
+
 // ── Запись ──
 export function saveBooking(b) {
   db.prepare(
@@ -52,8 +59,8 @@ export function saveVisit(v) {
 // INSERT OR IGNORE: повторный вебхук с тем же session_id не создаст дубль
 export function createOrder(o) {
   const r = db.prepare(
-    'INSERT OR IGNORE INTO orders (session_id, email, amount, currency, token) VALUES (?,?,?,?,?)'
-  ).run(o.sessionId, o.email || '', o.amount || 0, o.currency || '', o.token);
+    'INSERT OR IGNORE INTO orders (session_id, email, amount, currency, token, product) VALUES (?,?,?,?,?,?)'
+  ).run(o.sessionId, o.email || '', o.amount || 0, o.currency || '', o.token, o.product || 'pdf');
   return r.changes > 0;
 }
 
@@ -77,7 +84,7 @@ export function countDownload(id) {
 }
 
 export function getOrders(limit = 300) {
-  return db.prepare('SELECT id, email, amount, currency, downloads, emailed, created_at FROM orders ORDER BY id DESC LIMIT ?').all(limit);
+  return db.prepare('SELECT id, product, email, amount, currency, downloads, emailed, created_at FROM orders ORDER BY id DESC LIMIT ?').all(limit);
 }
 
 // ── Чтение для админки ──

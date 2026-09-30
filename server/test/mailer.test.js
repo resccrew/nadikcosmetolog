@@ -99,3 +99,11 @@ test('purchase notice: SQLite UTC time is shown in Warsaw time', async () => {
   const m = JSON.parse((await sendPurchaseNotice({ email: 'b@example.com', amount: 799, currency: 'usd', createdAt: '2026-01-15 12:00:00' })).message);
   assert.match(m.text, /15\.01\.2026, 13:00:00/);
 });
+
+test('guide mail (web): link to the online guide, no attachment', async () => {
+  const { sendGuideMail } = await import('../mailer.js');
+  const m = JSON.parse((await sendGuideMail({ email: 'b@example.com', token: 'tok', siteUrl: 'https://x.com', product: 'web' })).message);
+  assert.match(m.text, /https:\/\/x\.com\/api\/guide\/online\?token=tok/);
+  assert.equal((m.attachments || []).length, 0);
+  assert.match(m.subject, /онлайн/);
+});

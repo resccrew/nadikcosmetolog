@@ -9,7 +9,7 @@ import Stripe from 'stripe';
 import { sendBookingMail, sendBookingConfirmation, sendGuideMail, sendPurchaseNotice } from './mailer.js';
 import * as db from './db.js';
 import { saveBooking, saveVisit, getBookings, getStats } from './db.js';
-import { checkoutParams, fulfillSession, accessBySession, accessByToken, maskEmail } from './shop.js';
+import { checkoutParams, fulfillSession, accessBySession, accessByToken, accessUrl, maskEmail, productOf } from './shop.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const app = express();
@@ -20,15 +20,16 @@ app.set('trust proxy', 1); // за nginx — чтобы rate-limit видел р
 // ── Stripe: продажа PDF-гайда ──
 const SITE_URL = (process.env.SITE_URL || 'https://nadezdantiage.com').replace(/\/$/, '');
 const GUIDE_PDF = process.env.GUIDE_PDF_PATH || join(__dirname, 'private', 'guide.pdf');
+const GUIDE_WEB = process.env.GUIDE_WEB_PATH || join(__dirname, 'private', 'guide-web.html');
 const stripe = process.env.STRIPE_SECRET_KEY ? new Stripe(process.env.STRIPE_SECRET_KEY) : null;
 
 const shopDeps = {
   db,
   retrieveSession: (id) => stripe.checkout.sessions.retrieve(id),
-  sendGuide: ({ email, token }) =>
-    sendGuideMail({ email, token, pdfPath: GUIDE_PDF, siteUrl: SITE_URL }),
-  notifyOwner: ({ email, amount, currency, createdAt }) =>
-    sendPurchaseNotice({ email, amount, currency, createdAt }),
+  sendGuide: ({ email, token, product }) =>
+    sendGuideMail({ email, token, product, pdfPath: GUIDE_PDF, siteUrl: SITE_URL }),
+  notifyOwner: ({ email, amount, currency, createdAt, product }) =>
+    sendPurchaseNotice({ email, amount, currency, createdAt, product }),
 };
 
 // Вебхук регистрируется ДО express.json — Stripe подписывает сырое тело запроса
@@ -131,9 +132,13 @@ const shopLimiter = rateLimit({ windowMs: 10 * 60 * 1000, max: 30, standardHeade
 app.post('/api/checkout', shopLimiter, async (req, res) => {
   if (!stripe) return res.status(503).json({ ok: false, error: 'Оплата временно недоступна' });
   try {
+    const product = productOf(req.body?.product);
+    const web = product === 'web';
     const params = checkoutParams({
       siteUrl: SITE_URL,
-      priceId: process.env.STRIPE_PRICE_ID,
+      product,
+      priceId: web ? process.env.STRIPE_WEB_PRICE_ID : process.env.STRIPE_PRICE_ID,
+      amount: web ? Number(process.env.GUIDE_WEB_PRICE_CENTS) || undefined : undefined,
       lang: req.body?.lang,
     });
     const session = await stripe.checkout.sessions.create(params);
@@ -160,13 +165,15 @@ app.get('/api/guide/access', shopLimiter, async (req, res) => {
   const { order } = result;
   res.json({
     ok: true,
+    product: productOf(order.product),
     email: maskEmail(order.email),
-    downloadUrl: `/api/guide/download?token=${encodeURIComponent(order.token)}`,
+    url: accessUrl(order),
+    downloadUrl: accessUrl(order),
   });
 });
 
 app.get('/api/guide/download', shopLimiter, (req, res) => {
-  const result = accessByToken(String(req.query.token || ''), shopDeps);
+  const result = accessByToken(String(req.query.token || ''), shopDeps, 'pdf');
   if (!result.ok) return res.status(result.error === 'bad_request' ? 400 : 404).send('Ссылка недействительна');
   if (!existsSync(GUIDE_PDF)) {
     console.error('Guide PDF not found at', GUIDE_PDF);
@@ -174,6 +181,24 @@ app.get('/api/guide/download', shopLimiter, (req, res) => {
   }
   db.countDownload(result.order.id);
   res.download(GUIDE_PDF, 'Гайд-трихолога.pdf');
+});
+
+// Онлайн-версия гайда: закрытая страница, только по личной ссылке покупателя.
+// Файл лежит вне веб-корня; поисковикам запрещено индексировать, ссылка не утекает в Referer.
+app.get('/api/guide/online', shopLimiter, (req, res) => {
+  res.set({
+    'X-Robots-Tag': 'noindex, nofollow, noarchive',
+    'Referrer-Policy': 'no-referrer',
+    'Cache-Control': 'private, no-store',
+  });
+  const result = accessByToken(String(req.query.token || ''), shopDeps, 'web');
+  if (!result.ok) return res.status(result.error === 'bad_request' ? 400 : 404).send('Ссылка недействительна');
+  if (!existsSync(GUIDE_WEB)) {
+    console.error('Online guide not found at', GUIDE_WEB);
+    return res.status(500).send('Гайд временно недоступен');
+  }
+  db.countDownload(result.order.id);
+  res.sendFile(GUIDE_WEB);
 });
 
 // ── Счётчик посещений ──

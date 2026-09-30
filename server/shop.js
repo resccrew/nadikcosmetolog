@@ -1,4 +1,4 @@
-// Продажа PDF-гайда через Stripe Checkout.
+// Продажа гайда через Stripe Checkout: PDF и онлайн-версия (отдельные продукты).
 // Логика отделена от Express и Stripe SDK (зависимости передаются снаружи) —
 // так её можно тестировать без сети. Функции возвращают Result: { ok, ... } / { ok:false, error }.
 import { randomBytes } from 'crypto';
@@ -11,16 +11,25 @@ const SESSION_RE = /^cs_(test|live)_[A-Za-z0-9]+$/;
 export const isValidToken = (t) => typeof t === 'string' && TOKEN_RE.test(t);
 export const isValidSessionId = (s) => typeof s === 'string' && SESSION_RE.test(s);
 
-// Параметры Checkout Session. Цена — из Stripe (STRIPE_PRICE_ID) или inline $7.99.
-export function checkoutParams({ siteUrl, priceId, lang }) {
+// Каталог. Цену можно задать через Stripe Price ID (priceId) — иначе inline-цена отсюда.
+export const PRODUCTS = {
+  pdf: { name: 'Гайд «Самостоятельная консультация трихолога» (PDF)', amount: 799 },
+  web: { name: 'Гайд «Самостоятельная консультация трихолога» — онлайн-версия', amount: 799 },
+};
+
+export const productOf = (p) => (p === 'web' ? 'web' : 'pdf');
+
+// Параметры Checkout Session. Продукт передаётся в metadata — по нему выдаём заказ.
+export function checkoutParams({ siteUrl, priceId, lang, product, amount }) {
+  const key = productOf(product);
   const lineItem = priceId
     ? { price: priceId, quantity: 1 }
     : {
         quantity: 1,
         price_data: {
           currency: 'usd',
-          unit_amount: 799,
-          product_data: { name: 'Гайд «Самостоятельная консультация трихолога» (PDF)' },
+          unit_amount: amount || PRODUCTS[key].amount,
+          product_data: { name: PRODUCTS[key].name },
         },
       };
   return {
@@ -28,6 +37,7 @@ export function checkoutParams({ siteUrl, priceId, lang }) {
     line_items: [lineItem],
     customer_creation: 'if_required',
     locale: lang === 'en' ? 'en' : 'ru',
+    metadata: { product: key },
     success_url: `${siteUrl}/guide/access?session_id={CHECKOUT_SESSION_ID}`,
     cancel_url: `${siteUrl}/#guide`,
   };
@@ -46,13 +56,14 @@ export async function fulfillSession(session, { db, sendGuide, notifyOwner }) {
     amount: session.amount_total,
     currency: session.currency,
     token: newToken(),
+    product: productOf(session.metadata?.product),
   });
   const order = db.getOrderBySession(session.id);
   if (!order) return { ok: false, error: 'db_error' };
 
   if (order.email && db.claimOrderEmail(order.id)) {
     try {
-      await sendGuide({ email: order.email, token: order.token });
+      await sendGuide({ email: order.email, token: order.token, product: order.product });
     } catch (e) {
       db.releaseOrderEmail(order.id);
       // письмо не ушло — доступ всё равно есть через страницу; повторим на следующем вызове
@@ -65,6 +76,7 @@ export async function fulfillSession(session, { db, sendGuide, notifyOwner }) {
     try {
       await notifyOwner({
         email: order.email,
+        product: order.product,
         amount: order.amount,
         currency: order.currency,
         createdAt: order.created_at,
@@ -94,12 +106,20 @@ export async function accessBySession(sessionId, { db, retrieveSession, sendGuid
   return fulfillSession(session, { db, sendGuide });
 }
 
-export function accessByToken(token, { db }) {
+// product — если задан, ссылка от одного продукта не открывает другой
+export function accessByToken(token, { db }, product) {
   if (!isValidToken(token)) return { ok: false, error: 'bad_request' };
   const order = db.getOrderByToken(token);
   if (!order) return { ok: false, error: 'not_found' };
+  if (product && productOf(order.product) !== product) return { ok: false, error: 'not_found' };
   return { ok: true, order };
 }
+
+// Куда вести покупателя: PDF — скачать, онлайн-версия — открыть страницу
+export const accessUrl = (order) =>
+  productOf(order.product) === 'web'
+    ? `/api/guide/online?token=${encodeURIComponent(order.token)}`
+    : `/api/guide/download?token=${encodeURIComponent(order.token)}`;
 
 // Маскируем email для показа на странице: an***@gmail.com
 export function maskEmail(email = '') {

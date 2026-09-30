@@ -33,11 +33,11 @@ async function getJson(url, opts) {
   }
 }
 
-export const startCheckout = (lang) =>
+export const startCheckout = (lang, product = 'pdf') =>
   getJson('/api/checkout', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ lang }),
+    body: JSON.stringify({ lang, product }),
   });
 
 export const getGuideAccess = (params) =>
