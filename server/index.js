@@ -9,7 +9,8 @@ import Stripe from 'stripe';
 import { sendBookingMail, sendBookingConfirmation, sendGuideMail, sendPurchaseNotice, sendGuideResults } from './mailer.js';
 import * as db from './db.js';
 import { saveBooking, saveVisit, getBookings, getStats } from './db.js';
-import { checkoutParams, fulfillSession, accessBySession, accessByToken, accessUrl, maskEmail, productOf } from './shop.js';
+import { checkoutParams, fulfillSession, accessBySession, accessByToken, accessUrl, maskEmail, productOf, redeemPromoCode } from './shop.js';
+import { readFileSync } from 'fs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const app = express();
@@ -26,10 +27,10 @@ const stripe = process.env.STRIPE_SECRET_KEY ? new Stripe(process.env.STRIPE_SEC
 const shopDeps = {
   db,
   retrieveSession: (id) => stripe.checkout.sessions.retrieve(id),
-  sendGuide: ({ email, token, product }) =>
-    sendGuideMail({ email, token, product, pdfPath: GUIDE_PDF, siteUrl: SITE_URL }),
-  notifyOwner: ({ email, amount, currency, createdAt, product }) =>
-    sendPurchaseNotice({ email, amount, currency, createdAt, product }),
+  sendGuide: ({ email, token, product, promoCode }) =>
+    sendGuideMail({ email, token, product, promoCode, pdfPath: GUIDE_PDF, siteUrl: SITE_URL }),
+  notifyOwner: ({ email, amount, currency, createdAt, product, promoCode }) =>
+    sendPurchaseNotice({ email, amount, currency, createdAt, product, promoCode }),
 };
 
 // Вебхук регистрируется ДО express.json — Stripe подписывает сырое тело запроса
@@ -87,7 +88,7 @@ app.get('/api/health', (_req, res) => res.json({ ok: true }));
 // ── Приём заявки ──
 app.post('/api/booking', bookingLimiter, async (req, res) => {
   try {
-    const { name, phone, email, message, lang, _honey } = req.body || {};
+    const { name, phone, email, message, lang, promo, _honey } = req.body || {};
 
     // honeypot: если бот заполнил скрытое поле — молча отвечаем «ок»
     if (_honey) return res.json({ ok: true });
@@ -99,16 +100,24 @@ app.post('/api/booking', bookingLimiter, async (req, res) => {
     if (Object.keys(errors).length)
       return res.status(400).json({ ok: false, errors });
 
+    // Промокод −10% (выдаётся покупателям гайда): проверяем и гасим
+    const promoResult = promo && String(promo).trim() ? redeemPromoCode(promo, { db }) : null;
+
     const data = {
       name: String(name).trim(),
       phone: phone ? String(phone).trim() : '',
       email: String(email).trim(),
       message: message ? String(message).trim() : '',
       ip: req.ip,
+      promo: promoResult,
     };
 
     // 1) СНАЧАЛА сохраняем заявку в базу — она не потеряется, даже если письмо не уйдёт
-    saveBooking(data);
+    // в базе промокод дописываем к запросу — чтобы он был виден в админке
+    saveBooking({
+      ...data,
+      message: [data.message, promoResult ? `Промокод: ${promoResult.code} (${promoResult.status})` : ''].filter(Boolean).join('\n'),
+    });
 
     // 2) Клиенту сразу отвечаем «принято» (форма не ждёт почту)
     res.json({ ok: true });
@@ -166,6 +175,7 @@ app.get('/api/guide/access', shopLimiter, async (req, res) => {
   res.json({
     ok: true,
     product: productOf(order.product),
+    promo: order.promo_code || null,
     email: maskEmail(order.email),
     url: accessUrl(order),
     downloadUrl: accessUrl(order),
@@ -198,7 +208,14 @@ app.get('/api/guide/online', shopLimiter, (req, res) => {
     return res.status(500).send('Гайд временно недоступен');
   }
   db.countDownload(result.order.id);
-  res.sendFile(GUIDE_WEB);
+  // Подставляем личный промокод покупателя в блок <!--PROMO-->…<!--/PROMO-->
+  const html = readFileSync(GUIDE_WEB, 'utf8');
+  const code = result.order.promo_code;
+  res.type('html').send(
+    html.replace(/<!--PROMO-->([\s\S]*?)<!--\/PROMO-->/g, (_, block) =>
+      code ? block.replaceAll('{{PROMO}}', code.replace(/[^A-Z0-9-]/g, '')) : ''
+    )
+  );
 });
 
 // Кнопка «Отправить врачу» в онлайн-гайде: итог анкеты уходит на почту врача.

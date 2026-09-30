@@ -116,3 +116,22 @@ test('guide results: go to the doctor, reply-to buyer, text is escaped in HTML',
   assert.match(m.text, /Баллы: 5/);
   assert.ok(!m.html.includes('<b>x</b>'));
 });
+
+test('guide mail: includes promo code when given', async () => {
+  const { sendGuideMail } = await import('../mailer.js');
+  const m = JSON.parse((await sendGuideMail({ email: 'b@example.com', token: 'tok', siteUrl: 'https://x.com', product: 'web', promoCode: 'NA10-ABC234' })).message);
+  assert.match(m.text, /NA10-ABC234/);
+  assert.match(m.html, /NA10-ABC234/);
+});
+
+test('booking mail: shows promo status for the owner', async () => {
+  const { sendBookingMail } = await import('../mailer.js');
+  const r = await sendBookingMail({ name: 'Анна', email: 'a@example.com', promo: { code: 'NA10-ABC234', status: 'valid' } });
+  assert.match(JSON.parse(r.message).text, /NA10-ABC234 — действителен, скидка 10%/);
+});
+
+test('purchase notice: owner sees the issued promo code', async () => {
+  const { sendPurchaseNotice } = await import('../mailer.js');
+  const m = JSON.parse((await sendPurchaseNotice({ email: 'b@example.com', amount: 499, currency: 'usd', promoCode: 'NA10-ABC234' })).message);
+  assert.match(m.text, /Выдан промокод −10%: NA10-ABC234/);
+});

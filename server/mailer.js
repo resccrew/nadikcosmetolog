@@ -48,7 +48,7 @@ function sendMail(msg) {
 const esc = (s = '') =>
   String(s).replace(/[<>&]/g, (c) => ({ '<': '&lt;', '>': '&gt;', '&': '&amp;' }[c]));
 
-export async function sendBookingMail({ name, phone, email, message, ip }) {
+export async function sendBookingMail({ name, phone, email, message, ip, promo }) {
   const to = process.env.MAIL_TO;
   if (!to) throw new Error('MAIL_TO не задан в .env');
 
@@ -64,6 +64,7 @@ export async function sendBookingMail({ name, phone, email, message, ip }) {
       ${phone ? `<p><b>Телефон:</b> <a href="tel:${esc(phone)}">${esc(phone)}</a></p>` : ''}
       <p><b>Email:</b> <a href="mailto:${esc(email)}">${esc(email)}</a></p>
       ${message ? `<p><b>Запрос:</b><br>${esc(message).replace(/\n/g, '<br>')}</p>` : ''}
+      ${promo ? `<p><b>Промокод:</b> ${esc(promo.code)} — ${promo.status === 'valid' ? '<span style="color:#3E7B45">действителен, скидка 10%</span>' : promo.status === 'used' ? '<span style="color:#A65D55">уже был использован</span>' : '<span style="color:#A65D55">не найден</span>'}</p>` : ''}
       <hr style="border:none;border-top:1px solid #eee;margin:20px 0">
       <p style="color:#999;font-size:12px">Отправлено: ${when} · IP: ${esc(ip || '')}</p>
     </div>
@@ -75,12 +76,13 @@ export async function sendBookingMail({ name, phone, email, message, ip }) {
     phone ? `Телефон: ${phone}` : null,
     `Email: ${email}`,
     message ? `Запрос: ${message}` : null,
+    promo ? `Промокод: ${promo.code} — ${promo.status === 'valid' ? 'действителен, скидка 10%' : promo.status === 'used' ? 'уже был использован' : 'не найден'}` : null,
     `Отправлено: ${when}`,
   ]
     .filter(Boolean)
     .join('\n');
 
-  await sendMail({
+  return sendMail({
     from: process.env.MAIL_FROM || process.env.SMTP_USER,
     to,
     replyTo: email,
@@ -92,7 +94,7 @@ export async function sendBookingMail({ name, phone, email, message, ip }) {
 
 // ── Письмо покупателю гайда ──
 // PDF: файл во вложении + ссылка скачать ещё раз. Онлайн-версия: ссылка на закрытую страницу.
-export async function sendGuideMail({ email, token, pdfPath, siteUrl, product = 'pdf' }) {
+export async function sendGuideMail({ email, token, pdfPath, siteUrl, product = 'pdf', promoCode }) {
   const web = product === 'web';
   const link = web
     ? `${siteUrl}/api/guide/online?token=${encodeURIComponent(token)}`
@@ -109,6 +111,11 @@ export async function sendGuideMail({ email, token, pdfPath, siteUrl, product = 
     <div style="padding:24px;color:#2E2924;font-size:15px;line-height:1.7">
       <p>${intro}</p>
       <p><a href="${esc(link)}" style="display:inline-block;background:#1C1816;color:#D4B483;padding:12px 22px;border-radius:4px;text-decoration:none">Открыть гайд</a></p>
+      ${promoCode ? `<div style="margin:22px 0;padding:16px 18px;border:1px dashed #B8965A;border-radius:6px;background:#FDFAF6">
+        <p style="margin:0 0 6px"><b>Ваш промокод −10% на консультацию:</b></p>
+        <p style="margin:0 0 6px;font-size:20px;letter-spacing:2px;color:#1C1816"><b>${esc(promoCode)}</b></p>
+        <p style="margin:0;color:#7A6E64;font-size:13px">Укажите его в форме записи на <a href="${esc(siteUrl)}/#contact">nadezdantiage.com</a>. Код одноразовый.</p>
+      </div>` : ''}
       <p style="color:#999;font-size:12px">Не пересылайте эту ссылку — она привязана к вашему заказу.</p>
     </div>
   </div>`;
@@ -119,7 +126,8 @@ export async function sendGuideMail({ email, token, pdfPath, siteUrl, product = 
       ? 'Онлайн-версия гайда «Самостоятельная консультация трихолога»:'
       : 'Гайд «Самостоятельная консультация трихолога» — во вложении (PDF). Скачать ещё раз:',
     link,
-  ].join('\n');
+    promoCode ? `\nВаш промокод −10% на консультацию: ${promoCode}\nУкажите его в форме записи на ${siteUrl}/#contact (код одноразовый).` : null,
+  ].filter(Boolean).join('\n');
 
   return sendMail({
     from: process.env.MAIL_FROM || process.env.SMTP_USER,
@@ -132,7 +140,7 @@ export async function sendGuideMail({ email, token, pdfPath, siteUrl, product = 
 }
 
 // ── Уведомление владельцу сайта о покупке гайда ──
-export async function sendPurchaseNotice({ email, amount, currency, createdAt, product = 'pdf' }) {
+export async function sendPurchaseNotice({ email, amount, currency, createdAt, product = 'pdf', promoCode }) {
   const item = product === 'web' ? 'онлайн-версия' : 'PDF';
   const to = process.env.MAIL_TO;
   if (!to) throw new Error('MAIL_TO не задан в .env');
@@ -156,6 +164,7 @@ export async function sendPurchaseNotice({ email, amount, currency, createdAt, p
       <p><b>Продукт:</b> ${item}</p>
       <p><b>Сумма:</b> ${esc(formatted)}</p>
       <p><b>Email покупателя:</b> <a href="mailto:${esc(email)}">${esc(email)}</a></p>
+      ${promoCode ? `<p><b>Выдан промокод −10%:</b> ${esc(promoCode)}</p>` : ''}
       <hr style="border:none;border-top:1px solid #eee;margin:20px 0">
       <p style="color:#999;font-size:12px">Отправлено: ${when}</p>
     </div>
@@ -166,8 +175,9 @@ export async function sendPurchaseNotice({ email, amount, currency, createdAt, p
     `Продукт: ${item}`,
     `Сумма: ${formatted}`,
     `Email покупателя: ${email}`,
+    promoCode ? `Выдан промокод −10%: ${promoCode}` : null,
     `Отправлено: ${when}`,
-  ].join('\n');
+  ].filter(Boolean).join('\n');
 
   return sendMail({
     from: process.env.MAIL_FROM || process.env.SMTP_USER,
