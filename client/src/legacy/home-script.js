@@ -119,6 +119,7 @@ window.switchTab = function switchTab(idx) {
     const phone   = (document.getElementById('fieldPhone')   || {}).value || '';
     const service = (document.getElementById('fieldService') || {}).value || '';
     const note    = (document.getElementById('fieldNote')    || {}).value || '';
+    const promo   = ((document.getElementById('fieldPromo')  || {}).value || '').trim();
     const message = [service && `${T.service}: ${service}`, note.trim()].filter(Boolean).join('\n');
 
     let hasError = false;
@@ -135,7 +136,7 @@ window.switchTab = function switchTab(idx) {
     btn.textContent = T.sending;
     btn.style.opacity = '0.7';
 
-    const res = await submitBooking({ name, phone, email, message });
+    const res = await submitBooking({ name, phone, email, message, promo });
 
     busy = false;
     btn.style.opacity = '';
@@ -149,6 +150,15 @@ window.switchTab = function switchTab(idx) {
       setTimeout(() => { btn.textContent = orig; }, 3500);
     }
   });
+})();
+
+/* ─── ПРОМОКОД ИЗ ССЫЛКИ (?promo=NA10-…) — подставляем в форму записи ─── */
+(() => {
+  try {
+    const code = new URLSearchParams(location.search).get('promo');
+    const field = document.getElementById('fieldPromo');
+    if (code && field && /^[A-Za-z0-9-]{4,20}$/.test(code)) field.value = code.toUpperCase();
+  } catch { /* noop */ }
 })();
 
 /* ─── PREVENT ZOOM ON INPUT FOCUS (iOS) ─── */

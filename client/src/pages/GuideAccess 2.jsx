@@ -11,8 +11,6 @@ const T = {
       email ? `Гайд отправлен на ${email}. Скачать его можно и прямо здесь:` : 'Скачать гайд можно прямо здесь:',
     download: 'Скачать гайд (PDF)',
     keep: 'Сохраните ссылку из письма — по ней гайд доступен в любой момент.',
-    promo: 'Ваш промокод −10% на консультацию',
-    promoHint: 'Укажите его в форме записи на сайте. Код одноразовый, он также есть в письме.',
     pending: 'Оплата ещё обрабатывается. Обновите страницу через минуту.',
     failTitle: 'Доступ не найден',
     fail: 'Ссылка недействительна или оплата не прошла. Если вы оплатили — напишите нам, и мы вышлем гайд.',
@@ -26,8 +24,6 @@ const T = {
       email ? `The guide was sent to ${email}. You can also download it here:` : 'You can download the guide here:',
     download: 'Download the guide (PDF)',
     keep: 'Keep the link from the email — it gives you access any time.',
-    promo: 'Your −10% promo code for a consultation',
-    promoHint: 'Enter it in the booking form on the site. One-time code, also sent by email.',
     pending: 'Your payment is still processing. Refresh in a minute.',
     failTitle: 'Access not found',
     fail: 'The link is invalid or the payment did not go through. If you paid, contact us and we will send the guide.',
@@ -50,8 +46,6 @@ export default function GuideAccess() {
       return;
     }
     getGuideAccess(token ? { token } : { session_id: sessionId }).then((res) => {
-      // Онлайн-версия — сразу открываем гайд, без промежуточной страницы
-      if (res.ok && res.product === 'web') return window.location.replace(res.url);
       if (res.ok) return setState({ status: 'ok', ...res });
       setState({ status: res.status === 402 ? 'pending' : 'fail' });
     });
@@ -69,13 +63,6 @@ export default function GuideAccess() {
               {t.download}
             </a>
             <p style={S.note}>{t.keep}</p>
-            {state.promo && (
-              <div style={S.promo}>
-                <div style={S.note}>{t.promo}</div>
-                <div style={S.code}>{state.promo}</div>
-                <div style={S.note}>{t.promoHint}</div>
-              </div>
-            )}
           </>
         )}
         {state.status === 'pending' && (
@@ -122,8 +109,6 @@ const S = {
     borderRadius: 3, border: 'none', cursor: 'pointer', fontFamily: 'inherit',
   },
   note: { fontSize: '0.75rem', color: '#7A6E64', margin: '24px 0 0', lineHeight: 1.6 },
-  promo: { marginTop: 28, padding: '4px 18px 22px', border: '1px dashed #B8965A', borderRadius: 4 },
-  code: { fontFamily: "'Cormorant Garamond', serif", fontSize: '1.8rem', letterSpacing: '0.12em', color: '#1C1816', marginTop: 10 },
   home: {
     display: 'inline-block', marginTop: 32, fontSize: '0.7rem', letterSpacing: '0.16em',
     textTransform: 'uppercase', color: '#B8965A', textDecoration: 'none',

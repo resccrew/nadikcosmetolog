@@ -5,6 +5,23 @@ import { randomBytes } from 'crypto';
 
 export const newToken = () => randomBytes(24).toString('base64url');
 
+// Промокод на консультацию: NA10-XXXXXX, без похожих символов (0/O, 1/I)
+const PROMO_ABC = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+export const newPromoCode = () =>
+  'NA10-' + [...randomBytes(6)].map((b) => PROMO_ABC[b % PROMO_ABC.length]).join('');
+export const normalizePromo = (c) => String(c || '').trim().toUpperCase().replace(/\s+/g, '');
+const PROMO_RE = /^NA10-[A-Z0-9]{6}$/;
+
+// Проверка и погашение промокода при записи на консультацию.
+// status: 'valid' — принят (−10%), 'used' — уже использован, 'invalid' — не найден.
+export function redeemPromoCode(code, { db }) {
+  const c = normalizePromo(code);
+  if (!PROMO_RE.test(c)) return { ok: false, status: 'invalid', code: c };
+  if (!db.getOrderByPromo(c)) return { ok: false, status: 'invalid', code: c };
+  if (!db.redeemPromo(c)) return { ok: false, status: 'used', code: c };
+  return { ok: true, status: 'valid', code: c };
+}
+
 const TOKEN_RE = /^[A-Za-z0-9_-]{20,64}$/;
 const SESSION_RE = /^cs_(test|live)_[A-Za-z0-9]+$/;
 
@@ -13,7 +30,7 @@ export const isValidSessionId = (s) => typeof s === 'string' && SESSION_RE.test(
 
 // Каталог. Цену можно задать через Stripe Price ID (priceId) — иначе inline-цена отсюда.
 export const PRODUCTS = {
-  pdf: { name: 'Гайд «Самостоятельная консультация трихолога» (PDF)', amount: 799 },
+  pdf: { name: 'Гайд «Самостоятельная консультация трихолога» (PDF)', amount: 499 },
   web: { name: 'Гайд «Самостоятельная консультация трихолога» — онлайн-версия', amount: 799 },
 };
 
@@ -57,13 +74,14 @@ export async function fulfillSession(session, { db, sendGuide, notifyOwner }) {
     currency: session.currency,
     token: newToken(),
     product: productOf(session.metadata?.product),
+    promoCode: newPromoCode(),
   });
   const order = db.getOrderBySession(session.id);
   if (!order) return { ok: false, error: 'db_error' };
 
   if (order.email && db.claimOrderEmail(order.id)) {
     try {
-      await sendGuide({ email: order.email, token: order.token, product: order.product });
+      await sendGuide({ email: order.email, token: order.token, product: order.product, promoCode: order.promo_code });
     } catch (e) {
       db.releaseOrderEmail(order.id);
       // письмо не ушло — доступ всё равно есть через страницу; повторим на следующем вызове
@@ -77,6 +95,7 @@ export async function fulfillSession(session, { db, sendGuide, notifyOwner }) {
       await notifyOwner({
         email: order.email,
         product: order.product,
+        promoCode: order.promo_code,
         amount: order.amount,
         currency: order.currency,
         createdAt: order.created_at,

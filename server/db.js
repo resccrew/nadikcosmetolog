@@ -41,6 +41,15 @@ try {
 } catch {
   /* колонка уже есть */
 }
+// Миграция: промокод −10% на консультацию, выдаётся с каждой покупкой (одноразовый)
+for (const col of ['promo_code TEXT', 'promo_used_at TEXT']) {
+  try {
+    db.exec(`ALTER TABLE orders ADD COLUMN ${col}`);
+  } catch {
+    /* колонка уже есть */
+  }
+}
+db.exec('CREATE UNIQUE INDEX IF NOT EXISTS idx_orders_promo ON orders(promo_code)');
 
 // ── Запись ──
 export function saveBooking(b) {
@@ -59,8 +68,8 @@ export function saveVisit(v) {
 // INSERT OR IGNORE: повторный вебхук с тем же session_id не создаст дубль
 export function createOrder(o) {
   const r = db.prepare(
-    'INSERT OR IGNORE INTO orders (session_id, email, amount, currency, token, product) VALUES (?,?,?,?,?,?)'
-  ).run(o.sessionId, o.email || '', o.amount || 0, o.currency || '', o.token, o.product || 'pdf');
+    'INSERT OR IGNORE INTO orders (session_id, email, amount, currency, token, product, promo_code) VALUES (?,?,?,?,?,?,?)'
+  ).run(o.sessionId, o.email || '', o.amount || 0, o.currency || '', o.token, o.product || 'pdf', o.promoCode || null);
   return r.changes > 0;
 }
 
@@ -83,8 +92,18 @@ export function countDownload(id) {
   db.prepare('UPDATE orders SET downloads = downloads + 1 WHERE id = ?').run(id);
 }
 
+export const getOrderByPromo = (code) =>
+  db.prepare('SELECT * FROM orders WHERE promo_code = ?').get(code);
+
+// Атомарно гасим промокод: true только при первом использовании
+export function redeemPromo(code) {
+  return db.prepare(
+    "UPDATE orders SET promo_used_at = datetime('now') WHERE promo_code = ? AND promo_used_at IS NULL"
+  ).run(code).changes > 0;
+}
+
 export function getOrders(limit = 300) {
-  return db.prepare('SELECT id, product, email, amount, currency, downloads, emailed, created_at FROM orders ORDER BY id DESC LIMIT ?').all(limit);
+  return db.prepare('SELECT id, product, email, amount, currency, downloads, emailed, promo_code, promo_used_at, created_at FROM orders ORDER BY id DESC LIMIT ?').all(limit);
 }
 
 // ── Чтение для админки ──

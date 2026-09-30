@@ -20,7 +20,7 @@ const paid = (id, email = 'anna@example.com') => ({
 test('checkoutParams: inline price and success url with session placeholder', () => {
   const p = shop.checkoutParams({ siteUrl: 'https://x.com', lang: 'en' });
   assert.equal(p.mode, 'payment');
-  assert.equal(p.line_items[0].price_data.unit_amount, 799);
+  assert.equal(p.line_items[0].price_data.unit_amount, 499);
   assert.equal(p.success_url, 'https://x.com/guide/access?session_id={CHECKOUT_SESSION_ID}');
   assert.equal(p.locale, 'en');
   assert.deepEqual(shop.checkoutParams({ siteUrl: 'x', priceId: 'price_1' }).line_items[0], { price: 'price_1', quantity: 1 });
@@ -143,4 +143,28 @@ test('checkoutParams: product goes to metadata, unknown product falls back to pd
   assert.equal(web.line_items[0].price_data.unit_amount, 1299);
   assert.match(web.line_items[0].price_data.product_data.name, /онлайн/);
   assert.deepEqual(shop.checkoutParams({ siteUrl: 'x', product: 'hack' }).metadata, { product: 'pdf' });
+});
+
+test('promo: each order gets its own NA10 code, sent to the buyer', async () => {
+  const mails = [];
+  const a = await shop.fulfillSession(paid('cs_test_PR1'), { db, sendGuide: async (m) => mails.push(m) });
+  const b = await shop.fulfillSession(paid('cs_test_PR2'), { db, sendGuide: async () => {} });
+  assert.match(a.order.promo_code, /^NA10-[A-Z2-9]{6}$/);
+  assert.notEqual(a.order.promo_code, b.order.promo_code);
+  assert.equal(mails[0].promoCode, a.order.promo_code);
+});
+
+test('promo: valid once, then used; unknown and malformed codes are invalid', async () => {
+  const { order } = await shop.fulfillSession(paid('cs_test_PR3'), { db, sendGuide: async () => {} });
+  const lower = '  ' + order.promo_code.toLowerCase() + ' ';
+  assert.equal(shop.redeemPromoCode(lower, { db }).status, 'valid');
+  assert.equal(shop.redeemPromoCode(order.promo_code, { db }).status, 'used');
+  assert.equal(shop.redeemPromoCode('NA10-ZZZZZZ', { db }).status, 'invalid');
+  assert.equal(shop.redeemPromoCode("' OR 1=1 --", { db }).status, 'invalid');
+});
+
+test('promo: owner notice carries the promo code of the new order', async () => {
+  const notices = [];
+  const { order } = await shop.fulfillSession(paid('cs_test_PR4'), { db, sendGuide: async () => {}, notifyOwner: async (n) => notices.push(n) });
+  assert.equal(notices[0].promoCode, order.promo_code);
 });
