@@ -40,5 +40,12 @@ export const startCheckout = (lang, product = 'pdf') =>
     body: JSON.stringify({ lang, product }),
   });
 
+export const unlockGuide = (key) =>
+  getJson('/api/guide/license', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ key }),
+  });
+
 export const getGuideAccess = (params) =>
   getJson(`/api/guide/access?${new URLSearchParams(params)}`);

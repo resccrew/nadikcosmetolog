@@ -50,6 +50,13 @@ for (const col of ['promo_code TEXT', 'promo_used_at TEXT']) {
   }
 }
 db.exec('CREATE UNIQUE INDEX IF NOT EXISTS idx_orders_promo ON orders(promo_code)');
+// Миграция: id продажи во внешней платёжке (Gumroad sale_id) — чтобы найти заказ по лицензионному ключу
+try {
+  db.exec('ALTER TABLE orders ADD COLUMN ext_sale TEXT');
+} catch {
+  /* колонка уже есть */
+}
+db.exec('CREATE UNIQUE INDEX IF NOT EXISTS idx_orders_ext_sale ON orders(ext_sale)');
 
 // ── Запись ──
 export function saveBooking(b) {
@@ -68,13 +75,16 @@ export function saveVisit(v) {
 // INSERT OR IGNORE: повторный вебхук с тем же session_id не создаст дубль
 export function createOrder(o) {
   const r = db.prepare(
-    'INSERT OR IGNORE INTO orders (session_id, email, amount, currency, token, product, promo_code) VALUES (?,?,?,?,?,?,?)'
-  ).run(o.sessionId, o.email || '', o.amount || 0, o.currency || '', o.token, o.product || 'pdf', o.promoCode || null);
+    'INSERT OR IGNORE INTO orders (session_id, email, amount, currency, token, product, promo_code, ext_sale) VALUES (?,?,?,?,?,?,?,?)'
+  ).run(o.sessionId, o.email || '', o.amount || 0, o.currency || '', o.token, o.product || 'pdf', o.promoCode || null, o.extSale || null);
   return r.changes > 0;
 }
 
 export const getOrderBySession = (sessionId) =>
   db.prepare('SELECT * FROM orders WHERE session_id = ?').get(sessionId);
+
+export const getOrderByExtSale = (extSale) =>
+  db.prepare('SELECT * FROM orders WHERE ext_sale = ?').get(extSale);
 
 export const getOrderByToken = (token) =>
   db.prepare('SELECT * FROM orders WHERE token = ?').get(token);
