@@ -2,13 +2,25 @@ import { useEffect } from 'react';
 import { getLang } from '../lib/lang.js';
 import { startCheckout, getGuideAccess } from '../lib/api.js';
 
-// Gumroad: окно оплаты поверх сайта открывает их скрипт по клику на ссылку товара
+// Gumroad: окно оплаты поверх сайта. gumroad.js — загрузчик, он подтягивает бандл,
+// а бандл через MutationObserver привязывает ссылки на товары (асинхронно)
+const waitLoad = (el) => new Promise((resolve) => {
+  if (!el || el.dataset.loaded) return resolve();
+  el.addEventListener('load', () => { el.dataset.loaded = '1'; resolve(); }, { once: true });
+  el.addEventListener('error', resolve, { once: true });
+});
+const nextFrame = () => new Promise((r) => setTimeout(r, 60));
+
 let gumroadScript;
 function loadGumroad() {
   gumroadScript ??= new Promise((resolve) => {
     const s = document.createElement('script');
     s.src = 'https://gumroad.com/js/gumroad.js';
-    s.onload = resolve;
+    s.onload = async () => {
+      const bundle = waitLoad(document.querySelector('script[src*="gumroad-bundle"]'));
+      await Promise.race([bundle, new Promise((r) => setTimeout(r, 4000))]);
+      resolve();
+    };
     s.onerror = resolve; // без скрипта ссылка просто откроет Gumroad в этой вкладке
     document.head.appendChild(s);
   });
@@ -33,8 +45,9 @@ async function openGumroad(url, ref) {
   a.className = 'gumroad-button';
   a.style.display = 'none';
   document.body.appendChild(a);
+  await nextFrame(); // даём бандлу привязать ссылку к окну оплаты
   a.click();
-  a.remove();
+  setTimeout(() => a.remove(), 1000);
   waitForGumroad(ref);
 }
 

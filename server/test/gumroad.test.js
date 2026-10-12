@@ -29,12 +29,12 @@ test('gumroadConfig: enabled with token, ping secret and at least one product', 
   assert.equal(gr.productAvailable(c, 'pdf'), false);
 });
 
-test('checkoutUrl: product link with wanted=true and our ref; unconfigured product unavailable', () => {
+test('checkoutUrl: product link with our ref (no wanted=true, it breaks the overlay); unconfigured product unavailable', () => {
   const r = gr.checkoutUrl({ cfg, product: 'web' });
   assert.equal(r.ok, true);
   const u = new URL(r.url);
   assert.equal(u.origin + u.pathname, 'https://pravorova.gumroad.com/l/pteuax');
-  assert.equal(u.searchParams.get('wanted'), 'true');
+  assert.equal(u.searchParams.get('wanted'), null);
   assert.equal(u.searchParams.get('ref'), r.ref);
   assert.ok(gr.isValidRef(r.ref));
   const only = { ...cfg, products: { web: 'WEB==' }, urls: { web: cfg.urls.web } };
