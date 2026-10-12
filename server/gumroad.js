@@ -38,7 +38,7 @@ export function checkoutUrl({ cfg, product }) {
   if (!productAvailable(cfg, key)) return { ok: false, error: 'unavailable' };
   const ref = newRef();
   const url = new URL(cfg.urls[key]);
-  url.searchParams.set('wanted', 'true');
+  // без wanted=true: с ним gumroad.js не открывает окно поверх сайта, а уводит на gumroad.com
   url.searchParams.set('ref', ref);
   return { ok: true, url: url.toString(), ref };
 }
