@@ -10,6 +10,7 @@ import { sendBookingMail, sendBookingConfirmation, sendGuideMail, sendPurchaseNo
 import * as db from './db.js';
 import { saveBooking, saveVisit, getBookings, getStats } from './db.js';
 import { checkoutParams, fulfillSession, accessBySession, accessByToken, accessUrl, maskEmail, productOf, redeemPromoCode } from './shop.js';
+import { lemonConfig, createCheckout, verifySignature, orderToSession, isValidRef } from './lemon.js';
 import { readFileSync } from 'fs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -23,6 +24,12 @@ const SITE_URL = (process.env.SITE_URL || 'https://nadezdantiage.com').replace(/
 const GUIDE_PDF = process.env.GUIDE_PDF_PATH || join(__dirname, 'private', 'guide.pdf');
 const GUIDE_WEB = process.env.GUIDE_WEB_PATH || join(__dirname, 'private', 'guide-web.html');
 const stripe = process.env.STRIPE_SECRET_KEY ? new Stripe(process.env.STRIPE_SECRET_KEY) : null;
+// Lemon Squeezy включается, когда заданы ключ, магазин и оба варианта; иначе — Stripe
+const lemon = lemonConfig(process.env);
+const fetchJson = async (url, init) => {
+  const r = await fetch(url, init);
+  return { status: r.status, json: await r.json().catch(() => null) };
+};
 
 const shopDeps = {
   db,
@@ -53,6 +60,29 @@ app.post('/api/stripe/webhook', express.raw({ type: 'application/json' }), async
     const result = await fulfillSession(event.data.object, shopDeps);
     if (!result.ok && result.error !== 'not_paid') return res.status(500).end();
   }
+  res.json({ received: true });
+});
+
+// Вебхук Lemon Squeezy: подпись X-Signature от сырого тела, событие order_created
+app.post('/api/lemonsqueezy/webhook', express.raw({ type: 'application/json', limit: '256kb' }), async (req, res) => {
+  if (!lemon.enabled || !lemon.webhookSecret) return res.status(503).end();
+  if (!verifySignature(req.body, req.headers['x-signature'], lemon.webhookSecret)) {
+    console.error('Lemon Squeezy webhook signature failed');
+    return res.status(400).send('Bad signature');
+  }
+  let payload;
+  try {
+    payload = JSON.parse(req.body.toString('utf8'));
+  } catch {
+    return res.status(400).send('Bad JSON');
+  }
+  const mapped = orderToSession(payload, lemon);
+  if (!mapped.ok) {
+    if (mapped.error !== 'ignored') console.error('Lemon Squeezy webhook skipped:', mapped.error);
+    return res.json({ received: true });
+  }
+  const result = await fulfillSession(mapped.session, shopDeps);
+  if (!result.ok && result.error !== 'not_paid') return res.status(500).end();
   res.json({ received: true });
 });
 
@@ -139,6 +169,12 @@ app.post('/api/booking', bookingLimiter, async (req, res) => {
 const shopLimiter = rateLimit({ windowMs: 10 * 60 * 1000, max: 30, standardHeaders: true, legacyHeaders: false });
 
 app.post('/api/checkout', shopLimiter, async (req, res) => {
+  if (lemon.enabled) {
+    const r = await createCheckout({ cfg: lemon, siteUrl: SITE_URL, product: req.body?.product }, { fetchJson });
+    if (r.ok) return res.json({ ok: true, url: r.url });
+    console.error('Lemon Squeezy checkout error:', r.error, r.detail || '');
+    return res.status(500).json({ ok: false, error: 'Не удалось открыть оплату. Попробуйте позже.' });
+  }
   if (!stripe) return res.status(503).json({ ok: false, error: 'Оплата временно недоступна' });
   try {
     const product = productOf(req.body?.product);
@@ -160,10 +196,12 @@ app.post('/api/checkout', shopLimiter, async (req, res) => {
 
 // Страница доступа: по session_id (сразу после оплаты) или token (ссылка из письма)
 app.get('/api/guide/access', shopLimiter, async (req, res) => {
-  const { session_id, token } = req.query;
+  const { session_id, token, ref } = req.query;
   const result = token
     ? accessByToken(String(token), shopDeps)
-    : stripe
+    : ref
+      ? accessByRef(String(ref))
+      : stripe
       ? await accessBySession(String(session_id || ''), shopDeps)
       : { ok: false, error: 'not_found' };
 
@@ -181,6 +219,13 @@ app.get('/api/guide/access', shopLimiter, async (req, res) => {
     downloadUrl: accessUrl(order),
   });
 });
+
+// Lemon Squeezy: заказ создаёт вебхук; пока он не пришёл — 402 (страница ждёт и повторяет)
+function accessByRef(ref) {
+  if (!isValidRef(ref)) return { ok: false, error: 'bad_request' };
+  const order = db.getOrderBySession(ref);
+  return order ? { ok: true, order } : { ok: false, error: 'not_paid' };
+}
 
 app.get('/api/guide/download', shopLimiter, (req, res) => {
   const result = accessByToken(String(req.query.token || ''), shopDeps, 'pdf');

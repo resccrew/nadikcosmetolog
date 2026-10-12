@@ -36,7 +36,7 @@ const T = {
   },
 };
 
-// Страница после оплаты (?session_id=) и по ссылке из письма (?token=)
+// Страница после оплаты (?session_id= Stripe, ?ref= Lemon Squeezy) и по ссылке из письма (?token=)
 export default function GuideAccess() {
   const [params] = useSearchParams();
   const [state, setState] = useState({ status: 'loading' });
@@ -45,16 +45,33 @@ export default function GuideAccess() {
   useEffect(() => {
     const token = params.get('token');
     const sessionId = params.get('session_id');
-    if (!token && !sessionId) {
+    const ref = params.get('ref');
+    if (!token && !sessionId && !ref) {
       setState({ status: 'fail' });
       return;
     }
-    getGuideAccess(token ? { token } : { session_id: sessionId }).then((res) => {
-      // Онлайн-версия — сразу открываем гайд, без промежуточной страницы
-      if (res.ok && res.product === 'web') return window.location.replace(res.url);
-      if (res.ok) return setState({ status: 'ok', ...res });
-      setState({ status: res.status === 402 ? 'pending' : 'fail' });
-    });
+    const query = token ? { token } : ref ? { ref } : { session_id: sessionId };
+    // Lemon Squeezy: заказ появляется после вебхука — несколько раз переспрашиваем
+    let tries = ref ? 10 : 0;
+    let timer;
+    let alive = true;
+    const load = () =>
+      getGuideAccess(query).then((res) => {
+        if (!alive) return;
+        // Онлайн-версия — сразу открываем гайд, без промежуточной страницы
+        if (res.ok && res.product === 'web') return window.location.replace(res.url);
+        if (res.ok) return setState({ status: 'ok', ...res });
+        if (res.status === 402 && tries-- > 0) {
+          timer = setTimeout(load, 2000);
+          return;
+        }
+        setState({ status: res.status === 402 ? 'pending' : 'fail' });
+      });
+    load();
+    return () => {
+      alive = false;
+      clearTimeout(timer);
+    };
   }, [params]);
 
   return (
