@@ -75,6 +75,7 @@ export async function fulfillSession(session, { db, sendGuide, notifyOwner }) {
     token: newToken(),
     product: productOf(session.metadata?.product),
     promoCode: newPromoCode(),
+    extSale: session.ext_sale,
   });
   const order = db.getOrderBySession(session.id);
   if (!order) return { ok: false, error: 'db_error' };

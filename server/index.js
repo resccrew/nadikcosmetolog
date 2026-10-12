@@ -11,6 +11,7 @@ import * as db from './db.js';
 import { saveBooking, saveVisit, getBookings, getStats } from './db.js';
 import { checkoutParams, fulfillSession, accessBySession, accessByToken, accessUrl, maskEmail, productOf, redeemPromoCode } from './shop.js';
 import { lemonConfig, createCheckout, verifySignature, orderToSession, isValidRef } from './lemon.js';
+import * as gumroad from './gumroad.js';
 import { readFileSync } from 'fs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -26,6 +27,8 @@ const GUIDE_WEB = process.env.GUIDE_WEB_PATH || join(__dirname, 'private', 'guid
 const stripe = process.env.STRIPE_SECRET_KEY ? new Stripe(process.env.STRIPE_SECRET_KEY) : null;
 // Lemon Squeezy включается, когда заданы ключ, магазин и оба варианта; иначе — Stripe
 const lemon = lemonConfig(process.env);
+// Gumroad — для ИП в Грузии (Stripe там недоступен); если настроен, имеет приоритет
+const gr = gumroad.gumroadConfig(process.env);
 const fetchJson = async (url, init) => {
   const r = await fetch(url, init);
   return { status: r.status, json: await r.json().catch(() => null) };
@@ -84,6 +87,22 @@ app.post('/api/lemonsqueezy/webhook', express.raw({ type: 'application/json', li
   const result = await fulfillSession(mapped.session, shopDeps);
   if (!result.ok && result.error !== 'not_paid') return res.status(500).end();
   res.json({ received: true });
+});
+
+// Gumroad Ping: секрет в адресе (Ping не подписан), продажу перепроверяем через API
+app.post('/api/gumroad/ping/:secret', express.urlencoded({ extended: true, limit: '64kb' }), async (req, res) => {
+  if (!gr.enabled || !gumroad.checkPingSecret(req.params.secret, gr.pingSecret)) return res.status(404).end();
+  const mapped = await gumroad.pingToSession(req.body, { cfg: gr }, { fetchJson });
+  if (!mapped.ok) {
+    console.error('Gumroad ping skipped:', mapped.error, mapped.detail || '');
+    // ошибка сети/API — 500, чтобы Gumroad повторил; остальное подтверждаем
+    return res.status(['network', 'api_error'].includes(mapped.error) ? 500 : 200).end();
+  }
+  // заказ по этой продаже уже мог создаться (например, по лицензионному ключу)
+  if (db.getOrderByExtSale(mapped.session.ext_sale)) return res.status(200).end();
+  const result = await fulfillSession(mapped.session, shopDeps);
+  if (!result.ok && result.error !== 'not_paid') return res.status(500).end();
+  res.status(200).end();
 });
 
 app.use(express.json({ limit: '10kb' }));
@@ -168,7 +187,21 @@ app.post('/api/booking', bookingLimiter, async (req, res) => {
 // ── Покупка гайда ──
 const shopLimiter = rateLimit({ windowMs: 10 * 60 * 1000, max: 30, standardHeaders: true, legacyHeaders: false });
 
+// Какие способы покупки доступны (для кнопок на сайте)
+app.get('/api/shop/config', (req, res) => {
+  if (gr.enabled) {
+    return res.json({ provider: 'gumroad', products: { pdf: gumroad.productAvailable(gr, 'pdf'), web: gumroad.productAvailable(gr, 'web') } });
+  }
+  const on = Boolean(lemon.enabled || stripe);
+  res.json({ provider: lemon.enabled ? 'lemonsqueezy' : stripe ? 'stripe' : null, products: { pdf: on, web: on } });
+});
+
 app.post('/api/checkout', shopLimiter, async (req, res) => {
+  if (gr.enabled) {
+    const r = gumroad.checkoutUrl({ cfg: gr, product: req.body?.product });
+    if (r.ok) return res.json({ ok: true, url: r.url, ref: r.ref, provider: 'gumroad' });
+    return res.status(404).json({ ok: false, error: 'Этот вариант гайда сейчас недоступен' });
+  }
   if (lemon.enabled) {
     const r = await createCheckout({ cfg: lemon, siteUrl: SITE_URL, product: req.body?.product }, { fetchJson });
     if (r.ok) return res.json({ ok: true, url: r.url });
@@ -222,10 +255,30 @@ app.get('/api/guide/access', shopLimiter, async (req, res) => {
 
 // Lemon Squeezy: заказ создаёт вебхук; пока он не пришёл — 402 (страница ждёт и повторяет)
 function accessByRef(ref) {
-  if (!isValidRef(ref)) return { ok: false, error: 'bad_request' };
+  if (!isValidRef(ref) && !gumroad.isValidRef(ref)) return { ok: false, error: 'bad_request' };
   const order = db.getOrderBySession(ref);
   return order ? { ok: true, order } : { ok: false, error: 'not_paid' };
 }
+
+// Gumroad: разблокировка по лицензионному ключу из чека (если письмо не дошло)
+const licenseLimiter = rateLimit({ windowMs: 10 * 60 * 1000, max: 10, standardHeaders: true, legacyHeaders: false });
+app.post('/api/guide/license', licenseLimiter, async (req, res) => {
+  if (!gr.enabled) return res.status(503).json({ ok: false, error: 'unavailable' });
+  const deps = { fetchJson };
+  const lic = await gumroad.licenseToSale(String(req.body?.key || ''), { cfg: gr }, deps);
+  if (!lic.ok) return res.status(lic.error === 'network' ? 502 : 404).json({ ok: false, error: lic.error });
+
+  let order = db.getOrderByExtSale(String(lic.saleId));
+  if (!order) {
+    const fetched = await gumroad.fetchSale(String(lic.saleId), { cfg: gr }, deps);
+    const mapped = fetched.ok ? gumroad.saleToSession(fetched.sale, gr) : fetched;
+    if (!mapped.ok) return res.status(404).json({ ok: false, error: mapped.error });
+    const result = await fulfillSession(mapped.session, shopDeps);
+    if (!result.ok) return res.status(result.error === 'not_paid' ? 402 : 500).json({ ok: false, error: result.error });
+    order = result.order;
+  }
+  res.json({ ok: true, token: order.token });
+});
 
 app.get('/api/guide/download', shopLimiter, (req, res) => {
   const result = accessByToken(String(req.query.token || ''), shopDeps, 'pdf');

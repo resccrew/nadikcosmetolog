@@ -8,6 +8,7 @@ import Home from './pages/Home.jsx';
 const Story = lazy(() => import('./pages/Story.jsx'));
 const Guide = lazy(() => import('./pages/Guide.jsx'));
 const GuideAccess = lazy(() => import('./pages/GuideAccess.jsx'));
+const GuideUnlock = lazy(() => import('./pages/GuideUnlock.jsx'));
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
@@ -19,6 +20,7 @@ createRoot(document.getElementById('root')).render(
           <Route path="/story" element={<Story />} />
           <Route path="/guide" element={<Guide />} />
           <Route path="/guide/access" element={<GuideAccess />} />
+          <Route path="/guide/unlock" element={<GuideUnlock />} />
         </Routes>
       </Suspense>
     </BrowserRouter>
